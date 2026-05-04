@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard,
@@ -5,14 +6,16 @@ import {
   BrainCircuit,
   History,
   UserCircle,
-  Wallet,
+  ChevronLeft,
+  ChevronRight,
 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/scan-struk', label: 'Scan Struk', icon: ScanLine },
-  { to: '/analisis-ai', label: 'Analisis AI', icon: BrainCircuit },
-  { to: '/riwayat', label: 'Riwayat', icon: History },
+  { to: '/scan', label: 'Scan', icon: ScanLine },
+  { to: '/ai-analysis', label: 'Analysis', icon: BrainCircuit },
+  { to: '/history', label: 'History', icon: History },
   { to: '/profile', label: 'Profile', icon: UserCircle },
 ];
 
@@ -22,9 +25,11 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const [collapsed, setCollapsed] = useState(false);
+
   return (
     <>
-      {/* Overlay (mobile) */}
+      {/* Mobile overlay */}
       {isOpen && (
         <div
           className="fixed inset-0 z-20 bg-black/40 lg:hidden"
@@ -35,48 +40,76 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       {/* Sidebar panel */}
       <aside
-        className={[
-          'fixed inset-y-0 left-0 z-30 flex w-64 flex-col bg-white shadow-xl transition-transform duration-300',
-          'lg:static lg:translate-x-0 lg:shadow-none',
+        className={cn(
+          'fixed inset-y-0 left-0 z-30 flex w-72 flex-col bg-white shadow transition-all duration-300 overflow-visible',
+          'lg:relative',
           isOpen ? 'translate-x-0' : '-translate-x-full',
-        ].join(' ')}
+          'lg:translate-x-0',
+          collapsed && 'lg:w-16',
+        )}
       >
-        {/* Brand */}
-        <div className="flex h-16 items-center gap-2 border-b px-6">
-          <Wallet className="h-7 w-7 text-violet-600" />
-          <span className="text-xl font-bold text-violet-600">Spendly</span>
+        {/* Brand + collapse button */}
+        <div
+          className={cn(
+            'relative flex items-center mt-5 mb-2 transition-all duration-300',
+            collapsed ? 'justify-center px-3' : 'px-5',
+          )}
+        >
+          {collapsed ? (
+            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary">
+              <span className="text-sm font-bold text-white">S</span>
+            </div>
+          ) : (
+            <img src="/assets/logos/logo.svg" alt="Spendly" className="h-14 mx-auto" />
+          )}
+
+          {/* Collapse button — floats on the right border, desktop only */}
+          <button
+            onClick={() => setCollapsed((v) => !v)}
+            className="absolute right-0 top-1/2 hidden lg:flex h-6 w-6 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white shadow-md text-muted-foreground transition-colors hover:bg-primary hover:text-white hover:border-primary z-40"
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {collapsed ? (
+              <ChevronRight className="h-3.5 w-3.5" />
+            ) : (
+              <ChevronLeft className="h-3.5 w-3.5" />
+            )}
+          </button>
         </div>
 
         {/* Nav items */}
-        <nav className="flex-1 overflow-y-auto p-4">
-          <ul className="space-y-1">
+        <nav className="flex-1 overflow-y-auto mt-8">
+          <ul className="space-y-1 px-5">
             {navItems.map(({ to, label, icon: Icon }) => (
-              <li key={to}>
+              <li key={to} className="group relative">
                 <NavLink
                   to={to}
                   end={to === '/'}
                   onClick={() => onClose()}
                   className={({ isActive }) =>
-                    [
-                      'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
+                    cn(
+                      'flex items-center rounded-md transition-colors text-lg font-medium border-r-3',
+                      collapsed ? 'justify-center p-2.5' : 'gap-3 px-3 py-2.5',
                       isActive
-                        ? 'bg-violet-100 text-violet-700'
-                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
-                    ].join(' ')
+                        ? 'bg-primary/10 text-primary border-primary'
+                        : 'text-muted-foreground hover:bg-accent hover:text-foreground border-transparent',
+                    )
                   }
                 >
                   <Icon className="h-5 w-5 shrink-0" />
-                  {label}
+                  {!collapsed && <span>{label}</span>}
                 </NavLink>
+
+                {/* Tooltip — collapsed mode only */}
+                {collapsed && (
+                  <div className="pointer-events-none absolute left-full top-1/2 z-50 ml-3 -translate-y-1/2 whitespace-nowrap rounded-md bg-gray-900 px-2.5 py-1.5 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
+                    {label}
+                  </div>
+                )}
               </li>
             ))}
           </ul>
         </nav>
-
-        {/* Footer */}
-        <div className="border-t p-4 text-xs text-gray-400">
-          Spendly &copy; {new Date().getFullYear()}
-        </div>
       </aside>
     </>
   );

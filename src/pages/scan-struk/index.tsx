@@ -1,3 +1,5 @@
-export default function ScanStrukPage() {
+function ScanStrukPage() {
   return <p>Ini adalah page scan struk</p>;
 }
+
+export default ScanStrukPage;

@@ -1,4 +1,7 @@
 import { Menu } from 'lucide-react';
+import {  Avatar,
+  AvatarFallback,
+  AvatarImage, } from '@/components/ui/avatar';
 
 interface NavbarProps {
   onMenuToggle: () => void;
@@ -7,7 +10,7 @@ interface NavbarProps {
 
 export default function Navbar({ onMenuToggle, title = 'Dashboard' }: NavbarProps) {
   return (
-    <header className="flex h-16 items-center gap-4 border-b bg-white px-4 shadow-sm lg:px-6">
+    <header className="flex h-20 items-center gap-4 bg-white px-4 shadow lg:px-12">
       {/* Hamburger – visible on mobile only */}
       <button
         type="button"
@@ -18,7 +21,20 @@ export default function Navbar({ onMenuToggle, title = 'Dashboard' }: NavbarProp
         <Menu className="h-5 w-5" />
       </button>
 
-      <h1 className="text-lg font-semibold text-gray-800">{title}</h1>
+      <div className="flex gap-4 items-center justify-between w-full">
+        <h1 className="text-2xl font-semibold text-primary">{title}</h1>
+        <div className="flex gap-4 items-center">
+          <Avatar className='size-10'>
+            <AvatarImage
+              src="https://github.com/shadcn.png"
+              alt="@shadcn"
+              className="grayscale"
+            />
+            <AvatarFallback>JD</AvatarFallback>
+          </Avatar>
+          <span className="hidden sm:inline-block text-base font-medium text-foreground">John Doe</span>
+        </div>
+      </div>
     </header>
   );
 }

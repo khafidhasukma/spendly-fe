@@ -5,13 +5,13 @@ import Navbar from '../components/layout/Navbar';
 
 const routeTitles: Record<string, string> = {
   '/': 'Dashboard',
-  '/scan-struk': 'Scan Struk',
-  '/analisis-ai': 'Analisis AI',
-  '/riwayat': 'Riwayat',
+  '/scan': 'Scan Receipt',
+  '/ai-analysis': 'AI Analysis',
+  '/history': 'History',
   '/profile': 'Profile',
 };
 
-export default function MainLayout() {
+function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { pathname } = useLocation();
   const title = routeTitles[pathname] ?? 'Spendly';
@@ -31,3 +31,5 @@ export default function MainLayout() {
     </div>
   );
 }
+
+export default MainLayout;
