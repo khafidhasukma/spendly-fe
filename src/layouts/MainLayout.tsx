@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from '../components/layout/Sidebar';
 import Navbar from '../components/layout/Navbar';
+import BottomNav from '../components/layout/BottomNav';
 
 const routeTitles: Record<string, string> = {
   '/': 'Dashboard',
@@ -9,25 +9,28 @@ const routeTitles: Record<string, string> = {
   '/ai-analysis': 'AI Analysis',
   '/history': 'History',
   '/profile': 'Profile',
+  '/categories': 'Categories',
 };
 
 function MainLayout() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { pathname } = useLocation();
   const title = routeTitles[pathname] ?? 'Spendly';
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <Sidebar onClose={() => {}} />
 
       {/* Main content area */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        <Navbar onMenuToggle={() => setSidebarOpen((prev) => !prev)} title={title} />
+        <Navbar title={title} />
 
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6">
+        <main className="flex-1 overflow-y-auto p-4 pb-20 lg:p-8">
           <Outlet />
         </main>
       </div>
+
+      {/* Bottom navigation */}
+      <BottomNav />
     </div>
   );
 }
