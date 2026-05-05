@@ -11,6 +11,7 @@ const routeTitles: Record<string, string> = {
   '/profile': 'Profile',
   '/categories': 'Categories',
   '/hubungi-kami': 'Hubungi Kami',
+  '/tnc': 'Terms and Conditions',
 };
 
 function MainLayout() {

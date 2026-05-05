@@ -12,8 +12,7 @@ interface SupportItem {
 }
 
 const supportItems: SupportItem[] = [
-  { label: 'Privacy Policy', icon: ExternalLink, href: '#', external: true },
-  { label: 'Terms of Service', icon: ExternalLink, href: '#', external: true },
+  { label: 'Terms of Conditions', icon: ExternalLink, href: '/tnc', external: false },
   { label: 'Contact Support', icon: HelpCircle, href: '/hubungi-kami', external: false },
 ];
 

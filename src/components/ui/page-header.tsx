@@ -22,11 +22,11 @@ function PageHeader({
       {breadcrumb && breadcrumb.length > 0 && <BreadcrumbNav items={breadcrumb} className="mb-6" />}
 
       <div className="flex max-md:flex-col md:items-center justify-between gap-4">
-        <div className='space-y-2'>
-          <h1 className="text-headline-lg font-bold text-foreground font-manrope">{title}</h1>
+        <div className='space-y-3'>
+          <h1 className="text-headline-lg font-bold text-primary font-manrope">{title}</h1>
           {description && (
             <div className="flex max-md:flex-col items-center justify-between gap-4">
-              {description && <p className="text-sm text-muted-foreground lg:max-w-lg">{description}</p>}
+              {description && <p className="text-sm text-muted-foreground lg:max-w-xl">{description}</p>}
             </div>
           )}
         </div>
