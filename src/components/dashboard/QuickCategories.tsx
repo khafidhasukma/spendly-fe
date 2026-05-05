@@ -21,15 +21,15 @@ interface QuickCategory {
 }
 
 const categories: QuickCategory[] = [
-  { id: 'lifestyle',    label: 'Lifestyle',    icon: ShoppingBag,     color: 'text-purple-500', bgColor: 'bg-purple-50'   },
-  { id: 'groceries',   label: 'Groceries',    icon: ShoppingCart,    color: 'text-green-500',  bgColor: 'bg-green-50'    },
-  { id: 'beauty',      label: 'Beauty',       icon: Scissors,        color: 'text-pink-500',   bgColor: 'bg-pink-50'     },
-  { id: 'gas',         label: 'Gas',          icon: Fuel,            color: 'text-orange-500', bgColor: 'bg-orange-50'   },
-  { id: 'fnb',         label: 'F&B',          icon: UtensilsCrossed, color: 'text-amber-600',  bgColor: 'bg-amber-50'    },
-  { id: 'health',      label: 'Health',       icon: HeartPulse,      color: 'text-red-500',    bgColor: 'bg-red-50'      },
-  { id: 'household',   label: 'Household',    icon: Home,            color: 'text-blue-500',   bgColor: 'bg-blue-50'     },
-  { id: 'electricity', label: 'Electricity',  icon: Zap,             color: 'text-teal-500',   bgColor: 'bg-teal-50'     },
-  { id: 'transport',   label: 'Transport',    icon: Car,             color: 'text-indigo-500', bgColor: 'bg-indigo-50'   },
+  { id: 'lifestyle',    label: 'Lifestyle',    icon: ShoppingBag,     color: 'text-purple-500', bgColor: 'bg-purple-50 dark:bg-purple-500/20'   },
+  { id: 'groceries',   label: 'Groceries',    icon: ShoppingCart,    color: 'text-green-500',  bgColor: 'bg-green-50 dark:bg-green-500/20'    },
+  { id: 'beauty',      label: 'Beauty',       icon: Scissors,        color: 'text-pink-500',   bgColor: 'bg-pink-50 dark:bg-pink-500/20'     },
+  { id: 'gas',         label: 'Gas',          icon: Fuel,            color: 'text-orange-500', bgColor: 'bg-orange-50 dark:bg-orange-500/20'   },
+  { id: 'fnb',         label: 'F&B',          icon: UtensilsCrossed, color: 'text-amber-600',  bgColor: 'bg-amber-50 dark:bg-amber-500/20'    },
+  { id: 'health',      label: 'Health',       icon: HeartPulse,      color: 'text-red-500',    bgColor: 'bg-red-50 dark:bg-red-500/20'      },
+  { id: 'household',   label: 'Household',    icon: Home,            color: 'text-blue-500',   bgColor: 'bg-blue-50 dark:bg-blue-500/20'     },
+  { id: 'electricity', label: 'Electricity',  icon: Zap,             color: 'text-teal-500',   bgColor: 'bg-teal-50 dark:bg-teal-500/20'     },
+  { id: 'transport',   label: 'Transport',    icon: Car,             color: 'text-indigo-500', bgColor: 'bg-indigo-50 dark:bg-indigo-500/20'   },
 ];
 
 export default function QuickCategories() {
@@ -45,7 +45,7 @@ export default function QuickCategories() {
       <div className="mt-4 grid grid-cols-9 gap-5">
         {categories.map(({ id, label, icon: Icon, color, bgColor }) => (
           <Link key={id} to="/categories" className="flex flex-col items-center">
-            <div className="flex w-full flex-col items-center gap-2 rounded-lg border border-border bg-white p-4 hover:shadow-md transition-shadow">
+            <div className="flex w-full flex-col items-center gap-2 rounded-lg border border-border bg-card p-4 hover:shadow-md transition-shadow">
               <div className={`flex h-12 w-12 items-center justify-center rounded-full ${bgColor}`}>
                 <Icon className={`h-5 w-5 ${color}`} />
               </div>

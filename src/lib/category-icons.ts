@@ -43,7 +43,7 @@ export interface CategoryIconOption {
 export const ICON_OPTIONS: CategoryIconOption[] = [
   { id: 'utensils',     label: 'F&B',         icon: UtensilsCrossed },
   { id: 'shopping-bag', label: 'Shopping',     icon: ShoppingBag    },
-  { id: 'shopping-cart',label: 'Groceries',    icon: ShoppingCart   },
+  { id: 'shopping-cart', label: 'Groceries',    icon: ShoppingCart   },
   { id: 'shirt',        label: 'Apparels',     icon: Shirt          },
   { id: 'heart-pulse',  label: 'Health',       icon: HeartPulse     },
   { id: 'scissors',     label: 'Beauty',       icon: Scissors       },
@@ -57,7 +57,7 @@ export const ICON_OPTIONS: CategoryIconOption[] = [
   { id: 'dumbbell',     label: 'Fitness',      icon: Dumbbell       },
   { id: 'book-open',    label: 'Education',    icon: BookOpen       },
   { id: 'plane',        label: 'Travel',       icon: Plane          },
-  { id: 'music',        label: 'Entertainment',icon: Music          },
+  { id: 'music',        label: 'Entertainment', icon: Music          },
   { id: 'wifi',         label: 'Internet',     icon: Wifi           },
   { id: 'pill',         label: 'Medicine',     icon: Pill           },
   { id: 'baby',         label: 'Kids',         icon: Baby           },
@@ -81,18 +81,18 @@ export interface ColorOption {
 }
 
 export const COLOR_PALETTE: ColorOption[] = [
-  { color: 'text-orange-500', bgColor: 'bg-orange-100' },
-  { color: 'text-blue-500',   bgColor: 'bg-blue-100'   },
-  { color: 'text-red-500',    bgColor: 'bg-red-100'    },
-  { color: 'text-pink-500',   bgColor: 'bg-pink-100'   },
-  { color: 'text-green-500',  bgColor: 'bg-green-100'  },
-  { color: 'text-yellow-500', bgColor: 'bg-yellow-100' },
-  { color: 'text-slate-500',  bgColor: 'bg-slate-100'  },
-  { color: 'text-gray-500',   bgColor: 'bg-gray-100'   },
-  { color: 'text-purple-500', bgColor: 'bg-purple-100' },
-  { color: 'text-teal-500',   bgColor: 'bg-teal-100'   },
-  { color: 'text-indigo-500', bgColor: 'bg-indigo-100' },
-  { color: 'text-amber-600',  bgColor: 'bg-amber-100'  },
+  { color: 'text-orange-500', bgColor: 'bg-orange-100 dark:bg-orange-500/20' },
+  { color: 'text-blue-500',   bgColor: 'bg-blue-100 dark:bg-blue-500/20'   },
+  { color: 'text-red-500',    bgColor: 'bg-red-100 dark:bg-red-500/20'    },
+  { color: 'text-pink-500',   bgColor: 'bg-pink-100 dark:bg-pink-500/20'   },
+  { color: 'text-green-500',  bgColor: 'bg-green-100 dark:bg-green-500/20'  },
+  { color: 'text-yellow-500', bgColor: 'bg-yellow-100 dark:bg-yellow-500/20' },
+  { color: 'text-slate-500',  bgColor: 'bg-slate-100 dark:bg-slate-500/20'  },
+  { color: 'text-gray-500',   bgColor: 'bg-gray-100 dark:bg-gray-500/20'   },
+  { color: 'text-purple-500', bgColor: 'bg-purple-100 dark:bg-purple-500/20' },
+  { color: 'text-teal-500',   bgColor: 'bg-teal-100 dark:bg-teal-500/20'   },
+  { color: 'text-indigo-500', bgColor: 'bg-indigo-100 dark:bg-indigo-500/20' },
+  { color: 'text-amber-600',  bgColor: 'bg-amber-100 dark:bg-amber-500/20'  },
 ];
 
 export function getIconById(id: string): LucideIcon {

@@ -34,7 +34,7 @@ export default function CategoriesFeaturesSection() {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
       {features.map(({ id, title, description, icon: Icon, iconBg, iconColor }) => (
-        <div key={id} className="rounded-xl border border-border bg-white p-6 shadow-sm">
+        <div key={id} className="rounded-xl border border-border bg-card p-6 shadow-sm">
           <div className={`flex h-10 w-10 items-center justify-center rounded-[0.75rem] ${iconBg}`}>
             <Icon className={`h-5 w-5 ${iconColor}`} />
           </div>

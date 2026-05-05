@@ -18,7 +18,7 @@ export default function BalanceCard({
   percentageChange = 12.5,
 }: BalanceCardProps) {
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-primary p-6 text-white h-full">
+    <div className="relative overflow-hidden rounded-2xl bg-primary dark:bg-[#003d26] p-6 text-white h-full">
       {/* Decorative icon */}
       <div className="pointer-events-none absolute right-8 top-4 opacity-10">
         <Wallet className="size-30" />

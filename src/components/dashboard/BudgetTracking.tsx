@@ -32,7 +32,7 @@ function BudgetBar({ item }: { item: BudgetItem }) {
           <p className="text-sm text-muted-foreground">Limit: Rp{formatRupiah(item.limit)}</p>
         </div>
         <p className={`shrink-0 text-base font-bold ${textColor}`}>
-          Rp{formatRupiah(item.spent)}<span className="text-[#3F4942] text-sm font-normal"> / {Math.round(pct)}%</span>
+          Rp{formatRupiah(item.spent)}<span className="text-muted-foreground text-sm font-normal"> / {Math.round(pct)}%</span>
         </p>
       </div>
       <div className="h-3 w-full overflow-hidden rounded-full bg-muted">
@@ -48,7 +48,7 @@ export interface BudgetTrackingProps {
 
 export default function BudgetTracking({ budgets = mockBudgets }: BudgetTrackingProps) {
   return (
-    <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <h2 className="text-2xl font-semibold text-foreground font-manrope">Budget Tracking</h2>
 
       {budgets.length === 0 ? (

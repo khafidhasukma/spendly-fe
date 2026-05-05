@@ -26,14 +26,14 @@ export default function WealthGrowth({
   const maxValue = Math.max(...data.map((d) => d.value));
 
   return (
-    <div className="rounded-2xl border border-border bg-[#E5E2E1] p-6 shadow-sm">
+    <div className="rounded-2xl border border-border bg-surface-warm p-6 shadow-sm">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs font-semibold uppercase text-muted-foreground">Wealth Growth</p>
           <p className="mt-1 text-2xl font-semibold text-primary">+{percentage}%</p>
         </div>
 
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-card">
           <TrendingUp className="h-5 w-5 text-primary" />
         </div>
       </div>

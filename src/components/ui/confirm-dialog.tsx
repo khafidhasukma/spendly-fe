@@ -37,7 +37,7 @@ export function ConfirmDialog({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           {icon && (
-            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 text-red-600">
+            <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-500/20 text-red-600 dark:text-red-400">
               {icon}
             </div>
           )}

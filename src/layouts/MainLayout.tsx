@@ -17,7 +17,7 @@ function MainLayout() {
   const title = routeTitles[pathname] ?? 'Spendly';
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50">
+    <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar onClose={() => {}} />
 
       {/* Main content area */}

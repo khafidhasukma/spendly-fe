@@ -29,7 +29,7 @@ const mockTransactions: DisplayTransaction[] = [
     amount: -1_299_000,
     category: 'SHOPPING',
     icon: ShoppingBag,
-    iconBg: 'bg-purple-100',
+    iconBg: 'bg-purple-100 dark:bg-purple-500/20',
     iconColor: 'text-purple-500',
   },
   {
@@ -39,7 +39,7 @@ const mockTransactions: DisplayTransaction[] = [
     amount: -84_500,
     category: 'F&B',
     icon: UtensilsCrossed,
-    iconBg: 'bg-amber-100',
+    iconBg: 'bg-amber-100 dark:bg-amber-500/20',
     iconColor: 'text-amber-600',
   },
   {
@@ -49,7 +49,7 @@ const mockTransactions: DisplayTransaction[] = [
     amount: 6_200_000,
     category: 'PAYROLL',
     icon: Banknote,
-    iconBg: 'bg-green-100',
+    iconBg: 'bg-green-100 dark:bg-green-500/20',
     iconColor: 'text-green-600',
   },
   {
@@ -59,7 +59,7 @@ const mockTransactions: DisplayTransaction[] = [
     amount: -88_500,
     category: 'BEAUTY',
     icon: Scissors,
-    iconBg: 'bg-pink-100',
+    iconBg: 'bg-pink-100 dark:bg-pink-500/20',
     iconColor: 'text-pink-500',
   },
 ];
@@ -76,7 +76,7 @@ export default function RecentTransactions({
   transactions = mockTransactions,
 }: RecentTransactionsProps) {
   return (
-    <div className="rounded-2xl border border-border bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold text-foreground font-manrope">Recent Transactions</h2>
         <Link to="/history" className="text-sm font-semibold text-primary hover:underline">
@@ -113,10 +113,10 @@ export default function RecentTransactions({
                 </div>
 
                 <div className="shrink-0 text-right">
-                  <p className={`text-base font-bold ${tx.amount > 0 ? 'text-green-600' : 'text-foreground'}`}>
+                  <p className={`text-base font-bold ${tx.amount > 0 ? 'text-green-600 dark:text-green-400' : 'text-foreground'}`}>
                     {tx.amount > 0 ? '+' : '-'}Rp{formatRupiah(tx.amount)}
                   </p>
-                  <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-[#9CA3AF]">{tx.category}</p>
+                  <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">{tx.category}</p>
                 </div>
               </li>
             );

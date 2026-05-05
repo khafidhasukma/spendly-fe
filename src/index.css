@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&display=swap');
 @import "tailwindcss";
 
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -75,6 +77,9 @@
   --color-border:               #e6e8ee;
   --color-input:                #f2f3f9;
   --color-ring:                 #005C39;
+
+  /* Warm surface for accent cards (e.g. WealthGrowth) */
+  --color-surface-warm:         #E5E2E1;
 
   /* Radius */
   --radius-xs:   0.25rem;
@@ -178,4 +183,67 @@
   .text-label-lg { font-size: var(--text-label-lg); line-height: var(--leading-label); font-weight: 500; letter-spacing: var(--tracking-label); text-transform: uppercase; }
   .text-label-md { font-size: var(--text-label-md); line-height: var(--leading-label); font-weight: 500; letter-spacing: var(--tracking-label); text-transform: uppercase; }
   .text-label-sm { font-size: var(--text-label-sm); line-height: var(--leading-label); font-weight: 500; letter-spacing: var(--tracking-label); text-transform: uppercase; }
+}
+
+/* ── Dark-mode token overrides ──────────────────────────────────────────────
+   These override the CSS custom properties emitted by @theme so that all
+   Tailwind utilities that reference var(--color-*) automatically adapt.
+   Applied when <html class="dark"> is set by the ThemeProvider.
+   ───────────────────────────────────────────────────────────────────────── */
+.dark {
+  /* Surface / Background */
+  --color-background:                 #0d0f18;
+  --color-on-background:              #e3e5f0;
+  --color-surface:                    #0d0f18;
+  --color-surface-bright:             #1a1d2e;
+  --color-surface-dim:                #080a12;
+  --color-surface-container-lowest:   #08090f;
+  --color-surface-container-low:      #13151f;
+  --color-surface-container:          #181b28;
+  --color-surface-container-high:     #1e2132;
+  --color-surface-container-highest:  #242738;
+  --color-surface-variant:            #1e2d24;
+  --color-on-surface:                 #e3e5f0;
+  --color-on-surface-variant:         #bbbfcc;
+
+  /* Outline */
+  --color-outline:         #5a5e6e;
+  --color-outline-variant: #2a2d3a;
+
+  /* shadcn compatibility */
+  --color-foreground:           #e3e5f0;
+  --color-card:                 #1a1d2e;
+  --color-card-foreground:      #e3e5f0;
+  --color-popover:              #1a1d2e;
+  --color-popover-foreground:   #e3e5f0;
+  --color-muted:                #181b28;
+  --color-muted-foreground:     #8b8fa8;
+  --color-accent:               #1e2132;
+  --color-accent-foreground:    #e3e5f0;
+  --color-border:               #242738;
+  --color-input:                #1e2132;
+
+  /* Primary */
+  --color-primary:              #5edfaa;
+  --color-primary-foreground:   #00210f;
+  --color-on-primary:           #00210f;
+
+  /* Primary container */
+  --color-primary-container:      #003d24;
+  --color-on-primary-container:   #c5f5e0;
+
+  /* Error */
+  --color-error:                #f87171;
+  --color-destructive:          #f87171;
+  --color-destructive-foreground: #ffffff;
+  --color-on-error:             #ffffff;
+
+  /* Warm surface */
+  --color-surface-warm:         #2d2420;
+
+  /* Shadows */
+  --shadow-sm:      0 2px 8px rgba(0, 0, 0, 0.30);
+  --shadow-md:      0 4px 16px rgba(0, 0, 0, 0.35);
+  --shadow-ambient: 0 16px 40px rgba(0, 0, 0, 0.40);
+  --shadow-modal:   0 16px 40px rgba(0, 0, 0, 0.50);
 }

@@ -33,7 +33,7 @@ export default function CategoryCard({
   onDelete,
 }: CategoryCardProps) {
   return (
-    <div className="rounded-xl border border-border bg-white p-6 shadow-sm transition-shadow hover:shadow-md">
+    <div className="rounded-xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md">
       <div className="flex items-start justify-between">
         <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${bgColor}`}>
           <Icon className={`h-5 w-5 ${color}`} />

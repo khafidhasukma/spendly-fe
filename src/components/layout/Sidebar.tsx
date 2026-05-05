@@ -88,7 +88,7 @@ export default function Sidebar({ onClose }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'hidden lg:flex flex-col bg-white shadow-sm transition-all duration-300 relative',
+        'hidden lg:flex flex-col bg-card shadow-sm transition-all duration-300 relative',
         collapsed ? 'w-16' : 'w-64',
       )}
     >
@@ -106,7 +106,7 @@ export default function Sidebar({ onClose }: SidebarProps) {
 
         <button
           onClick={() => setCollapsed((v) => !v)}
-          className="absolute right-0 top-1/2 flex h-6 w-6 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-white shadow-md text-muted-foreground transition-colors hover:bg-primary hover:text-white hover:border-primary z-40"
+          className="absolute right-0 top-1/2 flex h-6 w-6 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card shadow-md text-muted-foreground transition-colors hover:bg-primary hover:text-white hover:border-primary z-40"
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {collapsed ? (

@@ -1,5 +1,50 @@
+import { useState } from 'react';
+import {
+  BudgetSettingsCard,
+  EditProfileModal,
+  LogoutConfirmDialog,
+  PersonalInfoCard,
+  ProfileHeader,
+  SecurityCard,
+  SupportCard,
+} from '@/components/profile';
+
 function ProfilePage() {
-  return <p>Ini adalah page profile</p>;
+  const [editOpen, setEditOpen] = useState(false);
+  const [logoutOpen, setLogoutOpen] = useState(false);
+
+  const handleLogout = () => {
+    console.log('Logging out...');
+  };
+
+  return (
+    <div className="space-y-5">
+      {/* Profile header — full width */}
+      <ProfileHeader onEditProfile={() => setEditOpen(true)} />
+
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+        {/* Left column */}
+        <div className="flex flex-col gap-5 lg:col-span-2">
+          <PersonalInfoCard />
+          <BudgetSettingsCard />
+          <SecurityCard />
+        </div>
+
+        {/* Right column */}
+        <div className="lg:col-span-1">
+          <SupportCard onLogout={() => setLogoutOpen(true)} />
+        </div>
+      </div>
+
+      {/* Modals */}
+      <EditProfileModal open={editOpen} onOpenChange={setEditOpen} />
+      <LogoutConfirmDialog
+        open={logoutOpen}
+        onOpenChange={setLogoutOpen}
+        onConfirm={handleLogout}
+      />
+    </div>
+  );
 }
 
 export default ProfilePage;

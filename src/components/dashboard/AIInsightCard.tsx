@@ -14,9 +14,9 @@ export default function AIInsightCard({
     <div className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-primary-container p-6">
       <div className="flex items-start justify-between">
         <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary">
-          <Sparkles className="h-5 w-5 text-[#86D2A6]" />
+          <Sparkles className="h-5 w-5 text-[#86D2A6] dark:text-on-primary-container" />
         </div>
-        <span className="rounded bg-white/40 px-3 py-1 text-xs font-semibold text-on-primary-container">
+        <span className="rounded bg-on-primary-container/15 dark:bg-primary/20 px-3 py-1 text-xs font-semibold text-on-primary-container">
           AI INSIGHT
         </span>
       </div>

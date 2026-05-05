@@ -1,7 +1,4 @@
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface NavbarProps {
   title?: string;
@@ -9,11 +6,12 @@ interface NavbarProps {
 
 export default function Navbar({ title = 'Dashboard' }: NavbarProps) {
   return (
-    <header className="flex h-20 items-center gap-4 bg-white px-4 shadow lg:px-12">
+    <header className="flex h-20 items-center gap-4 bg-card px-4 shadow dark:shadow-md dark:border-b dark:border-border lg:px-12">
       <div className="flex gap-4 items-center justify-between w-full">
         <h1 className="text-2xl font-semibold text-primary">{title}</h1>
-        <div className="flex gap-4 items-center">
-          <Avatar className='size-10'>
+
+        <div className="flex items-center gap-2">
+          <Avatar className="size-10">
             <AvatarImage
               src="https://github.com/shadcn.png"
               alt="@shadcn"
@@ -21,7 +19,9 @@ export default function Navbar({ title = 'Dashboard' }: NavbarProps) {
             />
             <AvatarFallback>JD</AvatarFallback>
           </Avatar>
-          <span className="hidden sm:inline-block text-base font-medium text-foreground">John Doe</span>
+          <span className="hidden sm:inline-block text-base font-medium text-foreground">
+            John Doe
+          </span>
         </div>
       </div>
     </header>
