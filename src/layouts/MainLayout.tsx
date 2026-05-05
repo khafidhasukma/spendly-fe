@@ -10,6 +10,7 @@ const routeTitles: Record<string, string> = {
   '/history': 'History',
   '/profile': 'Profile',
   '/categories': 'Categories',
+  '/hubungi-kami': 'Hubungi Kami',
 };
 
 function MainLayout() {

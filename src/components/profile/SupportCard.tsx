@@ -1,4 +1,5 @@
 import { ExternalLink, HelpCircle, LogOut, Moon, Sun } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -7,12 +8,13 @@ interface SupportItem {
   label: string;
   icon: typeof ExternalLink;
   href?: string;
+  external?: boolean;
 }
 
 const supportItems: SupportItem[] = [
-  { label: 'Privacy Policy', icon: ExternalLink, href: '#' },
-  { label: 'Terms of Service', icon: ExternalLink, href: '#' },
-  { label: 'Contact Support', icon: HelpCircle, href: '#' },
+  { label: 'Privacy Policy', icon: ExternalLink, href: '#', external: true },
+  { label: 'Terms of Service', icon: ExternalLink, href: '#', external: true },
+  { label: 'Contact Support', icon: HelpCircle, href: '/hubungi-kami', external: false },
 ];
 
 interface SupportCardProps {
@@ -52,18 +54,28 @@ export default function SupportCard({ onLogout }: SupportCardProps) {
         <h3 className="mb-4 text-base font-semibold text-foreground">Support</h3>
 
         <ul className="space-y-1">
-          {supportItems.map(({ label, icon: Icon, href }, index) => (
+          {supportItems.map(({ label, icon: Icon, href, external }, index) => (
             <li key={label}>
               {index > 0 && <Separator className="my-1" />}
-              <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between rounded-lg px-1 py-2.5 text-sm text-foreground transition-colors hover:text-primary"
-              >
-                <span>{label}</span>
-                <Icon className="h-4 w-4 text-muted-foreground" />
-              </a>
+              {external ? (
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between rounded-lg px-1 py-2.5 text-sm text-foreground transition-colors hover:text-primary"
+                >
+                  <span>{label}</span>
+                  <Icon className="h-4 w-4 text-muted-foreground" />
+                </a>
+              ) : (
+                <Link
+                  to={href!}
+                  className="flex items-center justify-between rounded-lg px-1 py-2.5 text-sm text-foreground transition-colors hover:text-primary"
+                >
+                  <span>{label}</span>
+                  <Icon className="h-4 w-4 text-muted-foreground" />
+                </Link>
+              )}
             </li>
           ))}
         </ul>

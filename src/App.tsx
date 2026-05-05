@@ -10,6 +10,7 @@ import ProfilePage from './pages/profile';
 import LoginPage from './pages/login';
 import RegisterPage from './pages/register';
 import CategoriesPage from './pages/categories';
+import HubungiKamiPage from './pages/hubungi-kami';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="history" element={<RiwayatPage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="categories" element={<CategoriesPage />} />
+            <Route path="hubungi-kami" element={<HubungiKamiPage />} />
           </Route>
           <Route element={<AuthLayout />}>
             <Route path="login" element={<LoginPage />} />
