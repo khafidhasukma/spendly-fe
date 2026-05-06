@@ -3,10 +3,12 @@ import { ShieldCheck, KeyRound, ChevronRight } from 'lucide-react';
 interface SecurityCardProps {
   lastPasswordChange?: string;
   twoFactorEnabled?: boolean;
+  onUpdatePassword?: () => void;
 }
 
 export default function SecurityCard({
   lastPasswordChange = '3 months ago',
+  onUpdatePassword,
 }: SecurityCardProps) {
 
   return (
@@ -29,7 +31,9 @@ export default function SecurityCard({
               <p className="text-sm text-muted-foreground">Last changed {lastPasswordChange}</p>
             </div>
           </div>
-          <button className="flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-primary/80">
+          <button
+            onClick={onUpdatePassword}
+            className="flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-primary/80">
             Update
             <ChevronRight className="h-3.5 w-3.5" />
           </button>

@@ -157,7 +157,10 @@ export default function EditProfileModal({
           <Button variant="outline" onClick={handleCancel} className="flex-1 sm:flex-none">
             Cancel
           </Button>
-          <Button onClick={handleSave} className="flex-1 bg-primary hover:bg-primary/90 sm:flex-none">
+          <Button
+            onClick={handleSave}
+            className="flex-1 bg-primary hover:bg-primary/90 sm:flex-none"
+          >
             Save Changes
           </Button>
         </DialogFooter>

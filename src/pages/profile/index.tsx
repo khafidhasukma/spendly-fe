@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   BudgetSettingsCard,
+  ChangePasswordModal,
   EditProfileModal,
   LogoutConfirmDialog,
   PersonalInfoCard,
@@ -11,6 +12,7 @@ import {
 
 function ProfilePage() {
   const [editOpen, setEditOpen] = useState(false);
+  const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
 
   const handleLogout = () => {
@@ -27,7 +29,7 @@ function ProfilePage() {
         <div className="flex flex-col gap-6 lg:col-span-2">
           <PersonalInfoCard />
           <BudgetSettingsCard />
-          <SecurityCard />
+          <SecurityCard onUpdatePassword={() => setChangePasswordOpen(true)} />
         </div>
 
         {/* Right column */}
@@ -38,6 +40,7 @@ function ProfilePage() {
 
       {/* Modals */}
       <EditProfileModal open={editOpen} onOpenChange={setEditOpen} />
+      <ChangePasswordModal open={changePasswordOpen} onOpenChange={setChangePasswordOpen} />
       <LogoutConfirmDialog
         open={logoutOpen}
         onOpenChange={setLogoutOpen}
