@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 interface FAQItem {
   question: string;
   answer: string;
@@ -19,21 +21,6 @@ const faqs: FAQItem[] = [
     answer:
       'Spendly Basic is completely free. Our Premium plan starts at $2.99 per month.',
   },
-  {
-    question: 'How do I export my transaction data?',
-    answer:
-      'Open the History menu, tap the export icon in the top-right corner, then choose PDF or CSV format.',
-  },
-  {
-    question: 'Is my data secure?',
-    answer:
-      'Yes, all data is encrypted with AES-256 standard and stored on high-security servers.',
-  },
-  {
-    question: 'How do I link a bank account?',
-    answer:
-      'Go to Profile > Budget Settings > Add Account, then follow the connection guide provided.',
-  },
 ];
 
 export default function ContactFAQ() {
@@ -42,9 +29,9 @@ export default function ContactFAQ() {
       {/* Title */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl text-foreground font-manrope">Frequently Asked Questions</h2>
-        <a href="#" className="text-base font-semibold text-primary hover:underline">
+        <Link to="/faq" className="text-base font-semibold text-primary hover:underline">
           View All →
-        </a>
+        </Link>
       </div>
 
       {/* Content */}

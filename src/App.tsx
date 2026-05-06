@@ -11,6 +11,7 @@ import LoginPage from './pages/login';
 import RegisterPage from './pages/register';
 import CategoriesPage from './pages/categories';
 import HubungiKamiPage from './pages/hubungi-kami';
+import FAQPage from './pages/faq';
 import TncPage from './pages/tnc';
 import PrivacyPolicyPage from './pages/privacy-policy';
 
@@ -27,6 +28,7 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
             <Route path="categories" element={<CategoriesPage />} />
             <Route path="hubungi-kami" element={<HubungiKamiPage />} />
+            <Route path="faq" element={<FAQPage />} />
           </Route>
           <Route element={<AuthLayout />}>
             <Route path="login" element={<LoginPage />} />
