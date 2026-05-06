@@ -25,10 +25,10 @@ export default function SupportCard({ onLogout }: SupportCardProps) {
   const { dark, toggleDark } = useTheme();
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-6">
       {/* Dark mode toggle */}
       <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
-        <h3 className="mb-4 text-base font-semibold text-foreground">Appearance</h3>
+        <h3 className="mb-4 text-lg font-semibold text-foreground font-manrope">Appearance</h3>
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted dark:bg-muted/40">
@@ -51,7 +51,7 @@ export default function SupportCard({ onLogout }: SupportCardProps) {
 
       {/* Support links */}
       <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
-        <h3 className="mb-4 text-base font-semibold text-foreground">Support</h3>
+        <h3 className="mb-4 text-lg font-semibold text-foreground font-manrope">Support</h3>
 
         <ul className="space-y-1">
           {supportItems.map(({ label, icon: Icon, href, external }, index) => (

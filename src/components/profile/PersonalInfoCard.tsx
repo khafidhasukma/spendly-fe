@@ -16,16 +16,16 @@ export default function PersonalInfoCard({
   return (
     <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
       {/* Card header */}
-      <div className="mb-5 flex items-center gap-3">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10">
+      <div className="mb-8 flex items-center gap-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
           <UserCircle className="h-5 w-5 text-primary" />
         </div>
-        <h3 className="text-base font-semibold text-foreground">Personal Information</h3>
+        <h3 className="text-lg font-semibold text-foreground font-manrope">Personal Information</h3>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         {/* First + Last name row */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
               First Name

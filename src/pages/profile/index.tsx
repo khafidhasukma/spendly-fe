@@ -19,12 +19,12 @@ function ProfilePage() {
 
   return (
     <div className="space-y-5">
-      {/* Profile header — full width */}
+      {/* Profile header  */}
       <ProfileHeader onEditProfile={() => setEditOpen(true)} />
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         {/* Left column */}
-        <div className="flex flex-col gap-5 lg:col-span-2">
+        <div className="flex flex-col gap-6 lg:col-span-2">
           <PersonalInfoCard />
           <BudgetSettingsCard />
           <SecurityCard />
