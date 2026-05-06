@@ -12,6 +12,7 @@ import RegisterPage from './pages/register';
 import CategoriesPage from './pages/categories';
 import HubungiKamiPage from './pages/hubungi-kami';
 import TncPage from './pages/tnc';
+import PrivacyPolicyPage from './pages/privacy-policy';
 
 function App() {
   return (
@@ -26,11 +27,12 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
             <Route path="categories" element={<CategoriesPage />} />
             <Route path="hubungi-kami" element={<HubungiKamiPage />} />
-            <Route path="tnc" element={<TncPage />} />
           </Route>
           <Route element={<AuthLayout />}>
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
+            <Route path="tnc" element={<TncPage />} />
+            <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
           </Route>
           {/* Catch-all redirect */}
           <Route path="*" element={<Navigate to="/" replace />} />

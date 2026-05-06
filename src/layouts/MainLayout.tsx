@@ -12,6 +12,7 @@ const routeTitles: Record<string, string> = {
   '/categories': 'Categories',
   '/hubungi-kami': 'Hubungi Kami',
   '/tnc': 'Terms and Conditions',
+  '/privacy-policy': 'Privacy Policy',
 };
 
 function MainLayout() {
