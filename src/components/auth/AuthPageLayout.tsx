@@ -7,9 +7,9 @@ interface AuthPageLayoutProps {
   maxWidth?: string;
 }
 
-export default function AuthPageLayout({
+const AuthPageLayout = ({
   children,
-}: AuthPageLayoutProps) {
+}: AuthPageLayoutProps) => {
   return (
     <div className="grid lg:grid-cols-5 h-screen overflow-hidden">
       <div className="col-span-3 flex items-center justify-center lg:max-w-2xl mx-auto overflow-y-auto">
@@ -23,3 +23,5 @@ export default function AuthPageLayout({
     </div>
   );
 }
+
+export default AuthPageLayout;

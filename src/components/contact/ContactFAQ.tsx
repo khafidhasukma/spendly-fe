@@ -23,7 +23,7 @@ const faqs: FAQItem[] = [
   },
 ];
 
-export default function ContactFAQ() {
+const ContactFAQ = () => {
   return (
     <section id="faq" className="space-y-6">
       {/* Title */}
@@ -49,3 +49,5 @@ export default function ContactFAQ() {
     </section>
   );
 }
+
+export default ContactFAQ;

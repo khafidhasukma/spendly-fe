@@ -16,13 +16,13 @@ interface PasswordInputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function PasswordInput({
+const PasswordInput = ({
   id = 'password',
   label = 'Password',
   placeholder = '••••••••',
   value,
   onChange,
-}: PasswordInputProps) {
+}: PasswordInputProps) => {
   const [show, setShow] = useState(false);
 
   return (
@@ -55,3 +55,5 @@ export default function PasswordInput({
     </div>
   );
 }
+
+export default PasswordInput;

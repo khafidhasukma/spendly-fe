@@ -14,14 +14,14 @@ interface SupportItem {
 const supportItems: SupportItem[] = [
   { label: 'Privacy Policy', icon: ExternalLink, href: '/privacy-policy', external: false },
   { label: 'Terms of Conditions', icon: ExternalLink, href: '/tnc', external: false },
-  { label: 'Contact Support', icon: HelpCircle, href: '/hubungi-kami', external: false },
+  { label: 'Contact Support', icon: HelpCircle, href: '/contact-us', external: false },
 ];
 
 interface SupportCardProps {
   onLogout?: () => void;
 }
 
-export default function SupportCard({ onLogout }: SupportCardProps) {
+const SupportCard = ({ onLogout }: SupportCardProps) => {
   const { dark, toggleDark } = useTheme();
 
   return (
@@ -92,3 +92,5 @@ export default function SupportCard({ onLogout }: SupportCardProps) {
     </div>
   );
 }
+
+export default SupportCard;

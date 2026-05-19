@@ -25,7 +25,7 @@ const channels: ContactChannel[] = [
   },
 ];
 
-export default function ContactChannels() {
+const ContactChannels = () => {
   return (
     <div className="space-y-6">
       {channels.map(({ icon: Icon, title, description, linkLabel, href }) => (
@@ -51,3 +51,5 @@ export default function ContactChannels() {
     </div>
   );
 }
+
+export default ContactChannels;

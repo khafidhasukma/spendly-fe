@@ -31,8 +31,7 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-// Extracted so className is always a static string (not a function prop)
-function NavItem({
+const NavItem = ({
   to,
   label,
   icon: Icon,
@@ -44,7 +43,7 @@ function NavItem({
   icon: LucideIcon;
   collapsed: boolean;
   onClose: () => void;
-}) {
+}) => {
   const isHome = to === '/';
   const matchExact = useMatch({ path: '/', end: true });
   const matchPath = useMatch(to);
@@ -82,7 +81,7 @@ function NavItem({
   );
 }
 
-export default function Sidebar({ onClose }: SidebarProps) {
+const Sidebar = ({ onClose }: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
 
   return (
@@ -135,3 +134,5 @@ export default function Sidebar({ onClose }: SidebarProps) {
     </aside>
   );
 }
+
+export default Sidebar;

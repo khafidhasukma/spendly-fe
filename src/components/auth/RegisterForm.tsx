@@ -11,7 +11,7 @@ import { GroupInput, PasswordInput } from '@/components/forms';
 //   { num: '2', label: 'VERIFICATION' },
 // ];
 
-export default function RegisterForm() {
+const RegisterForm = () => {
   const [agreed, setAgreed] = useState(false);
 
   return (
@@ -78,3 +78,5 @@ export default function RegisterForm() {
     </>
   );
 }
+
+export default RegisterForm;

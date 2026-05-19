@@ -22,7 +22,7 @@ function formatRupiah(amount: number) {
   return amount === 0 ? 'Rp 0' : `Rp ${new Intl.NumberFormat('id-ID').format(amount)}`;
 }
 
-export default function CategoryCard({
+const CategoryCard = ({
   name,
   icon: Icon,
   color,
@@ -31,7 +31,7 @@ export default function CategoryCard({
   total,
   onEdit,
   onDelete,
-}: CategoryCardProps) {
+}: CategoryCardProps) => {
   return (
     <div className="rounded-xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-md">
       <div className="flex items-start justify-between">
@@ -65,3 +65,5 @@ export default function CategoryCard({
     </div>
   );
 }
+
+export default CategoryCard;

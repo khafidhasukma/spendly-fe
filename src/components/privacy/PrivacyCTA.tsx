@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
-export default function PrivacyCTA() {
+const PrivacyCTA = () => {
   return (
     <div className="border-t border-border p-10 text-center">
       <p className="text-base text-muted-foreground">
@@ -9,7 +9,7 @@ export default function PrivacyCTA() {
       </p>
       <div className="mt-3 flex justify-center">
         <Button asChild className="h-auto rounded-full px-8! py-3 text-base">
-          <Link to="/hubungi-kami">
+          <Link to="/contact-us">
             Contact Privacy Team
           </Link>
         </Button>
@@ -17,3 +17,5 @@ export default function PrivacyCTA() {
     </div>
   );
 }
+
+export default PrivacyCTA;

@@ -42,7 +42,7 @@ const INITIAL_CATEGORIES: Category[] = [
 ];
 
 
-function CategoriesPage() {
+const CategoriesPage = () => {
   const [categories, setCategories] = useState<Category[]>(INITIAL_CATEGORIES);
 
   const [editTarget, setEditTarget] = useState<Category | null>(null);

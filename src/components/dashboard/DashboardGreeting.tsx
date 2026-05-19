@@ -9,7 +9,7 @@ export interface DashboardGreetingProps {
   name?: string;
 }
 
-export default function DashboardGreeting({ name = 'John Doe' }: DashboardGreetingProps) {
+const DashboardGreeting = ({ name = 'John Doe' }: DashboardGreetingProps) => {
   const { text } = getGreeting();
 
   return (
@@ -21,3 +21,5 @@ export default function DashboardGreeting({ name = 'John Doe' }: DashboardGreeti
     </div>
   );
 }
+
+export default DashboardGreeting;

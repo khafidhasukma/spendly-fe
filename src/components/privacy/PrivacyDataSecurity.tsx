@@ -7,7 +7,7 @@ const securityBadges = [
   { icon: Globe, label: 'ISO 27001 Certified' },
 ];
 
-export default function PrivacyDataSecurity() {
+const PrivacyDataSecurity = () => {
   return (
     <Card className="py-0">
       <CardContent className="p-6">
@@ -40,3 +40,5 @@ export default function PrivacyDataSecurity() {
     </Card>
   );
 }
+
+export default PrivacyDataSecurity;

@@ -1,6 +1,6 @@
 import { AuthPageLayout, RegisterForm } from '@/components/auth';
 
-function RegisterPage() {
+const RegisterPage = () => {
   return (
     <AuthPageLayout maxWidth="max-w-2xl">
       <RegisterForm />

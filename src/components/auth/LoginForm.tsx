@@ -5,7 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { GroupInput, PasswordInput } from '@/components/forms';
 import AuthDivider from './AuthDivider';
 
-export default function LoginForm() {
+const LoginForm = () => {
   return (
     <>
       <h1 className="text-2xl font-bold text-foreground font-manrope">Welcome Back</h1>
@@ -53,3 +53,5 @@ export default function LoginForm() {
     </>
   );
 }
+
+export default LoginForm;

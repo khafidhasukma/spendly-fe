@@ -5,4 +5,11 @@ import TncImageBanner from './TncImageBanner';
 import TncCTA from './TncCTA';
 import type { TncSubItem } from './TncSection';
 
-export { TncHeader, TncTableOfContents, TncSection, TncImageBanner, TncCTA, type TncSubItem };
+export { 
+    TncHeader, 
+    TncTableOfContents, 
+    TncSection, 
+    TncImageBanner, 
+    TncCTA, 
+    type TncSubItem 
+};

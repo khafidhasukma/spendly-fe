@@ -8,7 +8,7 @@ import {
   PrivacyCTA,
 } from '@/components/privacy';
 
-export default function PrivacyPolicyPage() {
+const PrivacyPolicyPage = () => {
   return (
     <div className="space-y-10 container px-5 md:px-8 lg:px-12 xl:px-16 py-6 md:py-8 lg:py-10 xl:py-12">
       <PrivacyHeader />
@@ -24,3 +24,5 @@ export default function PrivacyPolicyPage() {
     </div>
   );
 }
+
+export default PrivacyPolicyPage;

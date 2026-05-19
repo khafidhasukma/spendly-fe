@@ -6,4 +6,12 @@ import QuickCategories from './QuickCategories';
 import RecentTransactions from './RecentTransactions';
 import WealthGrowth from './WealthGrowth';
 
-export { AIInsightCard, BalanceCard, BudgetTracking, DashboardGreeting, QuickCategories, RecentTransactions, WealthGrowth };
+export { 
+    AIInsightCard, 
+    BalanceCard, 
+    BudgetTracking, 
+    DashboardGreeting, 
+    QuickCategories, 
+    RecentTransactions, 
+    WealthGrowth 
+};

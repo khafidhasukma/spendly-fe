@@ -5,9 +5,9 @@ interface AuthFormPanelProps {
   maxWidth?: string;
 }
 
-export default function AuthFormPanel({
+const AuthFormPanel = ({
   children,
-}: AuthFormPanelProps) {
+}: AuthFormPanelProps) => {
   return (
     <div className="flex flex-1 flex-col items-center justify-center overflow-y-auto bg-background px-8 lg:px-18">
       <div className="w-full py-10">
@@ -21,3 +21,5 @@ export default function AuthFormPanel({
     </div>
   );
 }
+
+export default AuthFormPanel;

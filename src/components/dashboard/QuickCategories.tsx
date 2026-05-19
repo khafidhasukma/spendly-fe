@@ -32,7 +32,7 @@ const categories: QuickCategory[] = [
   { id: 'transport',   label: 'Transport',    icon: Car,             color: 'text-indigo-500', bgColor: 'bg-indigo-50 dark:bg-indigo-500/20'   },
 ];
 
-export default function QuickCategories() {
+const QuickCategories = () => {
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -57,3 +57,5 @@ export default function QuickCategories() {
     </div>
   );
 }
+
+export default QuickCategories;

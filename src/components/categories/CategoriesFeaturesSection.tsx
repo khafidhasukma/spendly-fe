@@ -30,7 +30,7 @@ const features = [
   },
 ];
 
-export default function CategoriesFeaturesSection() {
+const CategoriesFeaturesSection = () => {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
       {features.map(({ id, title, description, icon: Icon, iconBg, iconColor }) => (
@@ -45,3 +45,5 @@ export default function CategoriesFeaturesSection() {
     </div>
   );
 }
+
+export default CategoriesFeaturesSection;

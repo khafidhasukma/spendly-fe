@@ -28,7 +28,7 @@ const categories: InfoCategory[] = [
   },
 ];
 
-export default function PrivacyInfoCollected() {
+const PrivacyInfoCollected = () => {
   return (
     <Card className="py-0">
       <CardContent className="p-6 flex items-start gap-4">
@@ -63,3 +63,5 @@ export default function PrivacyInfoCollected() {
     </Card>
   );
 }
+
+export default PrivacyInfoCollected;

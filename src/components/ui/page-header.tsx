@@ -10,32 +10,24 @@ interface PageHeaderProps {
   className?: string;
 }
 
-function PageHeader({
-  title,
-  description,
-  action,
-  breadcrumb,
-  className,
-}: PageHeaderProps) {
+function PageHeader({ title, description, action, breadcrumb, className }: PageHeaderProps) {
   return (
-    <div className={cn(className)}>
-      {breadcrumb && breadcrumb.length > 0 && <BreadcrumbNav items={breadcrumb} className="mb-6" />}
+    <div className={cn('w-full', className)}>
+      {breadcrumb && breadcrumb.length > 0 && <BreadcrumbNav items={breadcrumb} className="mb-4 sm:mb-6" />}
 
-      <div className="flex max-md:flex-col md:items-center justify-between gap-4">
-        <div className='space-y-3'>
-          <h1 className="text-headline-lg font-bold text-primary font-manrope">{title}</h1>
+      <div className="flex flex-col gap-4 sm:gap-5 lg:flex-row lg:items-start lg:justify-between lg:gap-6">
+        <div className="min-w-0 flex-1 space-y-2 sm:space-y-3">
+          <h1 className="text-balance text-2xl font-bold text-primary font-manrope sm:text-3xl lg:text-headline-lg">
+            {title}
+          </h1>
           {description && (
-            <div className="flex max-md:flex-col items-center justify-between gap-4">
-              {description && <p className="text-sm text-muted-foreground lg:max-w-xl">{description}</p>}
-            </div>
+            <p className="max-w-full text-pretty text-sm leading-relaxed text-muted-foreground sm:text-base sm:leading-normal lg:max-w-2xl">
+              {description}
+            </p>
           )}
         </div>
 
-        {(action) && (
-          <div>
-            {action && <div className="shrink-0">{action}</div>}
-          </div>
-        )}
+        {action && <div className="w-full shrink-0 lg:w-auto lg:max-w-md xl:max-w-lg">{action}</div>}
       </div>
     </div>
   );

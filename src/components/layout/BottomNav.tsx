@@ -24,7 +24,7 @@ const navItems: NavItem[] = [
   { to: '/profile',    label: 'Profile',  icon: UserCircle      },
 ];
 
-export default function BottomNav() {
+const BottomNav = () => {
   return (
     <nav className="fixed bottom-0 inset-x-0 z-30 flex lg:hidden h-16 items-stretch bg-white dark:bg-card border-t border-border shadow-[0_-2px_10px_rgba(0,0,0,0.08)]">
       {navItems.map(({ to, label, icon: Icon, scan }) => (
@@ -70,3 +70,5 @@ export default function BottomNav() {
     </nav>
   );
 }
+
+export default BottomNav;

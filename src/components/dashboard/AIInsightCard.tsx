@@ -6,10 +6,10 @@ export interface AIInsightCardProps {
   viewDetailsTo?: string;
 }
 
-export default function AIInsightCard({
+const AIInsightCard = ({
   title = 'Smart Savings',
   viewDetailsTo = '/ai-analysis',
-}: AIInsightCardProps) {
+}: AIInsightCardProps) => {
   return (
     <div className="relative flex h-full flex-col overflow-hidden rounded-2xl bg-primary-container p-6">
       <div className="flex items-start justify-between">
@@ -35,3 +35,5 @@ export default function AIInsightCard({
     </div>
   );
 }
+
+export default AIInsightCard;

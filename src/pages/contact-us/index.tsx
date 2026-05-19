@@ -6,7 +6,7 @@ import {
 } from '@/components/contact';
 import PageHeader from '@/components/ui/page-header';
 
-export default function HubungiKamiPage() {
+const ContactUsPage = () => {
   return (
     <div className="space-y-12">
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-5 lg:items-stretch">
@@ -31,3 +31,5 @@ export default function HubungiKamiPage() {
     </div>
   );
 }
+
+export default ContactUsPage;

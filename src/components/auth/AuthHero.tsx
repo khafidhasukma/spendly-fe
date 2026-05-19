@@ -17,7 +17,7 @@ const features = [
   },
 ];
 
-export default function AuthHero() {
+const AuthHero = () => {
   return (
     <div className="relative flex w-full h-full overflow-hidden flex-col text-white">
       {/* Background image */}
@@ -57,3 +57,5 @@ export default function AuthHero() {
     </div>
   );
 }
+
+export default AuthHero;

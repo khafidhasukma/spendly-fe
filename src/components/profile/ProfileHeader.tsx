@@ -11,13 +11,13 @@ interface ProfileHeaderProps {
   onEditProfile?: () => void;
 }
 
-export default function ProfileHeader({
+const ProfileHeader = ({
   name = 'Alex Graham',
   email = 'alex.graham@spendly.io',
   avatarUrl = 'https://i.pravatar.cc/150?img=3',
   isPremium = true,
   onEditProfile,
-}: ProfileHeaderProps) {
+}: ProfileHeaderProps) => {
   return (
     <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -65,3 +65,5 @@ export default function ProfileHeader({
     </div>
   );
 }
+
+export default ProfileHeader;

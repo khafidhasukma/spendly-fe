@@ -19,10 +19,10 @@ export interface WealthGrowthProps {
   data?: BarData[];
 }
 
-export default function WealthGrowth({
+const WealthGrowth = ({
   percentage = 12.4,
   data = mockData,
-}: WealthGrowthProps) {
+}: WealthGrowthProps) => {
   const maxValue = Math.max(...data.map((d) => d.value));
 
   return (
@@ -66,3 +66,5 @@ export default function WealthGrowth({
     </div>
   );
 }
+
+export default WealthGrowth;

@@ -20,7 +20,7 @@ const TOPICS = [
   { value: 'other', label: 'Other' },
 ];
 
-export default function ContactForm() {
+const ContactForm = () => {
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
 
@@ -137,3 +137,5 @@ export default function ContactForm() {
     </div>
   );
 }
+
+export default ContactForm;

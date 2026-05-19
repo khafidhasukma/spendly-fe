@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/badge';
 import PageHeader from '@/components/ui/page-header';
 
-export default function PrivacyHeader() {
+const PrivacyHeader = () => {
   return (
     <div className="space-y-4">
       <Badge variant="secondary-surface" className="text-xs">
@@ -14,3 +14,5 @@ export default function PrivacyHeader() {
     </div>
   );
 }
+
+export default PrivacyHeader;

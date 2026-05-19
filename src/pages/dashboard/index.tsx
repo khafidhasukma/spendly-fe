@@ -1,6 +1,14 @@
-﻿import { AIInsightCard, BalanceCard, DashboardGreeting, BudgetTracking, QuickCategories, RecentTransactions, WealthGrowth } from '@/components/dashboard';
+﻿import { 
+  AIInsightCard, 
+  BalanceCard, 
+  DashboardGreeting, 
+  BudgetTracking, 
+  QuickCategories, 
+  RecentTransactions, 
+  WealthGrowth 
+} from '@/components/dashboard';
 
-function HomePage() {
+const DashboardPage = () => {
   return (
     <div className="space-y-8">
       <DashboardGreeting />
@@ -33,4 +41,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default DashboardPage;

@@ -2,7 +2,7 @@ interface AuthDividerProps {
   label?: string;
 }
 
-export default function AuthDivider({ label = 'Or' }: AuthDividerProps) {
+const AuthDivider = ({ label = 'Or' }: AuthDividerProps) => {
   return (
     <div className="flex items-center gap-3">
       <div className="h-px flex-1 bg-border" />
@@ -11,3 +11,5 @@ export default function AuthDivider({ label = 'Or' }: AuthDividerProps) {
     </div>
   );
 }
+
+export default AuthDivider;

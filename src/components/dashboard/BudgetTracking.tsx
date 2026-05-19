@@ -12,11 +12,11 @@ const mockBudgets: BudgetItem[] = [
   { label: 'Entertainment',    limit:   500_000, spent:   480_000 },
 ];
 
-function formatRupiah(amount: number) {
+const formatRupiah = (amount: number) => {
   return new Intl.NumberFormat('id-ID').format(amount);
 }
 
-function BudgetBar({ item }: { item: BudgetItem }) {
+const BudgetBar = ({ item }: { item: BudgetItem }) => {
   const pct = Math.min((item.spent / item.limit) * 100, 100);
   const isDanger  = pct >= 100;
   const isWarning = pct >= 85 && !isDanger;
@@ -46,7 +46,7 @@ export interface BudgetTrackingProps {
   budgets?: BudgetItem[];
 }
 
-export default function BudgetTracking({ budgets = mockBudgets }: BudgetTrackingProps) {
+const BudgetTracking = ({ budgets = mockBudgets }: BudgetTrackingProps) => {
   return (
     <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
       <h2 className="text-2xl font-semibold text-foreground font-manrope">Budget Tracking</h2>
@@ -73,3 +73,5 @@ export default function BudgetTracking({ budgets = mockBudgets }: BudgetTracking
     </div>
   );
 }
+
+export default BudgetTracking;

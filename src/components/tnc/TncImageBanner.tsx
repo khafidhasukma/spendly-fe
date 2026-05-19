@@ -1,4 +1,4 @@
-export default function TncImageBanner() {
+const TncImageBanner = () => {
   return (
     <div className="relative overflow-hidden rounded-2xl">
       <img src="/assets/images/tnc-bg.png" alt="Privacy banner" className="h-44 w-full object-cover sm:h-52 lg:h-64" />
@@ -13,3 +13,5 @@ export default function TncImageBanner() {
     </div>
   );
 }
+
+export default TncImageBanner;

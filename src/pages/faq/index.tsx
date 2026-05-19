@@ -126,7 +126,7 @@ const faqData: FAQCategory[] = [
   },
 ];
 
-export default function FAQPage() {
+const FAQPage = () => {
   return (
     <div className="space-y-10">
       {/* Header */}
@@ -173,7 +173,7 @@ export default function FAQPage() {
           Our support team is available 24/7 and typically responds within a few hours.
         </p>
         <Link
-          to="/hubungi-kami"
+          to="/contact-us"
           className="mt-5 inline-flex h-auto items-center justify-center rounded-[0.75rem] bg-primary px-8 py-3 text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
         >
           Contact Us
@@ -182,3 +182,5 @@ export default function FAQPage() {
     </div>
   );
 }
+
+export default FAQPage;

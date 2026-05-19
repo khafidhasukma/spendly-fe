@@ -10,7 +10,7 @@ import {
   SupportCard,
 } from '@/components/profile';
 
-function ProfilePage() {
+const ProfilePage = () => {
   const [editOpen, setEditOpen] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);

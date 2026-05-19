@@ -6,10 +6,10 @@ interface SecurityCardProps {
   onUpdatePassword?: () => void;
 }
 
-export default function SecurityCard({
+const SecurityCard = ({
   lastPasswordChange = '3 months ago',
   onUpdatePassword,
-}: SecurityCardProps) {
+}: SecurityCardProps) => {
 
   return (
     <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
@@ -42,3 +42,5 @@ export default function SecurityCard({
     </div>
   );
 }
+
+export default SecurityCard;

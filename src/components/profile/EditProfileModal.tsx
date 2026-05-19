@@ -32,12 +32,12 @@ const DEFAULT_DATA = {
   avatarUrl: 'https://i.pravatar.cc/150?img=3',
 };
 
-export default function EditProfileModal({
+const EditProfileModal = ({
   open,
   onOpenChange,
   initialData = DEFAULT_DATA,
   onSave,
-}: EditProfileModalProps) {
+}: EditProfileModalProps) => {
   const [firstName, setFirstName] = useState(initialData.firstName);
   const [lastName, setLastName] = useState(initialData.lastName);
   const [email, setEmail] = useState(initialData.email);
@@ -45,7 +45,7 @@ export default function EditProfileModal({
   const [avatarPreview, setAvatarPreview] = useState(initialData.avatarUrl);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  function handleAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     const objectUrl = URL.createObjectURL(file);
@@ -53,12 +53,12 @@ export default function EditProfileModal({
     setAvatarUrl(objectUrl);
   }
 
-  function handleSave() {
+  const handleSave = () => {
     onSave?.({ firstName, lastName, email, avatarUrl });
     onOpenChange(false);
   }
 
-  function handleCancel() {
+  const handleCancel = () => {
     // Reset to initial
     setFirstName(initialData.firstName);
     setLastName(initialData.lastName);
@@ -168,3 +168,5 @@ export default function EditProfileModal({
     </Dialog>
   );
 }
+
+export default EditProfileModal;

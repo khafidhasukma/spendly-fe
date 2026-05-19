@@ -2,32 +2,32 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './contexts/ThemeContext';
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
-import HomePage from './pages/home';
+import DashboardPage from './pages/dashboard';
 import ScanStrukPage from './pages/scan-struk';
 import AnalisisAIPage from './pages/analisis-ai';
-import RiwayatPage from './pages/riwayat';
+import HistoryPage from './pages/history';
 import ProfilePage from './pages/profile';
 import LoginPage from './pages/login';
 import RegisterPage from './pages/register';
 import CategoriesPage from './pages/categories';
-import HubungiKamiPage from './pages/hubungi-kami';
+import ContactUsPage from './pages/contact-us';
 import FAQPage from './pages/faq';
 import TncPage from './pages/tnc';
 import PrivacyPolicyPage from './pages/privacy-policy';
 
-function App() {
+const App = () => {
   return (
     <ThemeProvider>
       <BrowserRouter>
         <Routes>
           <Route element={<MainLayout />}>
-            <Route index element={<HomePage />} />
+            <Route index element={<DashboardPage />} />
             <Route path="scan" element={<ScanStrukPage />} />
             <Route path="ai-analysis" element={<AnalisisAIPage />} />
-            <Route path="history" element={<RiwayatPage />} />
+            <Route path="history" element={<HistoryPage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="categories" element={<CategoriesPage />} />
-            <Route path="hubungi-kami" element={<HubungiKamiPage />} />
+            <Route path="contact-us" element={<ContactUsPage />} />
             <Route path="faq" element={<FAQPage />} />
           </Route>
           <Route element={<AuthLayout />}>

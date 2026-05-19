@@ -1,4 +1,4 @@
-export default function ContactImageBanner() {
+const ContactImageBanner = () => {
   return (
     <div className="relative overflow-hidden rounded-2xl">
       <img
@@ -14,3 +14,5 @@ export default function ContactImageBanner() {
     </div>
   );
 }
+
+export default ContactImageBanner;

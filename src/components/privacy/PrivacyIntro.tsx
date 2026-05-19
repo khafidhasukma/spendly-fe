@@ -1,6 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card';
 
-export default function PrivacyIntro() {
+const PrivacyIntro = () => {
   return (
     <Card className="py-0">
       <CardContent className="p-6">
@@ -15,3 +15,5 @@ export default function PrivacyIntro() {
     </Card>
   );
 }
+
+export default PrivacyIntro;

@@ -1,7 +1,9 @@
 import { Outlet, useLocation } from 'react-router-dom';
+import { Toaster } from 'sonner';
 import Sidebar from '../components/layout/Sidebar';
 import Navbar from '../components/layout/Navbar';
 import BottomNav from '../components/layout/BottomNav';
+import { useTheme } from '../contexts/ThemeContext';
 
 const routeTitles: Record<string, string> = {
   '/': 'Dashboard',
@@ -10,21 +12,21 @@ const routeTitles: Record<string, string> = {
   '/history': 'History',
   '/profile': 'Profile',
   '/categories': 'Categories',
-  '/hubungi-kami': 'Hubungi Kami',
+  '/contact-us': 'Contact Us',
   '/faq': 'FAQ',
   '/tnc': 'Terms and Conditions',
   '/privacy-policy': 'Privacy Policy',
 };
 
-function MainLayout() {
+const MainLayout = () => {
   const { pathname } = useLocation();
+  const { dark } = useTheme();
   const title = routeTitles[pathname] ?? 'Spendly';
 
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar onClose={() => {}} />
 
-      {/* Main content area */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <Navbar title={title} />
 
@@ -33,8 +35,9 @@ function MainLayout() {
         </main>
       </div>
 
-      {/* Bottom navigation */}
       <BottomNav />
+
+      <Toaster richColors position="top-center" theme={dark ? 'dark' : 'light'} />
     </div>
   );
 }

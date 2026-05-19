@@ -8,10 +8,10 @@ interface AuthStepIndicatorProps {
   currentStep?: number;
 }
 
-export default function AuthStepIndicator({
+const AuthStepIndicator = ({
   steps,
   currentStep = 0,
-}: AuthStepIndicatorProps) {
+}: AuthStepIndicatorProps) => {
   return (
     <div className="flex items-start">
       {steps.map(({ num, label }, i) => (
@@ -46,3 +46,5 @@ export default function AuthStepIndicator({
     </div>
   );
 }
+
+export default AuthStepIndicator;

@@ -16,7 +16,7 @@ interface GroupInputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function GroupInput({
+const GroupInput = ({
   id,
   label,
   type = 'text',
@@ -24,7 +24,7 @@ export default function GroupInput({
   icon,
   value,
   onChange,
-}: GroupInputProps) {
+}: GroupInputProps) => {
   return (
     <div className="space-y-1.5">
       {label && <Label htmlFor={id}>{label}</Label>}
@@ -46,3 +46,5 @@ export default function GroupInput({
     </div>
   );
 }
+
+export default GroupInput;

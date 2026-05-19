@@ -11,12 +11,12 @@ function formatRupiah(amount: number) {
   return new Intl.NumberFormat('id-ID').format(amount);
 }
 
-export default function BalanceCard({
+const BalanceCard = ({
   totalBalance = 12_850_000,
   income = 8_345_678,
   expense = 3_345_678,
   percentageChange = 12.5,
-}: BalanceCardProps) {
+}: BalanceCardProps) => {
   return (
     <div className="relative overflow-hidden rounded-2xl bg-primary dark:bg-[#003d26] p-6 text-white h-full">
       {/* Decorative icon */}
@@ -58,3 +58,5 @@ export default function BalanceCard({
     </div>
   );
 }
+
+export default BalanceCard;

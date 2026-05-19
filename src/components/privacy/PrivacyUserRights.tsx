@@ -21,7 +21,7 @@ const rights: RightItem[] = [
   },
 ];
 
-export default function PrivacyUserRights() {
+const PrivacyUserRights = () => {
   return (
     <div className="rounded-2xl bg-primary p-6 sm:p-8 lg:p-16">
       <h2 className="font-manrope text-headline-lg font-semibold text-white sm:text-2xl">
@@ -44,3 +44,5 @@ export default function PrivacyUserRights() {
     </div>
   );
 }
+
+export default PrivacyUserRights;

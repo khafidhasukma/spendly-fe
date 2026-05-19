@@ -15,7 +15,7 @@ interface TncSectionProps {
   icon: LucideIcon;
 }
 
-export default function TncSection({
+const TncSection = ({
   id,
   sectionNumber,
   title,
@@ -23,7 +23,7 @@ export default function TncSection({
   items,
   blockquote,
   icon: Icon,
-}: TncSectionProps) {
+}: TncSectionProps) => {
   return (
     <div id={id} className="scroll-mt-6 rounded-2xl border border-border bg-card p-6 shadow-sm">
       {/* Section heading */}
@@ -61,3 +61,5 @@ export default function TncSection({
     </div>
   );
 }
+
+export default TncSection;

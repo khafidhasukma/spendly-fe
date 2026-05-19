@@ -9,7 +9,7 @@ import {
   EmptyContent,
 } from '@/components/ui/empty';
 
-export default function CategoriesEmptyState() {
+const CategoriesEmptyState = () => {
   return (
     <Empty className="border bg-primary/5 border-primary/5">
       <EmptyHeader>
@@ -35,3 +35,5 @@ export default function CategoriesEmptyState() {
     </Empty>
   );
 }
+
+export default CategoriesEmptyState;

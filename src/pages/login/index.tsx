@@ -1,6 +1,6 @@
 import { AuthPageLayout, LoginForm } from '@/components/auth';
 
-function LoginPage() {
+const LoginPage = () => {
   return (
     <AuthPageLayout>
       <LoginForm />

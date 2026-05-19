@@ -17,11 +17,11 @@ interface ChangePasswordModalProps {
   onSave?: (newPassword: string) => void;
 }
 
-export default function ChangePasswordModal({
+const ChangePasswordModal = ({
   open,
   onOpenChange,
   onSave,
-}: ChangePasswordModalProps) {
+}: ChangePasswordModalProps) => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -29,12 +29,12 @@ export default function ChangePasswordModal({
   const mismatch = !!(newPassword && confirmPassword && newPassword !== confirmPassword);
   const canSave = currentPassword.length > 0 && newPassword.length > 0 && !mismatch;
 
-  function handleSave() {
+  const handleSave = () => {
     onSave?.(newPassword);
     handleClose();
   }
 
-  function handleClose() {
+  const handleClose = () => {
     setCurrentPassword('');
     setNewPassword('');
     setConfirmPassword('');
@@ -98,3 +98,5 @@ export default function ChangePasswordModal({
     </Dialog>
   );
 }
+
+export default ChangePasswordModal;

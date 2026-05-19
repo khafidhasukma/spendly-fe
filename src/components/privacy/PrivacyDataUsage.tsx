@@ -29,7 +29,7 @@ const usageItems: UsageItem[] = [
   },
 ];
 
-export default function PrivacyDataUsage() {
+const PrivacyDataUsage = () => {
   return (
     <Card className="py-0">
       <CardContent className="p-6 flex items-start gap-4">
@@ -60,3 +60,5 @@ export default function PrivacyDataUsage() {
     </Card>
   );
 }
+
+export default PrivacyDataUsage;

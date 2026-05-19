@@ -2,7 +2,7 @@ import { Mail, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
-export default function TncCTA() {
+const TncCTA = () => {
   return (
     <div className="rounded-2xl border-3 border-dashed border-secondary/30 p-8 text-center bg-secondary/10">
       <h2 className="font-manrope text-2xl font-semibold text-primary">Need Further Explanation?</h2>
@@ -12,7 +12,7 @@ export default function TncCTA() {
       </p>
       <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
         <Button asChild className='font-semibold px-8! py-3 h-auto text-base rounded-[0.75rem]'>
-          <Link to="/hubungi-kami">
+          <Link to="/contact-us">
             <Mail className="mr-2 h-4 w-4" />
             Contact Us
           </Link>
@@ -25,3 +25,5 @@ export default function TncCTA() {
     </div>
   );
 }
+
+export default TncCTA;

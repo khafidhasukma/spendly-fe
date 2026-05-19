@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-function AuthLayout() {
+const AuthLayout = () => {
   return (
     <div className="min-h-screen">
       <Outlet />

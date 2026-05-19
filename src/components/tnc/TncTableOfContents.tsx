@@ -14,7 +14,7 @@ const tocItems: TocItem[] = [
   { id: 'governing-law', label: 'Governing Law' },
 ];
 
-export default function TncTableOfContents() {
+const TncTableOfContents = () => {
   const [activeId, setActiveId] = useState<string>('user-obligations');
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function TncTableOfContents() {
     return () => observer.disconnect();
   }, []);
 
-  function scrollTo(id: string) {
+  const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -75,3 +75,5 @@ export default function TncTableOfContents() {
     </div>
   );
 }
+
+export default TncTableOfContents;

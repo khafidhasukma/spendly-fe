@@ -7,14 +7,14 @@ interface BudgetSettingsCardProps {
   spendingAlerts?: boolean;
 }
 
-function formatRupiah(amount: number) {
+const formatRupiah = (amount: number) => {
   return new Intl.NumberFormat('id-ID').format(amount);
 }
 
-export default function BudgetSettingsCard({
+const BudgetSettingsCard = ({
   monthlyLimit = 25_000_000,
   spendingAlerts: initialAlerts = true,
-}: BudgetSettingsCardProps) {
+}: BudgetSettingsCardProps) => {
   const [alerts, setAlerts] = useState(initialAlerts);
 
   return (
@@ -56,3 +56,5 @@ export default function BudgetSettingsCard({
     </div>
   );
 }
+
+export default BudgetSettingsCard;

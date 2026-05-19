@@ -1,6 +1,6 @@
 import { Wallet } from 'lucide-react';
 
-export default function RegisterHero() {
+const RegisterHero = () => {
   return (
     <div className="relative hidden overflow-hidden lg:flex lg:w-[45%] flex-col justify-between bg-[#0a2a1a] p-10 text-white">
       {/* Decorative glow */}
@@ -36,3 +36,5 @@ export default function RegisterHero() {
     </div>
   );
 }
+
+export default RegisterHero;

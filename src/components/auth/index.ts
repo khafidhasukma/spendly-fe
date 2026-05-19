@@ -1,21 +1,21 @@
-import LoginHero from './LoginHero';
-import RegisterHero from './RegisterHero';
-import AuthHero from './AuthHero';
+import AuthDivider from './AuthDivider';
 import AuthFormPanel from './AuthFormPanel';
+import AuthHero from './AuthHero';
 import AuthPageLayout from './AuthPageLayout';
 import AuthStepIndicator from './AuthStepIndicator';
-import AuthDivider from './AuthDivider';
 import LoginForm from './LoginForm';
+import LoginHero from './LoginHero';
 import RegisterForm from './RegisterForm';
+import RegisterHero from './RegisterHero';
 
 export {
-  LoginHero,
-  RegisterHero,
+  AuthDivider,
   AuthHero,
   AuthFormPanel,
   AuthPageLayout,
   AuthStepIndicator,
-  AuthDivider,
   LoginForm,
+  LoginHero,
   RegisterForm,
+  RegisterHero,
 };

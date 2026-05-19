@@ -16,12 +16,13 @@ interface LogoutConfirmDialogProps {
   onConfirm?: () => void;
 }
 
-export default function LogoutConfirmDialog({
+const LogoutConfirmDialog = ({
   open,
   onOpenChange,
   onConfirm,
-}: LogoutConfirmDialogProps) {
-  function handleConfirm() {
+}: LogoutConfirmDialogProps) => {
+  // confirm
+  const handleConfirm = () => {
     onConfirm?.();
     onOpenChange(false);
   }
@@ -74,3 +75,5 @@ export default function LogoutConfirmDialog({
     </Dialog>
   );
 }
+
+export default LogoutConfirmDialog;
