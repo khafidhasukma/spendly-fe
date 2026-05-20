@@ -22,6 +22,6 @@ const AuthPageLayout = ({
       </div>
     </div>
   );
-}
+};
 
 export default AuthPageLayout;

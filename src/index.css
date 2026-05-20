@@ -185,11 +185,6 @@
   .text-label-sm { font-size: var(--text-label-sm); line-height: var(--leading-label); font-weight: 500; letter-spacing: var(--tracking-label); text-transform: uppercase; }
 }
 
-/* ── Dark-mode token overrides ──────────────────────────────────────────────
-   These override the CSS custom properties emitted by @theme so that all
-   Tailwind utilities that reference var(--color-*) automatically adapt.
-   Applied when <html class="dark"> is set by the ThemeProvider.
-   ───────────────────────────────────────────────────────────────────────── */
 .dark {
   /* Surface / Background */
   --color-background:                 #0d0f18;
@@ -246,4 +241,80 @@
   --shadow-md:      0 4px 16px rgba(0, 0, 0, 0.35);
   --shadow-ambient: 0 16px 40px rgba(0, 0, 0, 0.40);
   --shadow-modal:   0 16px 40px rgba(0, 0, 0, 0.50);
+}
+
+/* Light mode */
+[data-sonner-toaster][data-sonner-theme=light] {
+  /* default */
+  --normal-bg:     var(--color-popover);
+  --normal-border: var(--color-border);
+  --normal-text:   var(--color-popover-foreground);
+
+  /* success — primary green */
+  --success-bg:     #9ef5cc;   /* primary-container light */
+  --success-border: #005C39;   /* primary */
+  --success-text:   #00210f;   /* on-primary-container */
+
+  /* info — secondary orange */
+  --info-bg:     #ffdcc5;      /* secondary-container light */
+  --info-border: #F48221;      /* secondary */
+  --info-text:   #2e1200;      /* on-secondary-container */
+
+  /* warning — tertiary lime */
+  --warning-bg:     #d5f4a9;   /* tertiary-container light */
+  --warning-border: #76BC43;   /* tertiary */
+  --warning-text:   #0f2000;   /* on-tertiary-container */
+
+  /* error — destructive red */
+  --error-bg:     #ffdad6;     /* error-container light */
+  --error-border: #ba1a1a;     /* error */
+  --error-text:   #410002;     /* on-error-container */
+}
+
+/* Dark mode — override Sonner's built-in palette variables */
+[data-sonner-toaster][data-sonner-theme=dark] {
+  /* default */
+  --normal-bg:     var(--color-popover);
+  --normal-border: var(--color-border);
+  --normal-text:   var(--color-popover-foreground);
+
+  /* success */
+  --success-bg:     #003d24;   /* primary-container dark */
+  --success-border: #5edfaa;   /* primary dark */
+  --success-text:   #c5f5e0;   /* on-primary-container dark */
+
+  /* info */
+  --info-bg:     #3d1f00;      /* secondary-container dark (deep orange) */
+  --info-border: #F48221;
+  --info-text:   #ffdcc5;
+
+  /* warning */
+  --warning-bg:     #1a2e00;   /* tertiary-container dark */
+  --warning-border: #76BC43;
+  --warning-text:   #d5f4a9;
+
+  /* error */
+  --error-bg:     #410002;     /* error-container dark */
+  --error-border: #f87171;     /* error dark */
+  --error-text:   #ffdad6;
+}
+
+/* Base toast shape */
+[data-sonner-toast][data-styled=true] {
+  font-family: var(--font-sans) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-md) !important;
+  font-size: 0.875rem !important;
+}
+
+/* Title weight */
+[data-sonner-toast][data-styled=true] [data-title] {
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+}
+
+/* Description */
+[data-sonner-toast][data-styled=true] [data-description] {
+  font-size: 0.75rem !important;
+  opacity: 0.85 !important;
 }

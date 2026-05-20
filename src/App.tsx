@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from './contexts/ThemeContext';
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
@@ -14,10 +15,12 @@ import ContactUsPage from './pages/contact-us';
 import FAQPage from './pages/faq';
 import TncPage from './pages/tnc';
 import PrivacyPolicyPage from './pages/privacy-policy';
+import ForgotPasswordPage from './pages/forgot-password';
 
 const App = () => {
   return (
     <ThemeProvider>
+      <Toaster position="top-center" />
       <BrowserRouter>
         <Routes>
           <Route element={<MainLayout />}>
@@ -33,6 +36,7 @@ const App = () => {
           <Route element={<AuthLayout />}>
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
+            <Route path="forgot-password" element={<ForgotPasswordPage />} />
             <Route path="tnc" element={<TncPage />} />
             <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
           </Route>
@@ -42,7 +46,7 @@ const App = () => {
       </BrowserRouter>
     </ThemeProvider>
   );
-}
+};
 
 export default App;
 

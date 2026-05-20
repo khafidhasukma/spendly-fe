@@ -45,6 +45,6 @@ const AuthStepIndicator = ({
       ))}
     </div>
   );
-}
+};
 
 export default AuthStepIndicator;

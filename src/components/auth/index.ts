@@ -4,9 +4,8 @@ import AuthHero from './AuthHero';
 import AuthPageLayout from './AuthPageLayout';
 import AuthStepIndicator from './AuthStepIndicator';
 import LoginForm from './LoginForm';
-import LoginHero from './LoginHero';
 import RegisterForm from './RegisterForm';
-import RegisterHero from './RegisterHero';
+import ForgotPasswordForm from './ForgotPasswordForm';
 
 export {
   AuthDivider,
@@ -15,7 +14,6 @@ export {
   AuthPageLayout,
   AuthStepIndicator,
   LoginForm,
-  LoginHero,
   RegisterForm,
-  RegisterHero,
+  ForgotPasswordForm
 };

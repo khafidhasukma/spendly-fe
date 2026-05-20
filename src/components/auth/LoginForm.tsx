@@ -52,6 +52,6 @@ const LoginForm = () => {
       </p>
     </>
   );
-}
+};
 
 export default LoginForm;

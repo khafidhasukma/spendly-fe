@@ -20,6 +20,6 @@ const AuthFormPanel = ({
       </div>
     </div>
   );
-}
+};
 
 export default AuthFormPanel;

@@ -25,9 +25,9 @@ const RegisterForm = () => {
         <AuthStepIndicator steps={STEPS} currentStep={0} />
       </div> */}
 
-      <form className="mt-6 space-y-8">
+      <form className="mt-6 space-y-6">
         {/* full Name + Email */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
           <GroupInput id="fullname" label="Full name" type="text" icon={<User />} placeholder="Jane Doe" />
           <GroupInput
             id="reg-email"
@@ -39,7 +39,7 @@ const RegisterForm = () => {
         </div>
 
         {/* password + confirm */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
           <PasswordInput id="password" placeholder="Min. 8 characters" />
           <PasswordInput id="confirm-password" label="Confirm Password" placeholder="Repeat password" />
         </div>
@@ -77,6 +77,6 @@ const RegisterForm = () => {
       </form>
     </>
   );
-}
+};
 
 export default RegisterForm;

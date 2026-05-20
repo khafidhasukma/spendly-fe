@@ -10,6 +10,6 @@ const AuthDivider = ({ label = 'Or' }: AuthDividerProps) => {
       <div className="h-px flex-1 bg-border" />
     </div>
   );
-}
+};
 
 export default AuthDivider;
