@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import { Wallet, ArrowRight } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
-
-interface BudgetSettingsCardProps {
-  monthlyLimit?: number;
-  spendingAlerts?: boolean;
-}
+import type { BudgetSettingsCardProps } from '@/types';
 
 const formatRupiah = (amount: number) => {
   return new Intl.NumberFormat('id-ID').format(amount);

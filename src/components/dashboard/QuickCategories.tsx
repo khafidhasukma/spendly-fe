@@ -8,17 +8,9 @@ import {
   Home,
   Zap,
   Car,
-  type LucideIcon,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-interface QuickCategory {
-  id: string;
-  label: string;
-  icon: LucideIcon;
-  color: string;
-  bgColor: string;
-}
+import type { QuickCategory } from '@/types';
 
 const categories: QuickCategory[] = [
   { id: 'lifestyle',    label: 'Lifestyle',    icon: ShoppingBag,     color: 'text-purple-500', bgColor: 'bg-purple-50 dark:bg-purple-500/20'   },

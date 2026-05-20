@@ -12,18 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-
-interface EditProfileModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  initialData?: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    avatarUrl: string;
-  };
-  onSave?: (data: { firstName: string; lastName: string; email: string; avatarUrl: string }) => void;
-}
+import type { EditProfileModalProps } from '@/types';
 
 const DEFAULT_DATA = {
   firstName: 'Alex',

@@ -1,14 +1,8 @@
 ﻿import { groupHistoryByRelativeDay } from '.';
 import { HistoryTableDesktop, HistoryTableMobile, HistoryTableEmpty } from '.';
-import type { HistoryTransaction } from './historyTypes';
+import type { HistoryTableProps } from '@/types';
 
-export type { HistoryCategory, HistoryTransaction } from './historyTypes';
-
-interface HistoryTableProps {
-  transactions: HistoryTransaction[];
-  onEdit?: (id: string) => void;
-  onDelete?: (id: string) => void;
-}
+export type { HistoryCategory, HistoryTransaction } from '@/types';
 
 const HistoryTable = ({ transactions, onEdit, onDelete }: HistoryTableProps) => {
   if (transactions.length === 0) {

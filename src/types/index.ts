@@ -1,28 +1,72 @@
-// ─── Transaction ─────────────────────────────────────────────────────────────
-export interface Transaction {
-  id: string;
-  amount: number;
-  category: string;
-  date: string; // ISO 8601 e.g. "2026-04-27"
-  merchant_name: string;
-}
+export type { Transaction, OCRResult, Prediction, ApiResponse } from './api';
 
-// ─── OCR Result ───────────────────────────────────────────────────────────────
-export interface OCRResult {
-  confidence_score: number; // 0.0 – 1.0
-  extracted_text: string;
-  total_amount: number;
-}
+export type {
+  HistoryCategory,
+  HistoryTransaction,
+  HistoryFiltersValue,
+  HistoryFiltersProps,
+  HistoryTableProps,
+  HistoryTableDesktopProps,
+  HistoryTableMobileProps,
+  HistoryHeaderProps,
+  HistoryPaginationProps,
+  HistoryCategoryStyle,
+  UseHistoryListOptions,
+  HistoryFiltersPanelProps,
+  HistoryDeleteDialogProps,
+  HistoryTransactionsPanelProps,
+} from './history';
 
-// ─── Prediction ───────────────────────────────────────────────────────────────
-export interface Prediction {
-  date: string; // ISO 8601
-  estimated_spending: number;
-}
+export type {
+  BarData,
+  WealthGrowthProps,
+  DisplayTransaction,
+  RecentTransactionsProps,
+  QuickCategory,
+  DashboardGreetingProps,
+  BudgetItem,
+  BudgetTrackingProps,
+  BalanceCardProps,
+  AIInsightCardProps,
+} from './dashboard';
 
-// ─── API Response wrapper ────────────────────────────────────────────────────
-export interface ApiResponse<T> {
-  data: T;
-  message: string;
-  success: boolean;
-}
+export type {
+  PersonalInfoCardProps,
+  SupportItem,
+  SupportCardProps,
+  SecurityCardProps,
+  ProfileHeaderProps,
+  LogoutConfirmDialogProps,
+  EditProfileModalProps,
+  ChangePasswordModalProps,
+  BudgetSettingsCardProps,
+} from './profile';
+
+export type {
+  Category,
+  CategoryIconOption,
+  ColorOption,
+} from './categories';
+
+export type {
+  SidebarProps,
+  NavbarProps,
+  NavItem,
+} from './layout';
+
+export type {
+  GroupInputProps,
+  PasswordInputProps,
+} from './forms';
+
+export type {
+  TncSubItem,
+  TncSectionProps,
+  TocItem,
+  FAQCategory,
+  FAQItem,
+  RightItem,
+  InfoCategory,
+  UsageItem,
+  ThemeContextValue,
+} from './pages';

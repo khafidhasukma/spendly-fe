@@ -1,11 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 import { ICON_OPTIONS } from '@/lib/category-icons';
-
-export interface HistoryCategoryStyle {
-  iconBg: string;
-  iconColor: string;
-  badgeClass: string;
-}
+import type { HistoryCategoryStyle } from '@/types';
 
 // 8 colors, keyed by category id
 const PALETTE: HistoryCategoryStyle[] = [

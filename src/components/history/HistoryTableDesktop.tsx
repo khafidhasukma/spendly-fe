@@ -4,13 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { formatRupiahAmount, formatDate, paymentSourceLabel } from '@/utils';
 import { getHistoryCategoryIcon, getHistoryCategoryStyle } from '@/lib/history-category-palette';
-import type { HistoryTransaction } from './historyTypes';
-
-type HistoryTableDesktopProps = {
-  transactions: HistoryTransaction[];
-  onEdit?: (id: string) => void;
-  onDelete?: (id: string) => void;
-};
+import type { HistoryTableDesktopProps } from '@/types';
 
 const HistoryTableDesktop = ({ transactions, onEdit, onDelete }: HistoryTableDesktopProps) => {
   return (

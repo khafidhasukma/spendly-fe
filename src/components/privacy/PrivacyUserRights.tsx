@@ -1,10 +1,5 @@
 import { Download, PenLine, Trash2 } from 'lucide-react';
-import { type LucideIcon } from 'lucide-react';
-
-interface RightItem {
-  icon: LucideIcon;
-  text: string;
-}
+import type { RightItem } from '@/types';
 
 const rights: RightItem[] = [
   {

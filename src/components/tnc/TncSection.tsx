@@ -1,19 +1,6 @@
-import { type LucideIcon } from 'lucide-react';
+import type { TncSectionProps } from '@/types';
 
-export interface TncSubItem {
-  number: string;
-  text: string;
-}
-
-interface TncSectionProps {
-  id: string;
-  sectionNumber: number;
-  title: string;
-  description: string;
-  items: TncSubItem[];
-  blockquote?: string;
-  icon: LucideIcon;
-}
+export type { TncSubItem } from '@/types';
 
 const TncSection = ({
   id,

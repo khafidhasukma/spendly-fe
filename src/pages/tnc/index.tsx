@@ -5,21 +5,10 @@ import {
   TncSection,
   TncImageBanner,
   TncCTA,
-  type TncSubItem,
 } from '@/components/tnc';
-import { type LucideIcon } from 'lucide-react';
+import type { TncSectionProps } from '@/types';
 
-interface SectionData {
-  id: string;
-  sectionNumber: number;
-  title: string;
-  description: string;
-  items: TncSubItem[];
-  blockquote?: string;
-  icon: LucideIcon;
-}
-
-const sections: SectionData[] = [
+const sections: TncSectionProps[] = [
   {
     id: 'user-obligations',
     sectionNumber: 1,

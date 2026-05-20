@@ -1,13 +1,6 @@
 import { Trash2 } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
-import type { HistoryTransaction } from '@/components/history';
-
-type HistoryDeleteDialogProps = {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  target: HistoryTransaction | undefined;
-  onConfirm: () => void;
-};
+import type { HistoryDeleteDialogProps } from '@/types';
 
 const HistoryDeleteDialog = ({ open, onOpenChange, target, onConfirm }: HistoryDeleteDialogProps) => {
   return (

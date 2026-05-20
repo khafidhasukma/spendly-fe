@@ -1,20 +1,10 @@
-import type { ReactNode } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
   InputGroup,
   InputGroupAddon,
 } from '@/components/ui/input-group';
-
-interface GroupInputProps {
-  id?: string;
-  label?: string;
-  type?: React.HTMLInputTypeAttribute;
-  placeholder?: string;
-  icon?: ReactNode;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+import type { GroupInputProps } from '@/types';
 
 const GroupInput = ({
   id,

@@ -7,11 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-
-interface FAQCategory {
-  category: string;
-  items: { question: string; answer: string }[];
-}
+import type { FAQCategory } from '@/types';
 
 const faqData: FAQCategory[] = [
   {

@@ -5,16 +5,9 @@ import {
   BrainCircuit,
   History,
   UserCircle,
-  type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-interface NavItem {
-  to: string;
-  label: string;
-  icon: LucideIcon;
-  scan?: boolean;
-}
+import type { NavItem } from '@/types';
 
 const navItems: NavItem[] = [
   { to: '/',           label: 'Home',     icon: LayoutDashboard },

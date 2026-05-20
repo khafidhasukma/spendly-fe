@@ -1,10 +1,6 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-
-interface TocItem {
-  id: string;
-  label: string;
-}
+import type { TocItem } from '@/types';
 
 const tocItems: TocItem[] = [
   { id: 'user-obligations', label: 'User Obligations' },

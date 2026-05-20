@@ -9,12 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-
-interface LogoutConfirmDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onConfirm?: () => void;
-}
+import type { LogoutConfirmDialogProps } from '@/types';
 
 const LogoutConfirmDialog = ({
   open,

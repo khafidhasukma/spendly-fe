@@ -7,14 +7,7 @@ import {
   InputGroupAddon,
   InputGroupButton,
 } from '@/components/ui/input-group';
-
-interface PasswordInputProps {
-  id?: string;
-  label?: string;
-  placeholder?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+import type { PasswordInputProps } from '@/types';
 
 const PasswordInput = ({
   id = 'password',

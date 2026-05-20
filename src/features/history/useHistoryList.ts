@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import type { HistoryFiltersValue, HistoryTransaction } from '@/components/history';
+import type { HistoryFiltersValue, HistoryTransaction, UseHistoryListOptions } from '@/types';
 import { MOCK_HISTORY_TRANSACTIONS } from '.';
-
-type UseHistoryListOptions = {
-  initialTransactions?: HistoryTransaction[];
-  pageSize?: number;
-};
 
 const useHistoryList = (options: UseHistoryListOptions = {}) => {
   const pageSize = options.pageSize ?? 10;

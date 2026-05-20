@@ -243,6 +243,8 @@
   --shadow-modal:   0 16px 40px rgba(0, 0, 0, 0.50);
 }
 
+/* Sonner toast overrides */
+
 /* Light mode */
 [data-sonner-toaster][data-sonner-theme=light] {
   /* default */

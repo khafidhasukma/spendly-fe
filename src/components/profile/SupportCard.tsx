@@ -3,13 +3,7 @@ import { Link } from 'react-router-dom';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { useTheme } from '@/contexts/ThemeContext';
-
-interface SupportItem {
-  label: string;
-  icon: typeof ExternalLink;
-  href?: string;
-  external?: boolean;
-}
+import type { SupportItem, SupportCardProps } from '@/types';
 
 const supportItems: SupportItem[] = [
   { label: 'Privacy Policy', icon: ExternalLink, href: '/privacy-policy', external: false },
@@ -17,16 +11,11 @@ const supportItems: SupportItem[] = [
   { label: 'Contact Support', icon: HelpCircle, href: '/contact-us', external: false },
 ];
 
-interface SupportCardProps {
-  onLogout?: () => void;
-}
-
 const SupportCard = ({ onLogout }: SupportCardProps) => {
   const { dark, toggleDark } = useTheme();
 
   return (
     <div className="space-y-6">
-      {/* Dark mode toggle */}
       <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
         <h3 className="mb-4 text-lg font-semibold text-foreground font-manrope">Appearance</h3>
         <div className="flex items-center justify-between gap-4">
@@ -49,7 +38,6 @@ const SupportCard = ({ onLogout }: SupportCardProps) => {
         </div>
       </div>
 
-      {/* Support links */}
       <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
         <h3 className="mb-4 text-lg font-semibold text-foreground font-manrope">Support</h3>
 
@@ -81,7 +69,6 @@ const SupportCard = ({ onLogout }: SupportCardProps) => {
         </ul>
       </div>
 
-      {/* Logout */}
       <button
         onClick={onLogout}
         className="flex w-full items-center justify-center gap-2 rounded-2xl border border-error/30 bg-card p-4 text-sm font-semibold text-error shadow-sm transition-colors hover:bg-error/5 dark:hover:bg-error/10"

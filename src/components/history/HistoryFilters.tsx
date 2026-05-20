@@ -16,19 +16,9 @@ import {
   DrawerFooter,
 } from '@/components/ui/drawer';
 import { cn } from '@/lib/utils';
+import type { HistoryFiltersValue, HistoryFiltersProps } from '@/types';
 
-export interface HistoryFiltersValue {
-  dateRange: string;
-  category: string;
-  amountMin: string;
-  amountMax: string;
-}
-
-interface HistoryFiltersProps {
-  value: HistoryFiltersValue;
-  onChange: (value: HistoryFiltersValue) => void;
-  categoryOptions?: { id: string; name: string }[];
-}
+export type { HistoryFiltersValue } from '@/types';
 
 const DATE_RANGE_OPTIONS = [
   { value: 'last-7', label: 'Last 7 Days' },
@@ -82,7 +72,7 @@ const HistoryFiltersFields = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all" className="text-sm">All Categories</SelectItem>
-            {categoryOptions.map((c) => (
+            {categoryOptions?.map((c) => (
               <SelectItem key={c.id} value={c.id} className="text-sm">
                 {c.name}
               </SelectItem>

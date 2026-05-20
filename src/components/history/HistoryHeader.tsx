@@ -1,10 +1,7 @@
 import { Download, FileText, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/ui/page-header';
-
-interface HistoryHeaderProps {
-  onAddExpense?: () => void;
-}
+import type { HistoryHeaderProps } from '@/types';
 
 const HistoryHeader = ({ onAddExpense }: HistoryHeaderProps) => {
   return (

@@ -1,15 +1,5 @@
-import { HistoryPagination, HistoryTable, type HistoryTransaction } from '@/components/history';
-
-type HistoryTransactionsPanelProps = {
-  transactions: HistoryTransaction[];
-  currentPage: number;
-  totalPages: number;
-  totalItems: number;
-  pageSize: number;
-  onPageChange: (page: number) => void;
-  onEdit?: (id: string) => void;
-  onDelete?: (id: string) => void;
-};
+import { HistoryPagination, HistoryTable } from '@/components/history';
+import type { HistoryTransactionsPanelProps } from '@/types';
 
 const HistoryTransactionsPanel = ({
   transactions,

@@ -1,9 +1,6 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-
-interface ThemeContextValue {
-  dark: boolean;
-  toggleDark: () => void;
-}
+import type { ThemeContextValue } from '@/types';
 
 const ThemeContext = createContext<ThemeContextValue>({ dark: false, toggleDark: () => {} });
 

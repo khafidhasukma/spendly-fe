@@ -1,10 +1,6 @@
 import { Database } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-
-interface InfoCategory {
-  title: string;
-  items: string[];
-}
+import type { InfoCategory } from '@/types';
 
 const categories: InfoCategory[] = [
   {

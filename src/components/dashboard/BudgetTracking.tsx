@@ -1,11 +1,6 @@
 import { BarChart3 } from 'lucide-react';
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty';
-
-export interface BudgetItem {
-  label: string;
-  limit: number;
-  spent: number;
-}
+import type { BudgetItem, BudgetTrackingProps } from '@/types';
 
 const mockBudgets: BudgetItem[] = [
   { label: 'Monthly Spending', limit: 4_500_000, spent: 3_150_000 },
@@ -42,9 +37,7 @@ const BudgetBar = ({ item }: { item: BudgetItem }) => {
   );
 };
 
-export interface BudgetTrackingProps {
-  budgets?: BudgetItem[];
-}
+export { type BudgetItem, type BudgetTrackingProps } from '@/types';
 
 const BudgetTracking = ({ budgets = mockBudgets }: BudgetTrackingProps) => {
   return (

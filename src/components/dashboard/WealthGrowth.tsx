@@ -1,9 +1,5 @@
 import { TrendingUp } from 'lucide-react';
-
-interface BarData {
-  month: string;
-  value: number;
-}
+import type { BarData, WealthGrowthProps } from '@/types';
 
 const mockData: BarData[] = [
   { month: 'Jul', value: 40 },
@@ -14,10 +10,7 @@ const mockData: BarData[] = [
   { month: 'Dec', value: 90 },
 ];
 
-export interface WealthGrowthProps {
-  percentage?: number;
-  data?: BarData[];
-}
+export { type WealthGrowthProps } from '@/types';
 
 const WealthGrowth = ({
   percentage = 12.4,

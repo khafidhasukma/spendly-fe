@@ -1,10 +1,5 @@
 import { ShieldCheck, KeyRound, ChevronRight } from 'lucide-react';
-
-interface SecurityCardProps {
-  lastPasswordChange?: string;
-  twoFactorEnabled?: boolean;
-  onUpdatePassword?: () => void;
-}
+import type { SecurityCardProps } from '@/types';
 
 const SecurityCard = ({
   lastPasswordChange = '3 months ago',

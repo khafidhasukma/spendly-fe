@@ -9,13 +9,7 @@ import {
 import { cn } from '@/lib/utils';
 import { formatRupiahAmount, formatDate } from '@/utils';
 import { getHistoryCategoryIcon, getHistoryCategoryStyle } from '@/lib/history-category-palette';
-import type { HistoryTransaction } from './historyTypes';
-
-type HistoryTableMobileProps = {
-  groups: [string, HistoryTransaction[]][];
-  onEdit?: (id: string) => void;
-  onDelete?: (id: string) => void;
-};
+import type { HistoryTableMobileProps } from '@/types';
 
 const HistoryTableMobile = ({ groups, onEdit, onDelete }: HistoryTableMobileProps) => {
   return (

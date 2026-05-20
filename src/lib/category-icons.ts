@@ -33,12 +33,7 @@ import {
   Building2,
   type LucideIcon,
 } from 'lucide-react';
-
-export interface CategoryIconOption {
-  id: string;
-  label: string;
-  icon: LucideIcon;
-}
+import type { CategoryIconOption, ColorOption } from '@/types';
 
 export const ICON_OPTIONS: CategoryIconOption[] = [
   { id: 'utensils',     label: 'F&B',         icon: UtensilsCrossed },
@@ -74,11 +69,6 @@ export const ICON_OPTIONS: CategoryIconOption[] = [
   { id: 'banknote',     label: 'Cash',         icon: Banknote       },
   { id: 'building',     label: 'Office',       icon: Building2      },
 ];
-
-export interface ColorOption {
-  color: string;
-  bgColor: string;
-}
 
 export const COLOR_PALETTE: ColorOption[] = [
   { color: 'text-orange-500', bgColor: 'bg-orange-100 dark:bg-orange-500/20' },

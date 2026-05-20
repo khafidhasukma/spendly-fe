@@ -1,3 +1,5 @@
+import type { DashboardGreetingProps } from '@/types';
+
 const getGreeting = (): { text: string; } => {
   const hour = new Date().getHours();
   if (hour < 12) return { text: 'Good morning' };
@@ -5,9 +7,7 @@ const getGreeting = (): { text: string; } => {
   return { text: 'Good evening' };
 };
 
-export interface DashboardGreetingProps {
-  name?: string;
-}
+export { type DashboardGreetingProps } from '@/types';
 
 const DashboardGreeting = ({ name = 'John Doe' }: DashboardGreetingProps) => {
   const { text } = getGreeting();

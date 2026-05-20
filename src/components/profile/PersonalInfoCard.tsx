@@ -1,12 +1,7 @@
 import { UserCircle } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-
-interface PersonalInfoCardProps {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-}
+import type { PersonalInfoCardProps } from '@/types';
 
 const PersonalInfoCard = ({
   firstName = 'Alex',

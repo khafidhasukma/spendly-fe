@@ -1,12 +1,6 @@
 import { Eye, Sparkles, Wrench, Bell } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { type LucideIcon } from 'lucide-react';
-
-interface UsageItem {
-  icon: LucideIcon;
-  title: string;
-  description: string;
-}
+import type { UsageItem } from '@/types';
 
 const usageItems: UsageItem[] = [
   {

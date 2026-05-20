@@ -17,6 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import type { SidebarProps } from '@/types';
 
 const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -25,11 +26,6 @@ const navItems = [
   { to: '/history', label: 'History', icon: History },
   { to: '/profile', label: 'Profile', icon: UserCircle },
 ];
-
-interface SidebarProps {
-  isOpen?: boolean;
-  onClose: () => void;
-}
 
 const NavItem = ({
   to,

@@ -1,10 +1,6 @@
 import { Sparkles, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
-export interface AIInsightCardProps {
-  title?: string;
-  viewDetailsTo?: string;
-}
+import type { AIInsightCardProps } from '@/types';
 
 const AIInsightCard = ({
   title = 'Smart Savings',

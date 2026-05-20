@@ -1,9 +1,5 @@
 import { Link } from 'react-router-dom';
-
-interface FAQItem {
-  question: string;
-  answer: string;
-}
+import type { FAQItem } from '@/types';
 
 const faqs: FAQItem[] = [
   {

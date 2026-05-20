@@ -1,8 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-
-interface NavbarProps {
-  title?: string;
-}
+import type { NavbarProps } from '@/types';
 
 const Navbar = ({ title = 'Dashboard' }: NavbarProps) => {
   return (

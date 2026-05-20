@@ -10,7 +10,6 @@ import {
   LayoutGrid,
   Trash2,
   Plus,
-  type LucideIcon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/ui/page-header';
@@ -18,17 +17,7 @@ import { CategoriesEmptyState, CategoryCard, CategoriesFeaturesSection } from '@
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { EditCategoryDialog } from '@/components/ui/edit-category-dialog';
 import { getIconById, getNextColor } from '@/lib/category-icons';
-
-interface Category {
-  id: string;
-  name: string;
-  iconId: string;
-  icon: LucideIcon;
-  color: string;
-  bgColor: string;
-  transactions: number;
-  total: number;
-}
+import type { Category } from '@/types';
 
 const INITIAL_CATEGORIES: Category[] = [
   { id: 'fnb',         iconId: 'utensils',      name: 'F&B',         icon: UtensilsCrossed, color: 'text-orange-500', bgColor: 'bg-orange-100 dark:bg-orange-500/20', transactions: 0, total: 0 },

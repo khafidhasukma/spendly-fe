@@ -4,22 +4,11 @@ import {
   Banknote,
   Scissors,
   ScanLine,
-  type LucideIcon,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty';
 import { Button } from '@/components/ui/button';
-
-interface DisplayTransaction {
-  id: string;
-  merchant: string;
-  datetime: string;
-  amount: number;
-  category: string;
-  icon: LucideIcon;
-  iconBg: string;
-  iconColor: string;
-}
+import type { DisplayTransaction, RecentTransactionsProps } from '@/types';
 
 const mockTransactions: DisplayTransaction[] = [
   {
@@ -68,9 +57,7 @@ function formatRupiah(amount: number) {
   return new Intl.NumberFormat('id-ID').format(Math.abs(amount));
 }
 
-export interface RecentTransactionsProps {
-  transactions?: DisplayTransaction[];
-}
+export { type RecentTransactionsProps } from '@/types';
 
 const RecentTransactions = ({
   transactions = mockTransactions,

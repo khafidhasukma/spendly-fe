@@ -3,7 +3,8 @@ import TncTableOfContents from './TncTableOfContents';
 import TncSection from './TncSection';
 import TncImageBanner from './TncImageBanner';
 import TncCTA from './TncCTA';
-import type { TncSubItem } from './TncSection';
+
+export type { TncSubItem } from '@/types';
 
 export {
   TncHeader,
@@ -11,5 +12,4 @@ export {
   TncSection,
   TncImageBanner,
   TncCTA,
-  type TncSubItem
 };

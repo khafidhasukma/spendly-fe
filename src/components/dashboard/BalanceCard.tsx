@@ -1,11 +1,5 @@
 import { ArrowDown, ArrowUp, TrendingUp, Wallet } from 'lucide-react';
-
-export interface BalanceCardProps {
-  totalBalance?: number;
-  income?: number;
-  expense?: number;
-  percentageChange?: number;
-}
+import type { BalanceCardProps } from '@/types';
 
 function formatRupiah(amount: number) {
   return new Intl.NumberFormat('id-ID').format(amount);

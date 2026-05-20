@@ -7,14 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-
-interface HistoryPaginationProps {
-  currentPage: number;
-  totalPages: number;
-  totalItems: number;
-  pageSize: number;
-  onPageChange: (page: number) => void;
-}
+import type { HistoryPaginationProps } from '@/types';
 
 const HistoryPagination = ({
   currentPage,

@@ -10,12 +10,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import PasswordInput from '@/components/forms/PasswordInput';
-
-interface ChangePasswordModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  onSave?: (newPassword: string) => void;
-}
+import type { ChangePasswordModalProps } from '@/types';
 
 const ChangePasswordModal = ({
   open,

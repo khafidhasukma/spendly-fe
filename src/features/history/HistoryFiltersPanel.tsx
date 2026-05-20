@@ -1,10 +1,5 @@
-import { HistoryFilters, type HistoryFiltersValue } from '@/components/history';
-
-type HistoryFiltersPanelProps = {
-  value: HistoryFiltersValue;
-  onChange: (value: HistoryFiltersValue) => void;
-  categoryOptions: { id: string; name: string }[];
-};
+import { HistoryFilters } from '@/components/history';
+import type { HistoryFiltersPanelProps } from '@/types';
 
 const HistoryFiltersPanel = ({ value, onChange, categoryOptions }: HistoryFiltersPanelProps) => {
   return <HistoryFilters value={value} onChange={onChange} categoryOptions={categoryOptions} />;
