@@ -3,8 +3,8 @@ import type { NavbarProps } from '@/types';
 
 const Navbar = ({ title = 'Dashboard' }: NavbarProps) => {
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 dark:border-border">
-      <div className="mx-auto flex h-14 w-full max-w-[1600px] items-center justify-between gap-3 px-3 sm:h-16 sm:px-5 lg:h-20 lg:px-12">
+    <header className="sticky top-0 z-40 border-b border-border/60 bg-card/95 backdrop-blur supports-backdrop-filter-bg-card/80 dark:border-border">
+      <div className="mx-auto flex h-14 w-full items-center justify-between gap-3 px-3 sm:h-16 sm:px-5 lg:h-20 lg:px-12">
         <div className="flex min-w-0 flex-1 items-center">
           <img
             src="/assets/logos/logo.svg"
@@ -21,7 +21,7 @@ const Navbar = ({ title = 'Dashboard' }: NavbarProps) => {
             <AvatarImage src="https://github.com/shadcn.png" alt="" className="grayscale" />
             <AvatarFallback>JD</AvatarFallback>
           </Avatar>
-          <span className="hidden max-w-[7.5rem] truncate text-sm font-medium text-foreground sm:inline-block sm:max-w-none sm:text-base">
+          <span className="hidden max-w-30 truncate text-sm font-medium text-foreground sm:inline-block sm:max-w-none sm:text-base">
             John Doe
           </span>
         </div>

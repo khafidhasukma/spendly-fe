@@ -12,27 +12,23 @@ const mockData: BarData[] = [
 
 export { type WealthGrowthProps } from '@/types';
 
-const WealthGrowth = ({
-  percentage = 12.4,
-  data = mockData,
-}: WealthGrowthProps) => {
+const WealthGrowth = ({ percentage = 12.4, data = mockData }: WealthGrowthProps) => {
   const maxValue = Math.max(...data.map((d) => d.value));
 
   return (
-    <div className="rounded-2xl border border-border bg-surface-warm p-6 shadow-sm">
+    <div className="rounded-2xl border border-border bg-surface-warm p-5 shadow-sm sm:p-6">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-xs font-semibold uppercase text-muted-foreground">Wealth Growth</p>
-          <p className="mt-1 text-2xl font-semibold text-primary">+{percentage}%</p>
+          <p className="mt-1 text-xl font-semibold text-primary sm:text-2xl">+{percentage}%</p>
         </div>
 
-        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-card">
-          <TrendingUp className="h-5 w-5 text-primary" />
+        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-card sm:h-10 sm:w-10">
+          <TrendingUp className="h-4 w-4 text-primary sm:h-5 sm:w-5" />
         </div>
       </div>
 
-      {/* Bar chart */}
-      <div className="mt-4 flex h-20 items-end gap-1.5">
+      <div className="mt-4 flex h-16 items-end gap-1 sm:h-20 sm:gap-1.5">
         {data.map((bar, i) => {
           const heightPct = maxValue > 0 ? (bar.value / maxValue) * 100 : 0;
           const isLast = i === data.length - 1;
@@ -48,10 +44,12 @@ const WealthGrowth = ({
         })}
       </div>
 
-      {/* Month labels */}
-      <div className="mt-1 flex gap-1.5">
+      <div className="mt-1 flex gap-1 sm:gap-1.5">
         {data.map((bar) => (
-          <div key={bar.month} className="flex-1 text-center text-[10px] text-muted-foreground">
+          <div
+            key={bar.month}
+            className="flex-1 text-center text-[9px] text-muted-foreground sm:text-[10px]"
+          >
             {bar.month}
           </div>
         ))}

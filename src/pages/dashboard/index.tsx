@@ -5,34 +5,32 @@
   BudgetTracking,
   QuickCategories,
   RecentTransactions,
-  WealthGrowth
+  WealthGrowth,
 } from '@/components/dashboard';
 
 const DashboardPage = () => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 lg:space-y-8">
       <DashboardGreeting />
 
-      <div className="grid grid-cols-1 gap-7 lg:grid-cols-5">
+      {/* Hero row */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-6">
         <div className="lg:col-span-3">
-          {/* Balance (wider) */}
           <BalanceCard />
         </div>
         <div className="lg:col-span-2">
-          {/* AI Insight */}
           <AIInsightCard />
         </div>
       </div>
 
-      {/* Quick Categories */}
       <QuickCategories />
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        {/* Recent Transactions */}
-        <RecentTransactions />
-
-        {/* Budget & Wealth */}
-        <div className="flex flex-col gap-6">
+      {/* Bottom row */}
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-6">
+        <div className="lg:col-span-3">
+          <RecentTransactions />
+        </div>
+        <div className="flex flex-col gap-4 lg:col-span-2 lg:gap-6">
           <BudgetTracking />
           <WealthGrowth />
         </div>

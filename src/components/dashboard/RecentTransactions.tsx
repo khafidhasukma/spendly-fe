@@ -59,13 +59,13 @@ function formatRupiah(amount: number) {
 
 export { type RecentTransactionsProps } from '@/types';
 
-const RecentTransactions = ({
-  transactions = mockTransactions,
-}: RecentTransactionsProps) => {
+const RecentTransactions = ({ transactions = mockTransactions }: RecentTransactionsProps) => {
   return (
-    <div className="rounded-2xl border border-border bg-card p-6 shadow-sm">
+    <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-foreground font-manrope">Recent Transactions</h2>
+        <h2 className="text-xl font-semibold text-foreground font-manrope sm:text-2xl">
+          Recent Transactions
+        </h2>
         <Link to="/history" className="text-sm font-semibold text-primary hover:underline">
           View All
         </Link>
@@ -78,32 +78,46 @@ const RecentTransactions = ({
               <ScanLine />
             </EmptyMedia>
             <EmptyTitle>Belum Ada Transaksi</EmptyTitle>
-            <EmptyDescription>Mulai scan struk belanja Anda untuk mencatat pengeluaran pertama.</EmptyDescription>
+            <EmptyDescription>
+              Mulai scan struk belanja Anda untuk mencatat pengeluaran pertama.
+            </EmptyDescription>
           </EmptyHeader>
           <Button asChild size="sm" className="bg-primary hover:bg-primary/90">
             <Link to="/scan">Scan Struk Sekarang</Link>
           </Button>
         </Empty>
       ) : (
-        <ul className="mt-6 space-y-4">
+        <ul className="mt-4 divide-y divide-border sm:mt-5">
           {transactions.map((tx) => {
             const Icon = tx.icon;
             return (
-              <li key={tx.id} className="flex items-center gap-4 p-3">
-                <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg ${tx.iconBg}`}>
-                  <Icon className={`h-5 w-5 ${tx.iconColor}`} />
+              <li key={tx.id} className="flex items-center gap-3 py-3 sm:py-3.5">
+                <div
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${tx.iconBg}`}
+                >
+                  <Icon className={`h-4 w-4 sm:h-5 sm:w-5 ${tx.iconColor}`} />
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-base font-semibold text-foreground">{tx.merchant}</p>
-                  <p className="text-sm text-muted-foreground">{tx.datetime}</p>
+                  <p className="truncate text-sm font-semibold text-foreground">
+                    {tx.merchant}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{tx.datetime}</p>
                 </div>
 
                 <div className="shrink-0 text-right">
-                  <p className={`text-base font-bold ${tx.amount > 0 ? 'text-green-600 dark:text-green-400' : 'text-foreground'}`}>
+                  <p
+                    className={`text-sm font-bold tabular-nums ${
+                      tx.amount > 0
+                        ? 'text-green-600 dark:text-green-400'
+                        : 'text-foreground'
+                    }`}
+                  >
                     {tx.amount > 0 ? '+' : '-'}Rp{formatRupiah(tx.amount)}
                   </p>
-                  <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">{tx.category}</p>
+                  <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">
+                    {tx.category}
+                  </p>
                 </div>
               </li>
             );

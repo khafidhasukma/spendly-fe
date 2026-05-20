@@ -30,7 +30,7 @@ const MainLayout = () => {
       <div className="flex flex-1 flex-col overflow-hidden">
         <Navbar title={title} />
 
-        <main className="flex-1 overflow-y-auto p-4 pb-20 lg:p-8">
+        <main className="flex-1 overflow-y-auto p-4 pb-20 sm:p-5 sm:pb-20 md:p-6 md:pb-20 lg:p-8 lg:pb-8">
           <Outlet />
         </main>
       </div>
