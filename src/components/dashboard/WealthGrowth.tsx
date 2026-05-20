@@ -65,6 +65,6 @@ const WealthGrowth = ({
       </div>
     </div>
   );
-}
+};
 
 export default WealthGrowth;

@@ -57,6 +57,6 @@ const BalanceCard = ({
       </div>
     </div>
   );
-}
+};
 
 export default BalanceCard;

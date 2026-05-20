@@ -40,7 +40,7 @@ const TncTableOfContents = () => {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  };
 
   return (
     <div className="sticky top-6 space-y-4">
@@ -74,6 +74,6 @@ const TncTableOfContents = () => {
       </div>
     </div>
   );
-}
+};
 
 export default TncTableOfContents;

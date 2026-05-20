@@ -36,7 +36,7 @@ const HistoryPagination = ({
     if (currentPage < totalPages - 2) pages.push('ellipsis');
     pages.push(totalPages);
     return pages;
-  }
+  };
 
   return (
     <div className="flex w-full flex-col items-center gap-3 sm:flex-row sm:justify-between sm:gap-4">
@@ -99,6 +99,6 @@ const HistoryPagination = ({
       </div>
     </div>
   );
-}
+};
 
 export default HistoryPagination;

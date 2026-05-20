@@ -9,7 +9,7 @@ interface BudgetSettingsCardProps {
 
 const formatRupiah = (amount: number) => {
   return new Intl.NumberFormat('id-ID').format(amount);
-}
+};
 
 const BudgetSettingsCard = ({
   monthlyLimit = 25_000_000,
@@ -55,6 +55,6 @@ const BudgetSettingsCard = ({
       </div>
     </div>
   );
-}
+};
 
 export default BudgetSettingsCard;

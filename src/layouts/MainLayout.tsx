@@ -40,6 +40,6 @@ const MainLayout = () => {
       <Toaster richColors position="top-center" theme={dark ? 'dark' : 'light'} />
     </div>
   );
-}
+};
 
 export default MainLayout;

@@ -13,6 +13,6 @@ const ContactImageBanner = () => {
       </p>
     </div>
   );
-}
+};
 
 export default ContactImageBanner;

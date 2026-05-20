@@ -23,6 +23,6 @@ const PrivacyPolicyPage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default PrivacyPolicyPage;

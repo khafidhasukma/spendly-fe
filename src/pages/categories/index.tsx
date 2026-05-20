@@ -161,6 +161,6 @@ const CategoriesPage = () => {
       />
     </div>
   );
-}
+};
 
 export default CategoriesPage;

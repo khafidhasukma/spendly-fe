@@ -35,6 +35,6 @@ const HistoryHeader = ({ onAddExpense }: HistoryHeaderProps) => {
       }
     />
   );
-}
+};
 
 export default HistoryHeader;

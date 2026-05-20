@@ -51,12 +51,12 @@ const EditProfileModal = ({
     const objectUrl = URL.createObjectURL(file);
     setAvatarPreview(objectUrl);
     setAvatarUrl(objectUrl);
-  }
+  };
 
   const handleSave = () => {
     onSave?.({ firstName, lastName, email, avatarUrl });
     onOpenChange(false);
-  }
+  };
 
   const handleCancel = () => {
     // Reset to initial
@@ -66,7 +66,7 @@ const EditProfileModal = ({
     setAvatarPreview(initialData.avatarUrl);
     setAvatarUrl(initialData.avatarUrl);
     onOpenChange(false);
-  }
+  };
 
   const initials = `${firstName[0] ?? ''}${lastName[0] ?? ''}`.toUpperCase();
 
@@ -167,6 +167,6 @@ const EditProfileModal = ({
       </DialogContent>
     </Dialog>
   );
-}
+};
 
 export default EditProfileModal;

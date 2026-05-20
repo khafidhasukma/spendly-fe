@@ -14,6 +14,6 @@ const PrivacyIntro = () => {
       </CardContent>
     </Card>
   );
-}
+};
 
 export default PrivacyIntro;

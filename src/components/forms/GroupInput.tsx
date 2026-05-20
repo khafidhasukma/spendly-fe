@@ -45,6 +45,6 @@ const GroupInput = ({
       </InputGroup>
     </div>
   );
-}
+};
 
 export default GroupInput;

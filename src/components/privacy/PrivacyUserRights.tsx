@@ -43,6 +43,6 @@ const PrivacyUserRights = () => {
       </ul>
     </div>
   );
-}
+};
 
 export default PrivacyUserRights;

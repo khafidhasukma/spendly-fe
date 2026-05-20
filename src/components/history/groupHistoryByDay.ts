@@ -11,6 +11,6 @@ const groupHistoryByRelativeDay = (transactions: HistoryTransaction[]): [string,
     map.set(label, list);
   }
   return Array.from(map.entries());
-}
+};
 
 export default groupHistoryByRelativeDay;

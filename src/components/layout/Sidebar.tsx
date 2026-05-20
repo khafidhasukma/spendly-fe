@@ -79,7 +79,7 @@ const NavItem = ({
       </Tooltip>
     </li>
   );
-}
+};
 
 const Sidebar = ({ onClose }: SidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
@@ -133,6 +133,6 @@ const Sidebar = ({ onClose }: SidebarProps) => {
       </TooltipProvider>
     </aside>
   );
-}
+};
 
 export default Sidebar;

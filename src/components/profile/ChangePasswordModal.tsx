@@ -32,14 +32,14 @@ const ChangePasswordModal = ({
   const handleSave = () => {
     onSave?.(newPassword);
     handleClose();
-  }
+  };
 
   const handleClose = () => {
     setCurrentPassword('');
     setNewPassword('');
     setConfirmPassword('');
     onOpenChange(false);
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) handleClose(); else onOpenChange(true); }}>
@@ -97,6 +97,6 @@ const ChangePasswordModal = ({
       </DialogContent>
     </Dialog>
   );
-}
+};
 
 export default ChangePasswordModal;

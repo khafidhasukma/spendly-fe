@@ -1,11 +1,11 @@
-﻿import { 
-  AIInsightCard, 
-  BalanceCard, 
-  DashboardGreeting, 
-  BudgetTracking, 
-  QuickCategories, 
-  RecentTransactions, 
-  WealthGrowth 
+﻿import {
+  AIInsightCard,
+  BalanceCard,
+  DashboardGreeting,
+  BudgetTracking,
+  QuickCategories,
+  RecentTransactions,
+  WealthGrowth
 } from '@/components/dashboard';
 
 const DashboardPage = () => {
@@ -39,6 +39,6 @@ const DashboardPage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default DashboardPage;

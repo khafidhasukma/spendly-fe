@@ -107,6 +107,6 @@ const HistoryTableDesktop = ({ transactions, onEdit, onDelete }: HistoryTableDes
       </table>
     </div>
   );
-}
+};
 
 export default HistoryTableDesktop;

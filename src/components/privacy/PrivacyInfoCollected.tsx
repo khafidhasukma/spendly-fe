@@ -62,6 +62,6 @@ const PrivacyInfoCollected = () => {
       </CardContent>
     </Card>
   );
-}
+};
 
 export default PrivacyInfoCollected;

@@ -16,6 +16,6 @@ const PrivacyCTA = () => {
       </div>
     </div>
   );
-}
+};
 
 export default PrivacyCTA;

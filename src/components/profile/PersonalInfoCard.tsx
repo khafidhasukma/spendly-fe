@@ -50,6 +50,6 @@ const PersonalInfoCard = ({
       </div>
     </div>
   );
-}
+};
 
 export default PersonalInfoCard;

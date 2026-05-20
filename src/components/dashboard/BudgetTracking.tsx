@@ -14,7 +14,7 @@ const mockBudgets: BudgetItem[] = [
 
 const formatRupiah = (amount: number) => {
   return new Intl.NumberFormat('id-ID').format(amount);
-}
+};
 
 const BudgetBar = ({ item }: { item: BudgetItem }) => {
   const pct = Math.min((item.spent / item.limit) * 100, 100);
@@ -40,7 +40,7 @@ const BudgetBar = ({ item }: { item: BudgetItem }) => {
       </div>
     </>
   );
-}
+};
 
 export interface BudgetTrackingProps {
   budgets?: BudgetItem[];
@@ -72,6 +72,6 @@ const BudgetTracking = ({ budgets = mockBudgets }: BudgetTrackingProps) => {
       )}
     </div>
   );
-}
+};
 
 export default BudgetTracking;

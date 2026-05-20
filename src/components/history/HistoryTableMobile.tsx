@@ -98,6 +98,6 @@ const HistoryTableMobile = ({ groups, onEdit, onDelete }: HistoryTableMobileProp
       ))}
     </div>
   );
-}
+};
 
 export default HistoryTableMobile;

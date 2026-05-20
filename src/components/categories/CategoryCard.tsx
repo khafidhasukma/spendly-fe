@@ -64,6 +64,6 @@ const CategoryCard = ({
       <p className="mt-4 text-lg font-bold text-foreground">{formatRupiah(total)}</p>
     </div>
   );
-}
+};
 
 export default CategoryCard;

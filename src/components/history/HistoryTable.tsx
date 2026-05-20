@@ -25,6 +25,6 @@ const HistoryTable = ({ transactions, onEdit, onDelete }: HistoryTableProps) => 
       <HistoryTableMobile groups={mobileGroups} onEdit={onEdit} onDelete={onDelete} />
     </div>
   );
-}
+};
 
 export default HistoryTable;

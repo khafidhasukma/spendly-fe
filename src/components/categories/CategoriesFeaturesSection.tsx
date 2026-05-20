@@ -44,6 +44,6 @@ const CategoriesFeaturesSection = () => {
       ))}
     </div>
   );
-}
+};
 
 export default CategoriesFeaturesSection;

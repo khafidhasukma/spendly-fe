@@ -54,6 +54,6 @@ const PasswordInput = ({
       </InputGroup>
     </div>
   );
-}
+};
 
 export default PasswordInput;

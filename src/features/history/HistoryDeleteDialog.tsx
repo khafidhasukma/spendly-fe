@@ -27,6 +27,6 @@ const HistoryDeleteDialog = ({ open, onOpenChange, target, onConfirm }: HistoryD
       icon={<Trash2 className="h-6 w-6" />}
     />
   );
-}
+};
 
 export default HistoryDeleteDialog;

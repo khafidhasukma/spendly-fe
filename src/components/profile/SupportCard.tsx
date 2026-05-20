@@ -91,6 +91,6 @@ const SupportCard = ({ onLogout }: SupportCardProps) => {
       </button>
     </div>
   );
-}
+};
 
 export default SupportCard;

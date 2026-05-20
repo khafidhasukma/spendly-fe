@@ -33,6 +33,6 @@ const HistoryTransactionsPanel = ({
       />
     </div>
   );
-}
+};
 
 export default HistoryTransactionsPanel;

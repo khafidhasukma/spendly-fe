@@ -13,6 +13,6 @@ const TncHeader = () => {
       />
     </div>
   );
-}
+};
 
 export default TncHeader;

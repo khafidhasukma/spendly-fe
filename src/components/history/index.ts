@@ -9,14 +9,14 @@ import groupHistoryByRelativeDay from './groupHistoryByDay';
 
 export type { HistoryCategory, HistoryTransaction } from './historyTypes';
 
-export { 
-    HistoryHeader, 
-    HistoryFilters, 
-    HistoryTable, 
-    HistoryPagination, 
-    HistoryTableDesktop, 
-    HistoryTableMobile, 
-    HistoryTableEmpty, 
-    type HistoryFiltersValue, 
-    groupHistoryByRelativeDay 
+export {
+  HistoryHeader,
+  HistoryFilters,
+  HistoryTable,
+  HistoryPagination,
+  HistoryTableDesktop,
+  HistoryTableMobile,
+  HistoryTableEmpty,
+  type HistoryFiltersValue,
+  groupHistoryByRelativeDay
 };

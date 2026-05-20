@@ -13,6 +13,6 @@ const PrivacyHeader = () => {
       />
     </div>
   );
-}
+};
 
 export default PrivacyHeader;

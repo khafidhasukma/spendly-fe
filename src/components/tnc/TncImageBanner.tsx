@@ -12,6 +12,6 @@ const TncImageBanner = () => {
       </div>
     </div>
   );
-}
+};
 
 export default TncImageBanner;

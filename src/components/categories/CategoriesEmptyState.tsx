@@ -34,6 +34,6 @@ const CategoriesEmptyState = () => {
       </EmptyContent>
     </Empty>
   );
-}
+};
 
 export default CategoriesEmptyState;

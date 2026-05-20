@@ -60,6 +60,6 @@ const TncSection = ({
       </div>
     </div>
   );
-}
+};
 
 export default TncSection;

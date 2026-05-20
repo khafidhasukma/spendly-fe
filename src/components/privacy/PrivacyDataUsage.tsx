@@ -59,6 +59,6 @@ const PrivacyDataUsage = () => {
       </CardContent>
     </Card>
   );
-}
+};
 
 export default PrivacyDataUsage;

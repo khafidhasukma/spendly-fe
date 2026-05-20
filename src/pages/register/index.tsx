@@ -6,6 +6,6 @@ const RegisterPage = () => {
       <RegisterForm />
     </AuthPageLayout>
   );
-}
+};
 
 export default RegisterPage;

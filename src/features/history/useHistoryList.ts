@@ -98,6 +98,6 @@ const useHistoryList = (options: UseHistoryListOptions = {}) => {
     requestDelete,
     confirmDelete,
   };
-}
+};
 
 export default useHistoryList;

@@ -30,6 +30,6 @@ const ContactUsPage = () => {
       <ContactFAQ />
     </div>
   );
-}
+};
 
 export default ContactUsPage;

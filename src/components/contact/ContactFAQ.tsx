@@ -48,6 +48,6 @@ const ContactFAQ = () => {
       </div>
     </section>
   );
-}
+};
 
 export default ContactFAQ;

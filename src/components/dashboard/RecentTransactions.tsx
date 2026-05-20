@@ -125,6 +125,6 @@ const RecentTransactions = ({
       )}
     </div>
   );
-}
+};
 
 export default RecentTransactions;

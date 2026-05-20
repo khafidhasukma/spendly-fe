@@ -45,10 +45,10 @@ const HistoryFiltersFields = ({
   categoryOptions,
   stacked = false,
 }: HistoryFiltersProps & { stacked?: boolean }) => {
-  
+
   const set = (key: keyof HistoryFiltersValue, val: string) => {
     onChange({ ...value, [key]: val });
-  }
+  };
 
   return (
     <div className={cn('grid gap-4', stacked ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-3')}>
@@ -113,7 +113,7 @@ const HistoryFiltersFields = ({
       </div>
     </div>
   );
-}
+};
 
 function HistoryFilters(props: HistoryFiltersProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);

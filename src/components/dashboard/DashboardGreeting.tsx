@@ -1,9 +1,9 @@
-function getGreeting(): { text: string; } {
+const getGreeting = (): { text: string; } => {
   const hour = new Date().getHours();
   if (hour < 12) return { text: 'Good morning' };
   if (hour < 17) return { text: 'Good afternoon' };
   return { text: 'Good evening' };
-}
+};
 
 export interface DashboardGreetingProps {
   name?: string;
@@ -20,6 +20,6 @@ const DashboardGreeting = ({ name = 'John Doe' }: DashboardGreetingProps) => {
       <p className="text-xl text-muted-foreground">How's your pocket sound?</p>
     </div>
   );
-}
+};
 
 export default DashboardGreeting;

@@ -4,7 +4,7 @@ import {
   HistoryFiltersPanel,
   HistoryTransactionsPanel,
   useHistoryList
-} from ".";
+} from '.';
 
 const TransactionHistoryScreen = () => {
   const {
@@ -51,6 +51,6 @@ const TransactionHistoryScreen = () => {
       />
     </div>
   );
-}
+};
 
 export default TransactionHistoryScreen;

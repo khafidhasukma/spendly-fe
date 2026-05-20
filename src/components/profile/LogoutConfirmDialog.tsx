@@ -25,7 +25,7 @@ const LogoutConfirmDialog = ({
   const handleConfirm = () => {
     onConfirm?.();
     onOpenChange(false);
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -74,6 +74,6 @@ const LogoutConfirmDialog = ({
       </DialogContent>
     </Dialog>
   );
-}
+};
 
 export default LogoutConfirmDialog;

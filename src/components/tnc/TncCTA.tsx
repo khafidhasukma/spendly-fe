@@ -24,6 +24,6 @@ const TncCTA = () => {
       </div>
     </div>
   );
-}
+};
 
 export default TncCTA;

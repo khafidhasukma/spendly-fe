@@ -39,6 +39,6 @@ const PrivacyDataSecurity = () => {
       </CardContent>
     </Card>
   );
-}
+};
 
 export default PrivacyDataSecurity;

@@ -50,6 +50,6 @@ const ContactChannels = () => {
       ))}
     </div>
   );
-}
+};
 
 export default ContactChannels;

@@ -64,6 +64,6 @@ const ProfileHeader = ({
       </div>
     </div>
   );
-}
+};
 
 export default ProfileHeader;

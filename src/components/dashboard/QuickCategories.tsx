@@ -56,6 +56,6 @@ const QuickCategories = () => {
       </div>
     </div>
   );
-}
+};
 
 export default QuickCategories;

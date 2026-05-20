@@ -15,6 +15,6 @@ const HistoryTableEmpty = () => {
       </Empty>
     </div>
   );
-}
+};
 
 export default HistoryTableEmpty;

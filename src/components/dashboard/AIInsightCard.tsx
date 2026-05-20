@@ -34,6 +34,6 @@ const AIInsightCard = ({
       </Link>
     </div>
   );
-}
+};
 
 export default AIInsightCard;

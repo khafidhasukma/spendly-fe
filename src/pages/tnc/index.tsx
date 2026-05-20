@@ -148,6 +148,6 @@ const TncPage = () => {
       </div>
     </div>
   );
-}
+};
 
 export default TncPage;
