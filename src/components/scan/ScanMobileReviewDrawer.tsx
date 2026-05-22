@@ -66,7 +66,7 @@ const ScanMobileReviewDrawer = ({ open, onOpenChange, data, onSave, onRetake }: 
   };
 
   return (
-    <Drawer open={open} onOpenChange={() => {}} direction="bottom" dismissible={false}>
+    <Drawer open={open} onOpenChange={onOpenChange} direction="bottom" dismissible={false}>
       <DrawerContent className="max-h-[85vh]">
         <div className="overflow-y-auto px-5 pb-6">
           <DrawerHeader className="px-0 pt-2 pb-4">

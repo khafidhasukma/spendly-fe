@@ -121,6 +121,7 @@ const ScanStrukPage = () => {
               <ScanProcessing
                 preview={preview}
                 progress={Math.min(progress, 100)}
+                onCancel={handleReset}
               />
             </div>
           )}

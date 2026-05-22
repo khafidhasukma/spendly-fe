@@ -1,5 +1,6 @@
 import moment from 'moment';
-import 'moment/dist/locale/id';
+// @ts-ignore - moment locale imports lack type declarations
+import 'moment/locale/id';
 
 moment.locale('id');
 
