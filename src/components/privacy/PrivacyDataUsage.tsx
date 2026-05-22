@@ -26,25 +26,25 @@ const usageItems: UsageItem[] = [
 const PrivacyDataUsage = () => {
   return (
     <Card className="py-0">
-      <CardContent className="p-6 flex items-start gap-4">
+      <CardContent className="p-4 sm:p-5 md:p-6 flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
         {/* Section heading */}
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-secondary/10">
-          <Eye className="h-5 w-5 text-secondary" />
+        <div className="flex h-9 w-9 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-md bg-secondary/10">
+          <Eye className="h-4 w-4 sm:h-5 sm:w-5 text-secondary" />
         </div>
         <div>
-          <h2 className="font-manrope text-2xl font-semibold text-primary">How We Use Your Data</h2>
-          <p className="mt-3 text-base leading-relaxed text-muted-foreground mb-6">
+          <h2 className="font-manrope text-xl sm:text-2xl font-semibold text-primary">How We Use Your Data</h2>
+          <p className="mt-2 sm:mt-3 text-sm sm:text-base leading-relaxed text-muted-foreground mb-4 sm:mb-6">
             We process your data based on operational needs and application feature development:
           </p>
 
           {/* Usage items */}
-          <div className="space-y-2">
+          <div className="space-y-1 sm:space-y-2">
             {usageItems.map(({ icon: Icon, title, description }) => (
-              <div key={title} className="flex items-start gap-4 p-4">
-                <Icon className="h-5.5 w-5.5 text-primary" />
+              <div key={title} className="flex items-start gap-3 sm:gap-4 p-3 sm:p-4">
+                <Icon className="h-5 w-5 sm:h-5.5 sm:w-5.5 text-primary shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-base font-bold text-foreground">{title}</p>
-                  <p className="text-base leading-relaxed text-muted-foreground">{description}</p>
+                  <p className="text-sm sm:text-base font-bold text-foreground">{title}</p>
+                  <p className="text-sm sm:text-base leading-relaxed text-muted-foreground">{description}</p>
                 </div>
               </div>
             ))}

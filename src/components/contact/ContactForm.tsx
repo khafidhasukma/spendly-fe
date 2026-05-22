@@ -34,9 +34,9 @@ const ContactForm = () => {
   }
 
   return (
-    <div className="rounded-2xl bg-card p-10 shadow-sm border border-border h-full">
-      <h2 className="text-lg font-semibold text-primary">Send a Message</h2>
-      <p className="mt-2 text-base text-muted-foreground mb-10">
+    <div className="rounded-2xl bg-card p-5 sm:p-6 md:p-8 lg:p-10 shadow-sm border border-border h-full">
+      <h2 className="text-base sm:text-lg font-semibold text-primary">Send a Message</h2>
+      <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 md:mb-10">
         Fill in the form below and our team will get back to you shortly.
       </p>
 
@@ -58,9 +58,9 @@ const ContactForm = () => {
           </Button>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 md:space-y-6">
           {/* Name + Email row */}
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
             <div className="space-y-1.5">
               <Label htmlFor="contact-name">Full Name</Label>
               <Input
@@ -113,7 +113,7 @@ const ContactForm = () => {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-base h-auto py-4 font-semibold"
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-sm sm:text-base h-auto py-3 sm:py-4 font-semibold"
           >
             {loading ? (
               'Sending...'

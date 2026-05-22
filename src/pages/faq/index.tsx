@@ -124,9 +124,9 @@ const faqData: FAQCategory[] = [
 
 const FAQPage = () => {
   return (
-    <div className="space-y-10">
+    <div className="space-y-6 sm:space-y-8 md:space-y-10">
       {/* Header */}
-      <div className="space-y-4">
+      <div className="space-y-3 sm:space-y-4">
         <Badge variant="secondary-surface" className="text-xs">
           Support
         </Badge>
@@ -137,19 +137,19 @@ const FAQPage = () => {
       </div>
 
       {/* FAQ categories */}
-      <div className="space-y-8">
+      <div className="space-y-5 sm:space-y-6 md:space-y-8">
         {faqData.map(({ category, items }) => (
-          <div key={category} className="space-y-3">
-            <h2 className="font-manrope text-lg font-semibold text-primary">{category}</h2>
+          <div key={category} className="space-y-2 sm:space-y-3">
+            <h2 className="font-manrope text-base sm:text-lg font-semibold text-primary">{category}</h2>
 
-            <div className="rounded-2xl border border-border bg-card px-6">
+            <div className="rounded-xl sm:rounded-2xl border border-border bg-card px-4 sm:px-6">
               <Accordion type="single" collapsible className="w-full">
                 {items.map(({ question, answer }, idx) => (
                   <AccordionItem key={question} value={`${category}-${idx}`}>
-                    <AccordionTrigger className="text-sm font-medium text-foreground hover:no-underline font-manrope cursor-pointer">
+                    <AccordionTrigger className="text-xs sm:text-sm font-medium text-foreground hover:no-underline font-manrope cursor-pointer py-3 sm:py-4">
                       {question}
                     </AccordionTrigger>
-                    <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
+                    <AccordionContent className="text-xs sm:text-sm leading-relaxed text-muted-foreground pb-3 sm:pb-4">
                       {answer}
                     </AccordionContent>
                   </AccordionItem>
@@ -161,16 +161,16 @@ const FAQPage = () => {
       </div>
 
       {/* Still need help CTA */}
-      <div className="rounded-2xl border-3 border-dashed border-secondary/30 bg-secondary/10 p-8 text-center">
-        <p className="font-manrope text-xl capitalize font-semibold text-foreground">
+      <div className="rounded-xl sm:rounded-2xl border-3 border-dashed border-secondary/30 bg-secondary/10 p-5 sm:p-6 md:p-8 text-center">
+        <p className="font-manrope text-lg sm:text-xl capitalize font-semibold text-foreground">
           Still have questions?
         </p>
-        <p className="mt-2 text-base text-muted-foreground max-w-md mx-auto">
+        <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-muted-foreground max-w-md mx-auto">
           Our support team is available 24/7 and typically responds within a few hours.
         </p>
         <Link
           to="/contact-us"
-          className="mt-5 inline-flex h-auto items-center justify-center rounded-[0.75rem] bg-primary px-8 py-3 text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+          className="mt-4 sm:mt-5 inline-flex h-auto items-center justify-center rounded-[0.75rem] bg-primary px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
         >
           Contact Us
         </Link>

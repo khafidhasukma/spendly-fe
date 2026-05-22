@@ -9,18 +9,18 @@ const PersonalInfoCard = ({
   email = 'alex.graham@spendly.io',
 }: PersonalInfoCardProps) => {
   return (
-    <div className="rounded-2xl border border-border bg-card p-5 shadow-sm sm:p-6">
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5 md:p-6">
       {/* Card header */}
-      <div className="mb-8 flex items-center gap-4">
-        <div className="flex h-10 w-10 items-center justify-center rounded-md bg-primary/10">
-          <UserCircle className="h-5 w-5 text-primary" />
+      <div className="mb-5 sm:mb-6 md:mb-8 flex items-center gap-3 sm:gap-4">
+        <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-md bg-primary/10">
+          <UserCircle className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
         </div>
-        <h3 className="text-lg font-semibold text-foreground font-manrope">Personal Information</h3>
+        <h3 className="text-base sm:text-lg font-semibold text-foreground font-manrope">Personal Information</h3>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-5 md:space-y-6">
         {/* First + Last name row */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
           <div className="space-y-1.5">
             <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
               First Name

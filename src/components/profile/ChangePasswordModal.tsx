@@ -38,9 +38,9 @@ const ChangePasswordModal = ({
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) handleClose(); else onOpenChange(true); }}>
-      <DialogContent className="max-w-sm w-full gap-0 p-0 overflow-hidden">
-        <DialogHeader className="px-6 pt-6 pb-4">
-          <DialogTitle className="flex items-center gap-2 text-base">
+      <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-sm w-full gap-0 p-0 overflow-hidden">
+        <DialogHeader className="px-4 pt-4 pb-3 sm:px-6 sm:pt-6 sm:pb-4">
+          <DialogTitle className="flex items-center gap-2 text-sm sm:text-base">
             <KeyRound className="h-4 w-4 text-primary" />
             Change Password
           </DialogTitle>
@@ -48,7 +48,7 @@ const ChangePasswordModal = ({
 
         <Separator />
 
-        <div className="px-6 py-5 space-y-5">
+        <div className="px-4 py-4 space-y-4 sm:px-6 sm:py-5 sm:space-y-5">
           <PasswordInput
             id="current-password"
             label="Current Password"
@@ -77,7 +77,7 @@ const ChangePasswordModal = ({
 
         <Separator />
 
-        <DialogFooter className="px-6 py-4 gap-2">
+        <DialogFooter className="px-4 py-3 gap-2 sm:px-6 sm:py-4">
           <Button variant="outline" onClick={handleClose} className="flex-1 sm:flex-none">
             Cancel
           </Button>

@@ -20,13 +20,13 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-4 sm:space-y-5 md:space-y-6">
       {/* Profile header  */}
       <ProfileHeader onEditProfile={() => setEditOpen(true)} />
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 lg:grid-cols-3">
         {/* Left column */}
-        <div className="flex flex-col gap-6 lg:col-span-2">
+        <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 lg:col-span-2">
           <PersonalInfoCard />
           <BudgetSettingsCard />
           <SecurityCard onUpdatePassword={() => setChangePasswordOpen(true)} />

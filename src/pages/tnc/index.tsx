@@ -115,16 +115,16 @@ const BANNER_AFTER_INDEX = 1;
 
 const TncPage = () => {
   return (
-    <div className="space-y-12 container px-5 md:px-8 lg:px-12 xl:px-16 py-6 md:py-8 lg:py-10 xl:py-12">
+    <div className="space-y-8 sm:space-y-10 md:space-y-12 container px-4 sm:px-5 md:px-8 lg:px-12 xl:px-16 py-4 sm:py-6 md:py-8 lg:py-10 xl:py-12">
       <TncHeader />
 
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
-        <div className="lg:col-span-1">
+      <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-4">
+        <div className="hidden lg:block lg:col-span-1">
           <TncTableOfContents />
         </div>
 
         {/* Sections */}
-        <div className="space-y-8 lg:col-span-3">
+        <div className="space-y-4 sm:space-y-6 md:space-y-8 lg:col-span-3">
           {sections.map((section, index) => (
             <>
               <TncSection key={section.id} {...section} />

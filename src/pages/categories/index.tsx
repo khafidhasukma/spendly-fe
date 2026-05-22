@@ -88,7 +88,7 @@ const CategoriesPage = () => {
   const hasTransactions = categories.some((c) => c.transactions > 0);
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6 sm:space-y-8 md:space-y-10">
       {/* Header */}
       <PageHeader
         breadcrumb={[
@@ -98,7 +98,7 @@ const CategoriesPage = () => {
         title="Manajemen Kategori"
         description="Kelola kategori pengeluaran Anda untuk mendapatkan laporan keuangan yang lebih akurat."
         action={
-          <Button onClick={() => setAddOpen(true)} className="bg-primary hover:bg-primary/90">
+          <Button onClick={() => setAddOpen(true)} className="bg-primary hover:bg-primary/90 w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" />
             Tambah Kategori
           </Button>
@@ -106,7 +106,7 @@ const CategoriesPage = () => {
       />
 
       {/* Category Grid */}
-      <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 md:gap-5 lg:grid-cols-3 xl:grid-cols-4 xl:gap-6">
         {categories.map((category) => (
           <CategoryCard
             key={category.id}

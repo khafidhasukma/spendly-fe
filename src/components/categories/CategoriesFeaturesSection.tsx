@@ -32,14 +32,14 @@ const features = [
 
 const CategoriesFeaturesSection = () => {
   return (
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 md:grid-cols-3 md:gap-6">
       {features.map(({ id, title, description, icon: Icon, iconBg, iconColor }) => (
-        <div key={id} className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <div className={`flex h-10 w-10 items-center justify-center rounded-[0.75rem] ${iconBg}`}>
-            <Icon className={`h-5 w-5 ${iconColor}`} />
+        <div key={id} className="rounded-xl border border-border bg-card p-4 sm:p-5 md:p-6 shadow-sm">
+          <div className={`flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-[0.75rem] ${iconBg}`}>
+            <Icon className={`h-4 w-4 sm:h-5 sm:w-5 ${iconColor}`} />
           </div>
-          <h4 className="mt-4 font-semibold text-foreground">{title}</h4>
-          <p className="mt-2 text-sm text-muted-foreground">{description}</p>
+          <h4 className="mt-3 sm:mt-4 text-sm sm:text-base font-semibold text-foreground">{title}</h4>
+          <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-muted-foreground">{description}</p>
         </div>
       ))}
     </div>

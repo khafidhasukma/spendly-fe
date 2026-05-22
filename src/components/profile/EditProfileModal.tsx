@@ -61,9 +61,9 @@ const EditProfileModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md w-full gap-0 p-0 overflow-hidden">
-        <DialogHeader className="px-6 pt-6 pb-4">
-          <DialogTitle className="flex items-center gap-2 text-base">
+      <DialogContent className="max-w-[calc(100vw-2rem)] sm:max-w-md w-full gap-0 p-0 overflow-hidden">
+        <DialogHeader className="px-4 pt-4 pb-3 sm:px-6 sm:pt-6 sm:pb-4">
+          <DialogTitle className="flex items-center gap-2 text-sm sm:text-base">
             <User className="h-4 w-4 text-primary" />
             Edit Profile
           </DialogTitle>
@@ -71,23 +71,23 @@ const EditProfileModal = ({
 
         <Separator />
 
-        <div className="px-6 py-5 space-y-5">
+        <div className="px-4 py-4 space-y-4 sm:px-6 sm:py-5 sm:space-y-5">
           {/* Avatar picker */}
-          <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-col items-center gap-2 sm:gap-3">
             <div className="relative">
-              <Avatar className="h-20 w-20 ring-4 ring-primary/20">
+              <Avatar className="h-16 w-16 sm:h-20 sm:w-20 ring-4 ring-primary/20">
                 <AvatarImage src={avatarPreview} alt="Avatar preview" />
-                <AvatarFallback className="text-xl font-semibold bg-primary/10 text-primary">
+                <AvatarFallback className="text-lg sm:text-xl font-semibold bg-primary/10 text-primary">
                   {initials}
                 </AvatarFallback>
               </Avatar>
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="absolute bottom-0 right-0 flex h-7 w-7 items-center justify-center rounded-full bg-primary text-white shadow-md transition-opacity hover:opacity-90"
+                className="absolute bottom-0 right-0 flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-primary text-white shadow-md transition-opacity hover:opacity-90"
                 aria-label="Change avatar"
               >
-                <Camera className="h-3.5 w-3.5" />
+                <Camera className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
               </button>
               <input
                 ref={fileInputRef}
@@ -103,7 +103,7 @@ const EditProfileModal = ({
           <Separator />
 
           {/* Name fields */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                 First Name
@@ -142,7 +142,7 @@ const EditProfileModal = ({
 
         <Separator />
 
-        <DialogFooter className="px-6 py-4 gap-2">
+        <DialogFooter className="px-4 py-3 gap-2 sm:px-6 sm:py-4">
           <Button variant="outline" onClick={handleCancel} className="flex-1 sm:flex-none">
             Cancel
           </Button>

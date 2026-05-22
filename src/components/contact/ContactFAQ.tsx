@@ -21,24 +21,24 @@ const faqs: FAQItem[] = [
 
 const ContactFAQ = () => {
   return (
-    <section id="faq" className="space-y-6">
+    <section id="faq" className="space-y-4 sm:space-y-5 md:space-y-6">
       {/* Title */}
       <div className="flex items-center justify-between">
-        <h2 className="text-xl text-foreground font-manrope">Frequently Asked Questions</h2>
-        <Link to="/faq" className="text-base font-semibold text-primary hover:underline">
+        <h2 className="text-lg sm:text-xl text-foreground font-manrope">Frequently Asked Questions</h2>
+        <Link to="/faq" className="text-sm sm:text-base font-semibold text-primary hover:underline">
           View All →
         </Link>
       </div>
 
       {/* Content */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {faqs.map(({ question, answer }) => (
           <div
             key={question}
-            className="rounded-2xl border border-border bg-card p-6"
+            className="rounded-xl sm:rounded-2xl border border-border bg-card p-4 sm:p-5 md:p-6"
           >
-            <p className="font-manrope text-foreground">{question}</p>
-            <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{answer}</p>
+            <p className="text-sm sm:text-base font-manrope text-foreground">{question}</p>
+            <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm leading-relaxed text-muted-foreground">{answer}</p>
           </div>
         ))}
       </div>
