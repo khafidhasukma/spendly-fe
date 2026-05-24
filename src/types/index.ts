@@ -60,6 +60,14 @@ export type {
 } from './forms';
 
 export type {
+  FilterOption,
+  FilterDropdownProps,
+  SummaryCardProps,
+  CategoryItem,
+  MonthlyDataItem,
+} from './ai-analysis';
+
+export type {
   TncSubItem,
   TncSectionProps,
   TocItem,
