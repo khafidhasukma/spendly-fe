@@ -78,3 +78,17 @@ export type {
   UsageItem,
   ThemeContextValue,
 } from './pages';
+
+export type {
+  BudgetCategory,
+  BudgetOverview,
+  BudgetHistoryItem,
+  AddBudgetFormData,
+} from './budget';
+
+export type {
+  Wallet,
+  WalletTransaction,
+  AddWalletFormData,
+  TransferFormData,
+} from './wallet';

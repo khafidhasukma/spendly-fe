@@ -18,6 +18,8 @@ import FAQPage from './pages/faq';
 import TncPage from './pages/tnc';
 import PrivacyPolicyPage from './pages/privacy-policy';
 import ForgotPasswordPage from './pages/forgot-password';
+import BudgetPage from './pages/budget';
+import WalletPage from './pages/wallet';
 
 const App = () => {
   return (
@@ -42,6 +44,8 @@ const App = () => {
             <Route path="history" element={<HistoryPage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="categories" element={<CategoriesPage />} />
+            <Route path="budget" element={<BudgetPage />} />
+            <Route path="wallet" element={<WalletPage />} />
           </Route>
 
           {/* Auth pages */}

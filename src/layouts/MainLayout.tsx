@@ -12,6 +12,8 @@ const routeTitles: Record<string, string> = {
   '/history': 'History',
   '/profile': 'Profile',
   '/categories': 'Categories',
+  '/budget': 'Detailed Budgeting',
+  '/wallet': 'Wallet Management',
   '/contact-us': 'Contact Us',
   '/faq': 'FAQ',
   '/tnc': 'Terms and Conditions',

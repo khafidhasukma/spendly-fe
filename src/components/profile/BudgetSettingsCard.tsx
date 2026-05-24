@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Wallet, ArrowRight } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import type { BudgetSettingsCardProps } from '@/types';
@@ -12,6 +13,7 @@ const BudgetSettingsCard = ({
   spendingAlerts: initialAlerts = true,
 }: BudgetSettingsCardProps) => {
   const [alerts, setAlerts] = useState(initialAlerts);
+  const navigate = useNavigate();
 
   return (
     <div className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5 md:p-6">
@@ -23,7 +25,10 @@ const BudgetSettingsCard = ({
           </div>
           <h3 className="text-base sm:text-lg font-semibold text-foreground font-manrope">Budget Settings</h3>
         </div>
-        <button className="flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-primary/80">
+        <button
+          onClick={() => navigate('/budget')}
+          className="flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-primary/80"
+        >
           View Detailed Budgeting
           <ArrowRight className="h-3.5 w-3.5" />
         </button>

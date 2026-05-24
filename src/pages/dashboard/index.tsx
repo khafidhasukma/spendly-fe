@@ -5,6 +5,7 @@
   BudgetTracking,
   QuickCategories,
   RecentTransactions,
+  WalletCTA,
   WealthGrowth,
 } from '@/components/dashboard';
 
@@ -22,6 +23,9 @@ const DashboardPage = () => {
           <AIInsightCard />
         </div>
       </div>
+
+      {/* Wallet CTA */}
+      <WalletCTA />
 
       <QuickCategories />
 
