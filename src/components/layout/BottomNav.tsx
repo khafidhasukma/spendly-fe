@@ -10,11 +10,11 @@ import { cn } from '@/lib/utils';
 import type { NavItem } from '@/types';
 
 const navItems: NavItem[] = [
-  { to: '/',           label: 'Home',     icon: LayoutDashboard },
+  { to: '/dashboard',    label: 'Home',     icon: LayoutDashboard },
   { to: '/ai-analysis', label: 'Analysis', icon: BrainCircuit    },
-  { to: '/scan',       label: 'Scan',     icon: ScanLine, scan: true },
-  { to: '/history',    label: 'History',  icon: History         },
-  { to: '/profile',    label: 'Profile',  icon: UserCircle      },
+  { to: '/scan',        label: 'Scan',     icon: ScanLine, scan: true },
+  { to: '/history',     label: 'History',  icon: History         },
+  { to: '/profile',     label: 'Profile',  icon: UserCircle      },
 ];
 
 const BottomNav = () => {
@@ -24,7 +24,7 @@ const BottomNav = () => {
         <NavLink
           key={to}
           to={to}
-          end={to === '/'}
+          end={to === '/dashboard'}
           className="flex flex-1 flex-col items-center justify-end pb-2.5 gap-0.5 transition-colors"
         >
           {({ isActive }) =>

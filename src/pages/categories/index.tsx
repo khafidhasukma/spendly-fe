@@ -92,7 +92,7 @@ const CategoriesPage = () => {
       {/* Header */}
       <PageHeader
         breadcrumb={[
-          { label: 'Dashboard', to: '/' },
+          { label: 'Dashboard', to: '/dashboard' },
           { label: 'Categories Management' },
         ]}
         title="Manajemen Kategori"

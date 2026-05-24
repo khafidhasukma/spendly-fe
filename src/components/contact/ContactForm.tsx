@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Link } from 'react-router-dom';
 
 const TOPICS = [
   { value: 'transaction', label: 'Transaction Issue' },
@@ -127,9 +128,9 @@ const ContactForm = () => {
 
           <p className="text-center text-xs text-muted-foreground">
             By submitting this form, you agree to our{' '}
-            <a href="#" className="underline underline-offset-2 hover:text-primary">
+            <Link to='/privacy-policy' className="underline underline-offset-2 hover:text-primary">
               Privacy Policy
-            </a>
+            </Link>
             .
           </p>
         </form>

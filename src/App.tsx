@@ -3,6 +3,8 @@ import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from './contexts/ThemeContext';
 import MainLayout from './layouts/MainLayout';
 import AuthLayout from './layouts/AuthLayout';
+import PublicLayout from './layouts/PublicLayout';
+import LandingPage from './pages/landing';
 import DashboardPage from './pages/dashboard';
 import ScanStrukPage from './pages/scan-struk';
 import AnalisisAIPage from './pages/analisis-ai';
@@ -23,24 +25,32 @@ const App = () => {
       <Toaster position="top-center" />
       <BrowserRouter>
         <Routes>
+          {/* Public pages with navbar + footer */}
+          <Route element={<PublicLayout />}>
+            <Route index element={<LandingPage />} />
+            <Route path="tnc" element={<TncPage />} />
+            <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
+            <Route path="contact-us" element={<ContactUsPage />} />
+            <Route path="faq" element={<FAQPage />} />
+          </Route>
+
+          {/* App pages with sidebar */}
           <Route element={<MainLayout />}>
-            <Route index element={<DashboardPage />} />
+            <Route path="dashboard" element={<DashboardPage />} />
             <Route path="scan" element={<ScanStrukPage />} />
             <Route path="ai-analysis" element={<AnalisisAIPage />} />
             <Route path="history" element={<HistoryPage />} />
             <Route path="profile" element={<ProfilePage />} />
             <Route path="categories" element={<CategoriesPage />} />
-            <Route path="contact-us" element={<ContactUsPage />} />
-            <Route path="faq" element={<FAQPage />} />
           </Route>
+
+          {/* Auth pages */}
           <Route element={<AuthLayout />}>
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
             <Route path="forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="tnc" element={<TncPage />} />
-            <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
           </Route>
-          {/* Catch-all redirect */}
+
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
@@ -49,4 +59,3 @@ const App = () => {
 };
 
 export default App;
-

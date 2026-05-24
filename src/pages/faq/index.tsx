@@ -124,7 +124,7 @@ const faqData: FAQCategory[] = [
 
 const FAQPage = () => {
   return (
-    <div className="space-y-6 sm:space-y-8 md:space-y-10">
+    <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 lg:py-16 space-y-6 sm:space-y-8 md:space-y-10">
       {/* Header */}
       <div className="space-y-3 sm:space-y-4">
         <Badge variant="secondary-surface" className="text-xs">

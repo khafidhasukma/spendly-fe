@@ -8,7 +8,7 @@ import PageHeader from '@/components/ui/page-header';
 
 const ContactUsPage = () => {
   return (
-    <div className="space-y-8 sm:space-y-10 md:space-y-12">
+    <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 lg:py-16 space-y-8 sm:space-y-10 md:space-y-12">
       <div className="grid grid-cols-1 gap-6 sm:gap-8 md:gap-10 lg:grid-cols-5 lg:items-stretch">
         {/* hero + channels + image */}
         <div className="flex flex-col gap-6 sm:gap-8 md:gap-10 lg:col-span-2">

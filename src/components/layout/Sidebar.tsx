@@ -20,7 +20,7 @@ import {
 import type { SidebarProps } from '@/types';
 
 const navItems = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/scan', label: 'Scan', icon: ScanLine },
   { to: '/ai-analysis', label: 'Analysis', icon: BrainCircuit },
   { to: '/history', label: 'History', icon: History },
@@ -40,8 +40,8 @@ const NavItem = ({
   collapsed: boolean;
   onClose: () => void;
 }) => {
-  const isHome = to === '/';
-  const matchExact = useMatch({ path: '/', end: true });
+  const isHome = to === '/dashboard';
+  const matchExact = useMatch({ path: '/dashboard', end: true });
   const matchPath = useMatch(to);
   const isActive = isHome ? !!matchExact : !!matchPath;
 

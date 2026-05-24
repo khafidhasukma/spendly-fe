@@ -115,7 +115,7 @@ const BANNER_AFTER_INDEX = 1;
 
 const TncPage = () => {
   return (
-    <div className="space-y-8 sm:space-y-10 md:space-y-12 container px-4 sm:px-5 md:px-8 lg:px-12 xl:px-16 py-4 sm:py-6 md:py-8 lg:py-10 xl:py-12">
+    <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 lg:py-16 space-y-8 sm:space-y-10 md:space-y-12">
       <TncHeader />
 
       <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-4">

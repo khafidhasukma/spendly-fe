@@ -6,7 +6,7 @@ import BottomNav from '../components/layout/BottomNav';
 import { useTheme } from '../contexts/ThemeContext';
 
 const routeTitles: Record<string, string> = {
-  '/': 'Dashboard',
+  '/dashboard': 'Dashboard',
   '/scan': 'Scan Receipt',
   '/ai-analysis': 'AI Analysis',
   '/history': 'History',
