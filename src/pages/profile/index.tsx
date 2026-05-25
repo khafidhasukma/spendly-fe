@@ -4,7 +4,6 @@ import {
   ChangePasswordModal,
   EditProfileModal,
   LogoutConfirmDialog,
-  PersonalInfoCard,
   ProfileHeader,
   SecurityCard,
   SupportCard,
@@ -27,7 +26,6 @@ const ProfilePage = () => {
       <div className="grid grid-cols-1 gap-4 sm:gap-5 md:gap-6 lg:grid-cols-3">
         {/* Left column */}
         <div className="flex flex-col gap-4 sm:gap-5 md:gap-6 lg:col-span-2">
-          <PersonalInfoCard />
           <BudgetSettingsCard />
           <SecurityCard onUpdatePassword={() => setChangePasswordOpen(true)} />
         </div>

@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import type { ProfileHeaderProps } from '@/types';
 
 const ProfileHeader = ({
-  name = 'Alex Graham',
-  email = 'alex.graham@spendly.io',
+  name = 'Khafidha Sukma',
+  email = 'khafidhasukma@spendly.io',
   avatarUrl = 'https://i.pravatar.cc/150?img=3',
   isPremium = true,
   onEditProfile,

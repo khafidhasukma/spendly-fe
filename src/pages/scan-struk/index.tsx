@@ -87,10 +87,10 @@ const ScanStrukPage = () => {
 
   return (
     <>
-      {/* Mobile view — no navbar, fills from top to bottom nav */}
-      <div className="lg:hidden flex flex-col h-[calc(100vh-4rem)] relative">
+      {/* Mobile view  */}
+      <div className="lg:hidden flex flex-col h-full relative">
         {/* Tabs overlaid on top */}
-        <div className="absolute top-0 inset-x-0 z-20 px-4 pt-3 pb-2 bg-linear-to-b from-black/60 via-black/30 to-transparent">
+        <div className="absolute top-0 inset-x-0 z-20 px-4 pt-8 pb-2 bg-linear-to-b from-black/60 via-black/30 to-transparent">
           <ScanTabSwitcher active={mode} onChange={handleModeChange} />
         </div>
 
