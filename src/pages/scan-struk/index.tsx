@@ -87,14 +87,14 @@ const ScanStrukPage = () => {
 
   return (
     <>
-      {/* mobile view */}
-      <div className="lg:hidden -m-4 sm:-m-5 md:-m-6 -mb-20 flex flex-col h-[calc(100vh-3.5rem-4rem)] sm:h-[calc(100vh-4rem-4rem)]">
-        {/* Tabs */}
-        <div className="relative z-30 px-3 pt-3 pb-2 sm:px-4 sm:pt-4">
+      {/* Mobile view — no navbar, fills from top to bottom nav */}
+      <div className="lg:hidden flex flex-col h-[calc(100vh-4rem)] relative">
+        {/* Tabs overlaid on top */}
+        <div className="absolute top-0 inset-x-0 z-20 px-4 pt-3 pb-2 bg-linear-to-b from-black/60 via-black/30 to-transparent">
           <ScanTabSwitcher active={mode} onChange={handleModeChange} />
         </div>
 
-        {/* Content */}
+        {/* Content fills the area */}
         <div className="flex-1 flex flex-col min-h-0">
           {state === 'idle' && mode === 'scan' && (
             <div className="flex-1 min-h-0">
@@ -102,22 +102,14 @@ const ScanStrukPage = () => {
             </div>
           )}
 
-          {state === 'idle' && mode === 'gallery' && (
-            <div className="flex-1 flex flex-col px-4 pb-4 min-h-0">
-              <div className="flex-1 flex items-center justify-center">
-                <ScanUploadZone onFileSelect={handleFileSelect} />
-              </div>
-            </div>
-          )}
-
           {state === 'idle' && mode === 'manual' && (
-            <div className="flex-1 overflow-y-auto px-4 pb-4 sm:px-5 min-h-0">
+            <div className="flex-1 overflow-y-auto px-4 pt-16 pb-4 sm:px-5 min-h-0 bg-background">
               <ScanManualInput />
             </div>
           )}
 
           {state === 'processing' && preview && (
-            <div className="flex-1 flex flex-col items-center justify-center px-4 pb-4 min-h-0">
+            <div className="flex-1 flex flex-col items-center justify-center px-4 pb-4 min-h-0 bg-background">
               <ScanProcessing
                 preview={preview}
                 progress={Math.min(progress, 100)}
@@ -127,7 +119,7 @@ const ScanStrukPage = () => {
           )}
 
           {state === 'result' && preview && (
-            <div className="flex-1 flex items-center justify-center px-4 pb-4 min-h-0">
+            <div className="flex-1 flex items-center justify-center px-4 pb-4 min-h-0 bg-background">
               <img
                 src={preview}
                 alt="Scanned receipt"
@@ -149,7 +141,7 @@ const ScanStrukPage = () => {
         )}
       </div>
 
-      {/* desktop view */}
+      {/* Desktop view */}
       <div className="hidden lg:block space-y-8">
         <PageHeader
           title="Scan & Input Transaction"

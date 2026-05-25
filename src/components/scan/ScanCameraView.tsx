@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
-import { Camera, VideoOff, Maximize, Minimize, Zap, ZapOff } from 'lucide-react';
+import { Camera, VideoOff, Maximize, Minimize, Zap, ZapOff, ImagePlus } from 'lucide-react';
 
 interface ScanCameraViewProps {
   onCapture: (file: File) => void;
@@ -9,6 +9,7 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [error, setError] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -21,12 +22,20 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
     const startCamera = async () => {
       try {
         const mediaStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'environment' },
+          video: {
+            facingMode: { ideal: 'environment' },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+            focusMode: { ideal: 'continuous' },
+          } as MediaTrackConstraints,
+          audio: false,
         });
+
         if (!active) {
           mediaStream.getTracks().forEach((t) => t.stop());
           return;
         }
+
         setStream(mediaStream);
         if (videoRef.current) {
           videoRef.current.srcObject = mediaStream;
@@ -34,10 +43,16 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
 
         const track = mediaStream.getVideoTracks()[0];
         if (track) {
-          const capabilities = track.getCapabilities?.() as MediaTrackCapabilities & { torch?: boolean };
-          if (capabilities?.torch) {
-            setTorchSupported(true);
-          }
+          setTimeout(() => {
+            try {
+              const capabilities = track.getCapabilities() as MediaTrackCapabilities & { torch?: boolean };
+              if (capabilities?.torch) {
+                setTorchSupported(true);
+              }
+            } catch {
+              // getCapabilities not supported
+            }
+          }, 500);
         }
       } catch {
         if (active) setError(true);
@@ -80,7 +95,9 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
     if (!track) return;
     const next = !torchOn;
     try {
-      await track.applyConstraints({ advanced: [{ torch: next } as MediaTrackConstraintSet] });
+      await track.applyConstraints({
+        advanced: [{ torch: next } as unknown as MediaTrackConstraintSet],
+      });
       setTorchOn(next);
     } catch {
       // torch not supported at runtime
@@ -108,6 +125,14 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
     }, 'image/jpeg', 0.92);
   }, [stream, onCapture]);
 
+  const handleGallerySelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      stream?.getTracks().forEach((t) => t.stop());
+      onCapture(file);
+    }
+  }, [stream, onCapture]);
+
   if (error) {
     return (
       <div className="flex h-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border bg-muted/20 px-6 py-16 sm:py-20 lg:rounded-2xl">
@@ -116,7 +141,7 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
         </div>
         <p className="mt-4 text-sm font-medium text-foreground">Camera not available</p>
         <p className="mt-1 max-w-xs text-center text-xs text-muted-foreground">
-          Please allow camera access in your browser settings, or switch to the Gallery tab to upload an image.
+          Please allow camera access in your browser settings, or switch to the Manual tab to input manually.
         </p>
       </div>
     );
@@ -125,7 +150,7 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
   return (
     <div
       ref={containerRef}
-      className="relative h-full overflow-hidden bg-black lg:rounded-2xl lg:border-2 lg:border-primary/30"
+      className="relative h-full w-full overflow-hidden bg-black lg:rounded-2xl lg:border-2 lg:border-primary/30"
     >
       {/* Live camera feed */}
       <video
@@ -138,36 +163,56 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
 
       {/* Viewfinder overlay */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Corner brackets */}
-        <div className="absolute left-6 top-6 h-10 w-10 border-l-2 border-t-2 border-primary/70 rounded-tl-sm sm:left-10 sm:top-10 sm:h-12 sm:w-12 lg:left-12 lg:top-12" />
-        <div className="absolute right-6 top-6 h-10 w-10 border-r-2 border-t-2 border-primary/70 rounded-tr-sm sm:right-10 sm:top-10 sm:h-12 sm:w-12 lg:right-12 lg:top-12" />
-        <div className="absolute bottom-24 left-6 h-10 w-10 border-b-2 border-l-2 border-primary/70 rounded-bl-sm sm:bottom-28 sm:left-10 sm:h-12 sm:w-12 lg:bottom-20 lg:left-12" />
-        <div className="absolute bottom-24 right-6 h-10 w-10 border-b-2 border-r-2 border-primary/70 rounded-br-sm sm:bottom-28 sm:right-10 sm:h-12 sm:w-12 lg:bottom-20 lg:right-12" />
-
-        {/* Scan line animation */}
-        <div className="absolute inset-x-8 top-8 bottom-28 overflow-hidden sm:inset-x-12 sm:top-12 sm:bottom-32 lg:inset-x-14 lg:top-14 lg:bottom-24">
-          <div className="absolute inset-x-0 h-0.5 bg-linear-to-r from-transparent via-primary to-transparent animate-scan-line" />
-        </div>
-
-        {/* Center hint text */}
-        <div className="absolute inset-x-0 top-12 -translate-y-1/2 flex justify-center">
-          <span className="rounded-full bg-black/40 backdrop-blur-sm px-3 py-2 text-[10px] uppercase tracking-widest text-white/80">
+        {/* Hint text at the top */}
+        <div className="absolute inset-x-0 top-1/5 flex justify-center sm:top-18 lg:top-8">
+          <span className="rounded-full bg-black/50 backdrop-blur-sm px-4 py-2 text-[10px] uppercase tracking-widest text-white/80 sm:text-xs">
             Align receipt within the frame
           </span>
         </div>
+
+        {/* Corner brackets */}
+        <div className="absolute left-6 top-24 h-14 w-14 border-l-3 border-t-3 border-white/80 rounded-tl-lg sm:left-10 sm:top-28 sm:h-16 sm:w-16 lg:left-12 lg:top-16" />
+        <div className="absolute right-6 top-24 h-14 w-14 border-r-3 border-t-3 border-white/80 rounded-tr-lg sm:right-10 sm:top-28 sm:h-16 sm:w-16 lg:right-12 lg:top-16" />
+        <div className="absolute bottom-32 left-6 h-14 w-14 border-b-3 border-l-3 border-white/80 rounded-bl-lg sm:bottom-36 sm:left-10 sm:h-16 sm:w-16 lg:bottom-24 lg:left-12" />
+        <div className="absolute bottom-32 right-6 h-14 w-14 border-b-3 border-r-3 border-white/80 rounded-br-lg sm:bottom-36 sm:right-10 sm:h-16 sm:w-16 lg:bottom-24 lg:right-12" />
+
+        {/* Scan line animation */}
+        <div className="absolute left-8 right-8 top-26 bottom-34 overflow-hidden sm:left-12 sm:right-12 sm:top-30 sm:bottom-38 lg:left-14 lg:right-14 lg:top-18 lg:bottom-26">
+          <div className="absolute inset-x-0 h-0.5 bg-linear-to-r from-transparent via-emerald-400 to-transparent animate-scan-line" />
+        </div>
       </div>
 
-      {/* Bottom bar: capture + controls */}
-      <div className="absolute bottom-0 inset-x-0 flex items-end justify-between px-5 pb-5 pt-12 bg-linear-to-t from-black/60 to-transparent sm:px-8 sm:pb-6 lg:px-10 lg:pb-8">
-        {/* Left: Torch */}
+      {/* Bottom controls area */}
+      <div className="absolute bottom-0 inset-x-0 flex items-end justify-between px-6 pb-5 pt-20 bg-linear-to-t from-black/80 via-black/40 to-transparent sm:px-8 sm:pb-6 lg:px-10 lg:pb-8">
+        {/* Left: Gallery button (mobile) */}
+        <div className="flex flex-col items-center gap-1 lg:hidden">
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25"
+            aria-label="Choose from gallery"
+          >
+            <ImagePlus className="h-5 w-5" />
+          </button>
+          <span className="text-[9px] uppercase tracking-wide text-white/70 font-medium">Gallery</span>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleGallerySelect}
+          />
+        </div>
+
+        {/* Left: Torch (desktop) */}
         <button
           type="button"
           onClick={toggleTorch}
           disabled={!torchSupported}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25 disabled:opacity-40 disabled:cursor-not-allowed"
+          className="hidden lg:flex h-11 w-11 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25 disabled:opacity-30 disabled:cursor-not-allowed"
           aria-label={torchOn ? 'Turn off flash' : 'Turn on flash'}
         >
-          {torchOn ? <Zap className="h-4 w-4 text-yellow-400" /> : <ZapOff className="h-4 w-4" />}
+          {torchOn ? <Zap className="h-5 w-5 text-yellow-400" /> : <ZapOff className="h-5 w-5" />}
         </button>
 
         {/* Center: Capture */}
@@ -177,17 +222,31 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
           className="flex h-16 w-16 items-center justify-center rounded-full border-4 border-white bg-white/20 backdrop-blur-sm transition-transform hover:scale-105 active:scale-95 sm:h-18 sm:w-18"
           aria-label="Capture receipt"
         >
-          <Camera className="h-6 w-6 text-white" />
+          <Camera className="h-6 w-6 text-white sm:h-7 sm:w-7" />
         </button>
 
-        {/* Right: Fullscreen */}
+        {/* Right: Torch (mobile) */}
+        <div className="flex flex-col items-center gap-1 lg:hidden">
+          <button
+            type="button"
+            onClick={toggleTorch}
+            disabled={!torchSupported}
+            className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25 disabled:opacity-30 disabled:cursor-not-allowed"
+            aria-label={torchOn ? 'Turn off flash' : 'Turn on flash'}
+          >
+            {torchOn ? <Zap className="h-5 w-5 text-yellow-400" /> : <ZapOff className="h-5 w-5" />}
+          </button>
+          <span className="text-[9px] uppercase tracking-wide text-white/70 font-medium">Flash</span>
+        </div>
+
+        {/* Right: Fullscreen (desktop only) */}
         <button
           type="button"
           onClick={toggleFullscreen}
-          className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25"
+          className="hidden lg:flex h-11 w-11 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25"
           aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
         >
-          {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
+          {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
         </button>
       </div>
 
