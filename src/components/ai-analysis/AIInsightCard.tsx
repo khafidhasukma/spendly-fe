@@ -20,7 +20,7 @@ const AIInsightCard = () => {
           Based on your recent lifestyle shifts, you can optimize your monthly balance. Reduce dining out by 2x/week to save more.
         </p>
       </div>
-      <div className="mt-4 rounded-xl bg-white/10 px-4 py-3">
+      <div className="mt-4 rounded-lg bg-white/10 px-4 py-3">
         <p className="text-[10px] text-[#86D2A6] font-medium">Potential Monthly Savings</p>
         <p className="text-xl font-bold text-white font-manrope sm:text-2xl mt-0.5">Rp1.250.000</p>
       </div>

@@ -36,7 +36,7 @@ const QuickCategories = () => {
         </Link>
       </div>
 
-      <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-5 sm:gap-3 md:grid-cols-9 md:gap-4 lg:mt-4 lg:gap-5">
+      <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-5 sm:gap-3 md:grid-cols-6 xl:grid-cols-9 md:gap-4 lg:mt-4 lg:gap-5">
         {categories.map(({ id, label, icon: Icon, color, bgColor }) => (
           <Link key={id} to="/categories" className="flex flex-col items-center">
             <div className="flex w-full flex-col items-center gap-1.5 rounded-lg border border-border bg-card p-2.5 transition-shadow hover:shadow-md sm:p-3 lg:p-4">

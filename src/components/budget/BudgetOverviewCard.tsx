@@ -26,7 +26,7 @@ const BudgetOverviewCard = ({
       : 'bg-white';
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-primary dark:bg-[#003d26] p-5 text-white sm:p-6 md:p-8">
+    <div className="relative overflow-hidden rounded-2xl bg-primary p-5 text-white sm:p-6 md:p-8">
       {/* Background decoration */}
       <div className="pointer-events-none absolute right-6 top-4 opacity-10">
         <Wallet className="size-20 sm:size-28" />

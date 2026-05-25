@@ -12,12 +12,12 @@ const BalanceCard = ({
   percentageChange = 12.5,
 }: BalanceCardProps) => {
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-primary dark:bg-[#003d26] p-5 text-white h-full min-h-48 sm:min-h-52 sm:p-6">
+    <div className="relative overflow-hidden rounded-2xl bg-primary p-5 text-white h-full min-h-48 sm:min-h-52 sm:p-6">
       <div className="pointer-events-none absolute right-6 top-3 opacity-10 sm:right-8 sm:top-4">
         <Wallet className="size-24 sm:size-30" />
       </div>
 
-      <p className="text-xs font-semibold uppercase tracking-widest text-white/70">Total Balance</p>
+      <p className="text-xs font-semibold uppercase text-white/70">Total Balance</p>
       <h2 className="mt-1.5 text-3xl font-bold font-manrope sm:mt-2 sm:text-4xl">
         Rp{formatRupiah(totalBalance)}
       </h2>
@@ -27,24 +27,24 @@ const BalanceCard = ({
         {percentageChange}% increase from last month
       </div>
 
-      <div className="mt-6 flex items-center justify-between gap-3 sm:mt-8 sm:gap-4">
+      <div className="mt-6 flex items-center justify-between gap-3 sm:mt-8 xl:gap-4">
         <div className="flex gap-2.5 items-center sm:gap-3">
-          <span className="flex size-11 items-center justify-center rounded-full bg-white/10 sm:size-14">
-            <ArrowDown className="size-5 text-[#34D399] sm:size-6" />
+          <span className="flex size-8 md:size-10 items-center justify-center rounded-full bg-white/10 xl:size-14">
+            <ArrowDown className="size-5 text-emerald-300 sm:size-6" />
           </span>
-          <div className="space-y-0.5 sm:space-y-1">
-            <p className="text-xs font-medium uppercase tracking-wide text-white/60">Income</p>
-            <span className="text-base font-semibold sm:text-xl">Rp{formatRupiah(income)}</span>
+          <div className="sm:space-y-1">
+            <p className="text-[10px] sm:text-xs font-medium uppercase tracking-wide text-white/60">Income</p>
+            <span className="text-sm font-semibold sm:text-base md:text-lg">Rp{formatRupiah(income)}</span>
           </div>
         </div>
 
         <div className="flex gap-2.5 items-center sm:gap-3">
-          <span className="flex size-11 items-center justify-center rounded-full bg-white/10 sm:size-14">
-            <ArrowUp className="size-5 text-secondary sm:size-6" />
+          <span className="flex size-8 md:size-10 items-center justify-center rounded-full bg-white/10 xl:size-14">
+            <ArrowUp className="size-5 text-orange-300 sm:size-6" />
           </span>
-          <div className="space-y-0.5 sm:space-y-1">
-            <p className="text-xs font-medium uppercase tracking-wide text-white/60">Expense</p>
-            <span className="text-base font-semibold sm:text-xl">Rp{formatRupiah(expense)}</span>
+          <div className="sm:space-y-1">
+            <p className="text-[10px] sm:text-xs font-medium uppercase tracking-wide text-white/60">Expense</p>
+            <span className="text-sm font-semibold sm:text-base md:text-lg">Rp{formatRupiah(expense)}</span>
           </div>
         </div>
       </div>

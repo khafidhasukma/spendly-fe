@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import PageHeader from '@/components/ui/page-header';
 import {
   AddBudgetDialog,
   BudgetCategoryList,
@@ -10,7 +10,6 @@ import {
 } from '@/components/budget';
 
 const BudgetPage = () => {
-  const navigate = useNavigate();
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editCategory, setEditCategory] = useState({ name: '', limit: 0 });
@@ -32,31 +31,20 @@ const BudgetPage = () => {
 
   return (
     <div className="space-y-5 sm:space-y-6 lg:space-y-8">
-      {/* Header */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => navigate(-1)}
-            className="shrink-0"
-          >
-            <ArrowLeft className="size-5" />
+      <PageHeader
+        title="Detailed Budgeting"
+        description="Manage and track your spending limits per category"
+        breadcrumb={[
+          { label: 'Profile', to: '/profile' },
+          { label: 'Detailed Budgeting' },
+        ]}
+        action={
+          <Button onClick={() => setAddDialogOpen(true)} className="w-full sm:w-auto">
+            <Plus className="size-4" />
+            Add Budget
           </Button>
-          <div>
-            <h1 className="text-xl font-bold text-foreground font-manrope sm:text-2xl lg:text-3xl">
-              Detailed Budgeting
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Manage and track your spending limits
-            </p>
-          </div>
-        </div>
-        <Button onClick={() => setAddDialogOpen(true)} className="w-full sm:w-auto">
-          <Plus className="size-4" />
-          Add Budget
-        </Button>
-      </div>
+        }
+      />
 
       {/* Overview */}
       <BudgetOverviewCard />

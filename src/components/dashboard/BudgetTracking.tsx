@@ -14,7 +14,7 @@ const BudgetBar = ({ item }: { item: BudgetItem }) => {
   const isDanger  = pct >= 100;
   const isWarning = pct >= 85 && !isDanger;
 
-  const barColor  = isDanger ? 'bg-red-500' : isWarning ? 'bg-secondary' : 'bg-primary';
+  const barColor  = isDanger ? 'bg-red-500' : isWarning ? 'bg-secondary' : 'bg-emerald-500';
   const textColor = isDanger ? 'text-red-500' : isWarning ? 'text-secondary' : 'text-foreground';
 
   return (

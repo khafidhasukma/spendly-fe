@@ -32,7 +32,7 @@ const ScanTabSwitcher = ({ active, onChange }: ScanTabSwitcherProps) => {
             desktopOnly ? 'hidden lg:flex' : ''
           } ${
             active === id
-              ? 'bg-white/90 text-primary shadow-sm lg:bg-card lg:text-primary'
+              ? 'bg-white/90 text-primary shadow-sm lg:bg-card'
               : 'text-white/70 hover:text-white lg:text-muted-foreground lg:hover:text-foreground'
           }`}
         >

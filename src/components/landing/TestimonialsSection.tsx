@@ -13,15 +13,15 @@ const row1: Testimonial[] = [
   { name: 'Rina Sari', role: 'Freelance Designer', avatar: 'RS', text: "Since using Spendly, I'm much more aware of where my money goes. The receipt scanner is a game changer!", rating: 5 },
   { name: 'Budi Hartono', role: 'Software Engineer', avatar: 'BH', text: "The AI analysis is spot on. I've saved nearly Rp1M per month just by following Spendly's recommendations.", rating: 5 },
   { name: 'Dewi Anggraini', role: 'Marketing Manager', avatar: 'DA', text: 'The dashboard is clean and easy to understand. Perfect for anyone just starting to track their finances.', rating: 4 },
-  { name: 'Andi Prasetyo', role: 'Student', avatar: 'AP', text: "Budget tracking keeps me from overspending. Highly recommended for anyone on a tight budget!", rating: 5 },
+  { name: 'Andi Prasetyo', role: 'Student', avatar: 'AP', text: 'Budget tracking keeps me from overspending. Highly recommended for anyone on a tight budget!', rating: 5 },
   { name: 'Siti Nurhaliza', role: 'Accountant', avatar: 'SN', text: 'As an accountant, I really appreciate the detailed categories and reports. Very well designed.', rating: 5 },
 ];
 
 const row2: Testimonial[] = [
   { name: 'Fajar Ramadhan', role: 'Entrepreneur', avatar: 'FR', text: 'Spendly helps me separate personal and business finances effortlessly. Simple yet powerful.', rating: 5 },
   { name: 'Maya Putri', role: 'Content Creator', avatar: 'MP', text: "Finally found an app that isn't complicated. Snap a receipt and it's recorded instantly.", rating: 5 },
-  { name: 'Rizky Aditya', role: 'Product Manager', avatar: 'RA', text: "The spending forecast is surprisingly accurate. It helps me plan my budget way better.", rating: 4 },
-  { name: 'Lina Kusuma', role: 'Teacher', avatar: 'LK', text: "My salary is limited, but Spendly helps me manage it so I can still save every month.", rating: 5 },
+  { name: 'Rizky Aditya', role: 'Product Manager', avatar: 'RA', text: 'The spending forecast is surprisingly accurate. It helps me plan my budget way better.', rating: 4 },
+  { name: 'Lina Kusuma', role: 'Teacher', avatar: 'LK', text: 'My salary is limited, but Spendly helps me manage it so I can still save every month.', rating: 5 },
   { name: 'Hendra Wijaya', role: 'Data Analyst', avatar: 'HW', text: 'Great charts and visualizations. I can see my spending patterns without exporting to Excel.', rating: 5 },
 ];
 
