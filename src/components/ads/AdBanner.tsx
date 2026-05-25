@@ -23,6 +23,8 @@ const AD_CLIENT_ID = import.meta.env.VITE_ADSENSE_CLIENT_ID as
   | string
   | undefined;
 
+const ADS_ENABLED = import.meta.env.VITE_ADS_ENABLED === 'true';
+
 /** Error boundary to prevent ad errors from crashing the app */
 class AdErrorBoundary extends Component<
   { children: ReactNode },
@@ -59,7 +61,8 @@ const AdBannerInner = ({
   const isAdPushed = useRef(false);
 
   useEffect(() => {
-    if (!AD_CLIENT_ID || isAdPushed.current) return;
+    // Don't do anything if ads are disabled or no client ID configured
+    if (!ADS_ENABLED || !AD_CLIENT_ID || isAdPushed.current) return;
 
     // Load AdSense script dynamically (once globally)
     const existingScript = document.querySelector(
@@ -92,7 +95,7 @@ const AdBannerInner = ({
     return () => clearTimeout(timer);
   }, []);
 
-  if (!AD_CLIENT_ID) {
+  if (!ADS_ENABLED || !AD_CLIENT_ID) {
     return null;
   }
 

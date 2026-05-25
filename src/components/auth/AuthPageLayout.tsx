@@ -11,7 +11,7 @@ const AuthPageLayout = ({
   children,
 }: AuthPageLayoutProps) => {
   return (
-    <div className="grid lg:grid-cols-5 h-screen overflow-hidden">
+    <div className="grid lg:grid-cols-5 h-dvh overflow-hidden">
       <div className="col-span-3 flex items-center justify-center lg:max-w-2xl mx-auto overflow-y-auto">
         <AuthFormPanel>{children}</AuthFormPanel>
       </div>
