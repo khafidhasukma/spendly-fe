@@ -7,6 +7,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { AdBanner } from '@/components/ads';
+import { usePageTitle } from '@/hooks';
 import type { FAQCategory } from '@/types';
 
 const faqData: FAQCategory[] = [
@@ -123,6 +125,7 @@ const faqData: FAQCategory[] = [
 ];
 
 const FAQPage = () => {
+  usePageTitle('FAQ');
   return (
     <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 lg:py-16 space-y-6 sm:space-y-8 md:space-y-10">
       {/* Header */}
@@ -159,6 +162,9 @@ const FAQPage = () => {
           </div>
         ))}
       </div>
+
+      {/* Ad placement: between FAQ content and CTA */}
+      <AdBanner slot="1234567893" format="horizontal" className="py-2" />
 
       {/* Still need help CTA */}
       <div className="rounded-xl sm:rounded-2xl border-3 border-dashed border-secondary/30 bg-secondary/10 p-5 sm:p-6 md:p-8 text-center">

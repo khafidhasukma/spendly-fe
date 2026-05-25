@@ -1,8 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { Home, ArrowLeft, SearchX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { usePageTitle } from '@/hooks';
 
 const NotFoundPage = () => {
+  usePageTitle('Page Not Found');
   const navigate = useNavigate();
 
   return (

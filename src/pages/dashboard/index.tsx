@@ -8,8 +8,10 @@
   WalletCTA,
   WealthGrowth,
 } from '@/components/dashboard';
+import { usePageTitle } from '@/hooks';
 
 const DashboardPage = () => {
+  usePageTitle('Dashboard');
   return (
     <div className="space-y-6 lg:space-y-8">
       <DashboardGreeting />

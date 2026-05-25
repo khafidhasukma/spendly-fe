@@ -10,6 +10,7 @@ import {
   ScanTabSwitcher,
   ScanMobileReviewDrawer,
 } from '@/components/scan';
+import { usePageTitle } from '@/hooks';
 import type { ScanMode } from '@/components/scan/ScanTabSwitcher';
 
 type PageState = 'idle' | 'processing' | 'result';
@@ -39,6 +40,7 @@ const useIsDesktop = () => {
 };
 
 const ScanStrukPage = () => {
+  usePageTitle('Scan Receipt');
   const isDesktop = useIsDesktop();
   const [mode, setMode] = useState<ScanMode>('scan');
   const [state, setState] = useState<PageState>('idle');

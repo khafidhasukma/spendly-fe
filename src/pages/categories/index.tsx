@@ -17,6 +17,7 @@ import { CategoriesEmptyState, CategoryCard, CategoriesFeaturesSection } from '@
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { EditCategoryDialog } from '@/components/ui/edit-category-dialog';
 import { getIconById, getNextColor } from '@/lib/category-icons';
+import { usePageTitle } from '@/hooks';
 import type { Category } from '@/types';
 
 const INITIAL_CATEGORIES: Category[] = [
@@ -32,6 +33,7 @@ const INITIAL_CATEGORIES: Category[] = [
 
 
 const CategoriesPage = () => {
+  usePageTitle('Categories');
   const [categories, setCategories] = useState<Category[]>(INITIAL_CATEGORIES);
 
   const [editTarget, setEditTarget] = useState<Category | null>(null);

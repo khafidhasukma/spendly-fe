@@ -1,3 +1,3 @@
 // Custom hooks
-// Example: export { default as useTransactions } from './useTransactions';
-export {};
+export { default as usePageTitle } from './usePageTitle';
+export { useScrollReveal } from './useScrollReveal';

@@ -4,9 +4,12 @@ import {
   ContactForm,
   ContactImageBanner,
 } from '@/components/contact';
+import { AdBanner } from '@/components/ads';
+import { usePageTitle } from '@/hooks';
 import PageHeader from '@/components/ui/page-header';
 
 const ContactUsPage = () => {
+  usePageTitle('Contact Us');
   return (
     <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 lg:py-16 space-y-8 sm:space-y-10 md:space-y-12">
       <div className="grid grid-cols-1 gap-6 sm:gap-8 md:gap-10 lg:grid-cols-5 lg:items-stretch">
@@ -28,6 +31,9 @@ const ContactUsPage = () => {
 
       {/* FAQ section */}
       <ContactFAQ />
+
+      {/* Ad placement: after FAQ section */}
+      <AdBanner slot="1234567892" format="horizontal" className="py-4" />
     </div>
   );
 };

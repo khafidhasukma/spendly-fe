@@ -168,8 +168,7 @@ Copy `.env.example` to `.env` and configure the following variables:
 |---|---|---|
 | `VITE_BACKEND_URL` | Base URL for the backend REST API | `http://localhost:3000/api` |
 | `VITE_AI_API_URL` | Base URL for the AI/OCR service | `http://localhost:8000/api` |
-| `VITE_SUPABASE_URL` | Supabase project URL (optional) | — |
-| `VITE_SUPABASE_ANON_KEY` | Supabase anonymous key (optional) | — |
+| `VITE_ADSENSE_CLIENT_ID` | Google AdSense client ID (optional) | — |
 
 All variables must be prefixed with `VITE_` to be exposed to the client by Vite.
 

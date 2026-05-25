@@ -8,9 +8,11 @@ import {
   PredictionCard,
   SpendingCategoryCard,
 } from '@/components/ai-analysis';
+import { usePageTitle } from '@/hooks';
 import type { FilterOption } from '@/components/ai-analysis';
 
 const AnalisisAIPage = () => {
+  usePageTitle('AI Analysis');
   const [filter, setFilter] = useState<FilterOption>('This Month');
 
   return (

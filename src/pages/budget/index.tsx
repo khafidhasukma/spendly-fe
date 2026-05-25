@@ -8,8 +8,10 @@ import {
   BudgetOverviewCard,
   EditBudgetDialog,
 } from '@/components/budget';
+import { usePageTitle } from '@/hooks';
 
 const BudgetPage = () => {
+  usePageTitle('Budget');
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [editCategory, setEditCategory] = useState({ name: '', limit: 0 });

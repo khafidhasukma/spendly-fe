@@ -6,6 +6,8 @@ import {
   TncImageBanner,
   TncCTA,
 } from '@/components/tnc';
+import { AdBanner } from '@/components/ads';
+import { usePageTitle } from '@/hooks';
 import type { TncSectionProps } from '@/types';
 
 const sections: TncSectionProps[] = [
@@ -114,6 +116,7 @@ const sections: TncSectionProps[] = [
 const BANNER_AFTER_INDEX = 1;
 
 const TncPage = () => {
+  usePageTitle('Terms & Conditions');
   return (
     <div className="mx-auto max-w-6xl px-5 sm:px-8 py-10 sm:py-14 lg:py-16 space-y-8 sm:space-y-10 md:space-y-12">
       <TncHeader />
@@ -131,6 +134,9 @@ const TncPage = () => {
               {index === BANNER_AFTER_INDEX && <TncImageBanner key="banner" />}
             </>
           ))}
+
+          {/* Ad placement: before CTA */}
+          <AdBanner slot="1234567894" format="rectangle" className="py-2" />
 
           <TncCTA />
         </div>

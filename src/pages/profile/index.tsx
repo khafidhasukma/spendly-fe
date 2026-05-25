@@ -8,8 +8,10 @@ import {
   SecurityCard,
   SupportCard,
 } from '@/components/profile';
+import { usePageTitle } from '@/hooks';
 
 const ProfilePage = () => {
+  usePageTitle('Profile');
   const [editOpen, setEditOpen] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);

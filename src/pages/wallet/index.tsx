@@ -10,8 +10,10 @@ import {
   WalletOverviewCard,
   WalletRecentActivity,
 } from '@/components/wallet';
+import { usePageTitle } from '@/hooks';
 
 const WalletPage = () => {
+  usePageTitle('Wallet');
   const [addWalletOpen, setAddWalletOpen] = useState(false);
   const [editWalletOpen, setEditWalletOpen] = useState(false);
   const [transferOpen, setTransferOpen] = useState(false);
