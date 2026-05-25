@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { ThemeProvider } from './contexts/ThemeContext';
 import MainLayout from './layouts/MainLayout';
@@ -20,6 +20,7 @@ import PrivacyPolicyPage from './pages/privacy-policy';
 import ForgotPasswordPage from './pages/forgot-password';
 import BudgetPage from './pages/budget';
 import WalletPage from './pages/wallet';
+import NotFoundPage from './pages/not-found';
 
 const App = () => {
   return (
@@ -55,7 +56,7 @@ const App = () => {
             <Route path="forgot-password" element={<ForgotPasswordPage />} />
           </Route>
 
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
