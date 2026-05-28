@@ -1,5 +1,5 @@
 import { useRef, useState, useCallback, useEffect } from 'react';
-import { Camera, VideoOff, Maximize, Minimize, Zap, ZapOff, ImagePlus, SwitchCamera, Focus } from 'lucide-react';
+import { Camera, VideoOff, Maximize, Minimize, Zap, ZapOff, ImagePlus } from 'lucide-react';
 
 interface ScanCameraViewProps {
   onCapture: (file: File) => void;
@@ -17,14 +17,10 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [torchOn, setTorchOn] = useState(false);
   const [torchSupported, setTorchSupported] = useState(false);
-  const [flashMode, setFlashMode] = useState<'off' | 'on'>('off');
-  const [flashSupported, setFlashSupported] = useState(false);
-  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
-  const [hasMultipleCameras, setHasMultipleCameras] = useState(false);
   const [capturing, setCapturing] = useState(false);
 
-  // Start camera
-  const startCamera = useCallback(async (facing: 'user' | 'environment') => {
+  // Start camera — always use back camera, exclude ultra-wide/0.5x
+  const startCamera = useCallback(async () => {
     // Stop existing stream
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((t) => t.stop());
@@ -33,63 +29,67 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
     }
 
     try {
-      // First, try to find the best back camera device
-      let deviceId: string | undefined;
-
-      if (facing === 'environment') {
-        try {
-          const devices = await navigator.mediaDevices.enumerateDevices();
-          const videoInputs = devices.filter((d) => d.kind === 'videoinput');
-          setHasMultipleCameras(videoInputs.length > 1);
-
-          // Prefer main back camera (not ultra-wide/telephoto)
-          const back = videoInputs.filter((d) => /back|rear|environment/i.test(d.label));
-          const main = back.find((d) => !/ultra|wide|tele|0\.5|0,5/i.test(d.label));
-          deviceId = main?.deviceId ?? back[0]?.deviceId;
-        } catch {
-          // ignore enumeration failure
-        }
-      }
-
-      const constraints: MediaStreamConstraints = {
-        video: deviceId
-          ? {
-            deviceId: { exact: deviceId },
-            width: { ideal: 1920 },
-            height: { ideal: 1080 },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any
-          : {
-            facingMode: { ideal: facing },
-            width: { ideal: 1920 },
-            height: { ideal: 1080 },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          } as any,
+      // Step 1: Get initial permission with a simple request
+      const probeStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: 'environment' } },
         audio: false,
-      };
+      });
+      probeStream.getTracks().forEach((t) => t.stop());
 
-      let stream: MediaStream;
+      // Step 2: Enumerate devices to find the main back camera (not 0.5x/ultra-wide)
+      let deviceId: string | undefined;
       try {
-        stream = await navigator.mediaDevices.getUserMedia(constraints);
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoInputs = devices.filter((d) => d.kind === 'videoinput');
+
+        // Filter back-facing cameras
+        const back = videoInputs.filter((d) =>
+          /back|rear|environment/i.test(d.label),
+        );
+
+        if (back.length > 0) {
+          // Exclude ultra-wide / 0.5x / wide-angle cameras
+          const main = back.find(
+            (d) => !/ultra|wide|tele|0\.5|0,5|macro/i.test(d.label),
+          );
+          deviceId = main?.deviceId ?? back[0]?.deviceId;
+        }
       } catch {
-        // Fallback: try without resolution/deviceId constraints
+        // ignore
+      }
+
+      // Step 3: Open the camera with high resolution
+      let stream: MediaStream;
+      const baseConstraints = deviceId
+        ? { deviceId: { exact: deviceId } }
+        : { facingMode: { exact: 'environment' as const } };
+
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            ...baseConstraints,
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+          },
+          audio: false,
+        });
+      } catch {
+        // Fallback without resolution constraints
         try {
           stream = await navigator.mediaDevices.getUserMedia({
-            video: deviceId
-              ? { deviceId: { exact: deviceId } }
-              : { facingMode: { ideal: facing } },
+            video: baseConstraints,
             audio: false,
           });
         } catch {
-          // Last resort: just request any video
+          // Last resort
           stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
+            video: { facingMode: { ideal: 'environment' } },
             audio: false,
           });
         }
       }
-      streamRef.current = stream;
 
+      streamRef.current = stream;
       const track = stream.getVideoTracks()[0];
       trackRef.current = track;
 
@@ -100,40 +100,29 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
       // Apply continuous autofocus
       if (track) {
         try {
-          await track.applyConstraints({
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            advanced: [{ focusMode: 'continuous' } as any],
-          });
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await track.applyConstraints({ advanced: [{ focusMode: 'continuous' } as any] });
         } catch {
           // not supported
         }
 
-        // Check torch and flash capabilities
-        const detectCapabilities = () => {
+        // Detect torch support
+        const detectTorch = () => {
           try {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const caps = track.getCapabilities() as any;
             if (caps?.torch) {
               setTorchSupported(true);
             }
-            // Check ImageCapture flash support
-            if (typeof ImageCapture !== 'undefined') {
-              const imageCapture = new ImageCapture(track);
-              imageCapture.getPhotoCapabilities().then((photoCaps) => {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const fillLightModes = (photoCaps as any).fillLightMode;
-                if (fillLightModes && fillLightModes.length > 0 && fillLightModes.includes('flash')) {
-                  setFlashSupported(true);
-                }
-              }).catch(() => { /* ignore */ });
-            }
           } catch {
             // ignore
           }
         };
 
-        detectCapabilities();
-        setTimeout(detectCapabilities, 800);
+        detectTorch();
+        // Some devices need a delay before capabilities are reported
+        setTimeout(detectTorch, 500);
+        setTimeout(detectTorch, 1500);
       }
 
       setReady(true);
@@ -147,7 +136,7 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
   // Initialize camera on mount
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    startCamera(facingMode);
+    startCamera();
 
     return () => {
       if (streamRef.current) {
@@ -175,6 +164,7 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
     }
   }, []);
 
+  // Toggle torch (flash LED) on/off
   const toggleTorch = useCallback(async () => {
     const track = trackRef.current;
     if (!track) return;
@@ -184,22 +174,10 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
       await track.applyConstraints({ advanced: [{ torch: next } as any] });
       setTorchOn(next);
     } catch {
+      // If it fails, torch is not actually supported
       setTorchSupported(false);
     }
   }, [torchOn]);
-
-  const toggleFlash = useCallback(() => {
-    setFlashMode((prev) => (prev === 'off' ? 'on' : 'off'));
-  }, []);
-
-  const switchCamera = useCallback(() => {
-    const newFacing = facingMode === 'environment' ? 'user' : 'environment';
-    setFacingMode(newFacing);
-    setTorchOn(false);
-    setTorchSupported(false);
-    setFlashSupported(false);
-    startCamera(newFacing);
-  }, [facingMode, startCamera]);
 
   // Tap-to-focus
   const handleTapToFocus = useCallback(async () => {
@@ -211,15 +189,16 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
       setTimeout(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         track.applyConstraints({ advanced: [{ focusMode: 'continuous' } as any] }).catch(() => {});
-      }, 100);
+      }, 150);
     } catch {
       // ignore
     }
   }, []);
 
   /**
-   * Capture using ImageCapture.takePhoto() for maximum resolution.
-   * Falls back to canvas capture if ImageCapture is not available.
+   * Capture photo using ImageCapture API for max resolution.
+   * The torch stays on during capture if enabled (no need for fillLightMode).
+   * Falls back to canvas if ImageCapture is unavailable.
    */
   const handleCapture = useCallback(async () => {
     const track = trackRef.current;
@@ -231,38 +210,28 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
     try {
       let blob: Blob | null = null;
 
-      // Method 1: ImageCapture API (high-res + flash support)
+      // Method 1: ImageCapture API — captures at full sensor resolution
       if (typeof ImageCapture !== 'undefined') {
         const imageCapture = new ImageCapture(track);
 
-        // Build photo settings
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const photoSettings: any = {};
 
-        // Request maximum resolution
+        // Request maximum photo resolution
         try {
           const capabilities = await imageCapture.getPhotoCapabilities();
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const caps = capabilities as any;
-          if (caps.imageWidth?.max) {
-            photoSettings.imageWidth = caps.imageWidth.max;
-          }
-          if (caps.imageHeight?.max) {
-            photoSettings.imageHeight = caps.imageHeight.max;
-          }
+          if (caps.imageWidth?.max) photoSettings.imageWidth = caps.imageWidth.max;
+          if (caps.imageHeight?.max) photoSettings.imageHeight = caps.imageHeight.max;
         } catch {
-          // ignore, use defaults
-        }
-
-        // Set flash mode
-        if (flashMode === 'on' && flashSupported) {
-          photoSettings.fillLightMode = 'flash';
+          // use defaults
         }
 
         blob = await imageCapture.takePhoto(photoSettings);
       }
 
-      // Method 2: Fallback to canvas capture
+      // Method 2: Canvas fallback
       if (!blob) {
         const canvas = document.createElement('canvas');
         canvas.width = video.videoWidth;
@@ -278,15 +247,19 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
 
       if (blob) {
         const file = new File([blob], `receipt-${Date.now()}.jpg`, { type: 'image/jpeg' });
-
-        // Stop stream
+        // Turn off torch before leaving
+        if (torchOn && trackRef.current) {
+          try {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            await trackRef.current.applyConstraints({ advanced: [{ torch: false } as any] });
+          } catch { /* ignore */ }
+        }
         streamRef.current?.getTracks().forEach((t) => t.stop());
         if (document.fullscreenElement) document.exitFullscreen();
-
         onCapture(file);
       }
     } catch {
-      // If ImageCapture fails, try canvas fallback
+      // Fallback canvas capture
       try {
         const canvas = document.createElement('canvas');
         canvas.width = video.videoWidth;
@@ -309,7 +282,7 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
     } finally {
       setCapturing(false);
     }
-  }, [onCapture, flashMode, flashSupported]);
+  }, [onCapture, torchOn]);
 
   const handleGallerySelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -337,14 +310,14 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
       ref={containerRef}
       className="relative h-full w-full overflow-hidden bg-black lg:rounded-2xl lg:border-2 lg:border-primary/30"
     >
-      {/* Live camera feed */}
+      {/* Live camera feed — never mirrored */}
       <video
         ref={videoRef}
         autoPlay
         playsInline
         muted
         onClick={handleTapToFocus}
-        className={`block h-full w-full object-cover ${facingMode === 'user' ? 'scale-x-[-1]' : ''}`}
+        className="block h-full w-full object-cover"
       />
 
       {/* Loading state */}
@@ -405,39 +378,16 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
           />
         </div>
 
-        {/* Left: Flash/Torch toggle (desktop) */}
-        <div className="hidden lg:flex flex-col items-center gap-2">
-          {flashSupported && (
-            <button
-              type="button"
-              onClick={toggleFlash}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25"
-              aria-label={flashMode === 'on' ? 'Turn off flash' : 'Turn on flash'}
-            >
-              {flashMode === 'on' ? <Zap className="h-5 w-5 text-yellow-400" /> : <ZapOff className="h-5 w-5" />}
-            </button>
-          )}
-          {torchSupported && (
-            <button
-              type="button"
-              onClick={toggleTorch}
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25"
-              aria-label={torchOn ? 'Turn off torch' : 'Turn on torch'}
-            >
-              {torchOn ? <Focus className="h-5 w-5 text-yellow-400" /> : <Focus className="h-5 w-5" />}
-            </button>
-          )}
-          {!flashSupported && !torchSupported && (
-            <button
-              type="button"
-              disabled
-              className="flex h-11 w-11 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white opacity-30 cursor-not-allowed"
-              aria-label="Flash not supported"
-            >
-              <ZapOff className="h-5 w-5" />
-            </button>
-          )}
-        </div>
+        {/* Left: Flash toggle (desktop) */}
+        <button
+          type="button"
+          onClick={toggleTorch}
+          disabled={!torchSupported}
+          className="hidden lg:flex h-11 w-11 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25 disabled:opacity-30 disabled:cursor-not-allowed"
+          aria-label={torchOn ? 'Turn off flash' : 'Turn on flash'}
+        >
+          {torchOn ? <Zap className="h-5 w-5 text-yellow-400" /> : <ZapOff className="h-5 w-5" />}
+        </button>
 
         {/* Center: Capture */}
         <button
@@ -450,37 +400,18 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
           <Camera className="h-6 w-6 text-white sm:h-7 sm:w-7" />
         </button>
 
-        {/* Right: Switch camera + Flash (mobile) */}
+        {/* Right: Flash toggle (mobile) */}
         <div className="flex flex-col items-center gap-1 lg:hidden">
-          {hasMultipleCameras ? (
-            <>
-              <button
-                type="button"
-                onClick={switchCamera}
-                className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25 active:scale-95"
-                aria-label="Switch camera"
-              >
-                <SwitchCamera className="h-5 w-5" />
-              </button>
-              <span className="text-[9px] uppercase tracking-wide text-white/70 font-medium">Flip</span>
-            </>
-          ) : (
-            <>
-              <button
-                type="button"
-                onClick={torchSupported ? toggleTorch : toggleFlash}
-                className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25 active:scale-95"
-                aria-label={torchOn || flashMode === 'on' ? 'Turn off flash' : 'Turn on flash'}
-              >
-                {torchOn || flashMode === 'on' ? (
-                  <Zap className="h-5 w-5 text-yellow-400" />
-                ) : (
-                  <ZapOff className="h-5 w-5" />
-                )}
-              </button>
-              <span className="text-[9px] uppercase tracking-wide text-white/70 font-medium">Flash</span>
-            </>
-          )}
+          <button
+            type="button"
+            onClick={toggleTorch}
+            disabled={!torchSupported}
+            className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25 active:scale-95 disabled:opacity-30"
+            aria-label={torchOn ? 'Turn off flash' : 'Turn on flash'}
+          >
+            {torchOn ? <Zap className="h-5 w-5 text-yellow-400" /> : <ZapOff className="h-5 w-5" />}
+          </button>
+          <span className="text-[9px] uppercase tracking-wide text-white/70 font-medium">Flash</span>
         </div>
 
         {/* Right: Fullscreen (desktop only) */}
@@ -494,12 +425,12 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
         </button>
       </div>
 
-      {/* Flash mode indicator (mobile, when flash is on) */}
-      {(flashMode === 'on' || torchOn) && (
+      {/* Flash indicator */}
+      {torchOn && (
         <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 rounded-full bg-yellow-500/20 backdrop-blur-sm px-3 py-1.5 border border-yellow-500/30 lg:top-6 lg:right-6">
           <Zap className="h-3.5 w-3.5 text-yellow-400" />
           <span className="text-[10px] font-medium text-yellow-300 uppercase tracking-wide">
-            {torchOn ? 'Torch On' : 'Flash On'}
+            Flash On
           </span>
         </div>
       )}
