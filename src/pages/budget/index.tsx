@@ -1,4 +1,5 @@
-import { useState } from 'react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useCallback, useEffect, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -11,53 +12,109 @@ import {
   EditBudgetDialog,
 } from '@/components/budget';
 import { usePageTitle } from '@/hooks';
-
-const mockCategoryNames: Record<string, string> = {
-  '1': 'Groceries',
-  '2': 'Food & Dining',
-  '3': 'Transportation',
-  '4': 'Entertainment',
-  '5': 'Utilities',
-  '6': 'Education',
-  '7': 'Health',
-};
-
-const mockCategoryData: Record<string, { name: string; limit: number }> = {
-  '1': { name: 'Groceries', limit: 3_000_000 },
-  '2': { name: 'Food & Dining', limit: 2_500_000 },
-  '3': { name: 'Transportation', limit: 1_500_000 },
-  '4': { name: 'Entertainment', limit: 1_000_000 },
-  '5': { name: 'Utilities', limit: 800_000 },
-  '6': { name: 'Education', limit: 2_000_000 },
-  '7': { name: 'Health', limit: 1_500_000 },
-};
+import { budgetApi, categoriesApi } from '@/api';
+import type { BudgetItem, BudgetPayload, BudgetSummary, BudgetUpdatePayload } from '@/types/budget';
+import type { ApiCategory } from '@/api/endpoints/categories';
 
 const BudgetPage = () => {
   usePageTitle('Budget');
+
+  const [budgets, setBudgets] = useState<BudgetItem[]>([]);
+  const [summary, setSummary] = useState<BudgetSummary | undefined>();
+  const [categories, setCategories] = useState<ApiCategory[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [editCategory, setEditCategory] = useState({ name: '', limit: 0 });
-
-  // Delete state
+  const [editBudget, setEditBudget] = useState<BudgetItem | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<BudgetItem | null>(null);
+
+  const fetchBudgets = useCallback(async () => {
+    try {
+      const [budgetData, summaryData] = await Promise.all([
+        budgetApi.getAll(),
+        budgetApi.getSummary(),
+      ]);
+      setBudgets(budgetData);
+      setSummary(summaryData);
+    } catch {
+      toast.error('Failed to load budgets');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const fetchCategories = useCallback(async () => {
+    try {
+      const data = await categoriesApi.getAll('expense');
+      setCategories(data);
+    } catch {
+      // noop
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchBudgets();
+    fetchCategories();
+  }, [fetchBudgets, fetchCategories]);
+
+  const handleAdd = async (payload: BudgetPayload) => {
+    setIsSubmitting(true);
+    try {
+      await budgetApi.create(payload);
+      await fetchBudgets();
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleEdit = (id: string) => {
-    const cat = mockCategoryData[id] ?? { name: 'Category', limit: 0 };
-    setEditCategory(cat);
-    setEditDialogOpen(true);
+    const budget = budgets.find((b) => b.id === id);
+    if (budget) {
+      setEditBudget(budget);
+      setEditDialogOpen(true);
+    }
+  };
+
+  const handleEditSave = async (id: string, payload: BudgetUpdatePayload) => {
+    setIsSubmitting(true);
+    try {
+      await budgetApi.update(id, payload);
+      await fetchBudgets();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleDeleteRequest = (id: string) => {
-    setDeleteTargetId(id);
-    setDeleteOpen(true);
+    const budget = budgets.find((b) => b.id === id);
+    if (budget) {
+      setDeleteTarget(budget);
+      setDeleteOpen(true);
+    }
   };
 
-  const handleDeleteConfirm = () => {
-    // TODO: delete budget by deleteTargetId
-    toast.success('Budget deleted successfully');
-    setDeleteTargetId(null);
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+    try {
+      await budgetApi.delete(deleteTarget.id);
+      toast.success('Budget deleted successfully');
+      await fetchBudgets();
+    } catch {
+      toast.error('Failed to delete budget');
+    } finally {
+      setDeleteTarget(null);
+      setDeleteOpen(false);
+    }
   };
+
+  const categoryOptions = categories.map((c) => ({
+    id: c.id,
+    name: c.name,
+    icon: c.icon,
+  }));
 
   return (
     <div className="space-y-5 sm:space-y-6 lg:space-y-8">
@@ -76,27 +133,36 @@ const BudgetPage = () => {
         }
       />
 
-      {/* Overview */}
-      <BudgetOverviewCard />
+      <BudgetOverviewCard summary={summary} isLoading={isLoading} />
 
-      {/* Category list */}
-      <BudgetCategoryList onEdit={handleEdit} onDelete={handleDeleteRequest} />
+      <BudgetCategoryList
+        budgets={budgets}
+        isLoading={isLoading}
+        onEdit={handleEdit}
+        onDelete={handleDeleteRequest}
+      />
 
-      {/* Dialogs */}
-      <AddBudgetDialog open={addDialogOpen} onOpenChange={setAddDialogOpen} />
+      <AddBudgetDialog
+        open={addDialogOpen}
+        onOpenChange={setAddDialogOpen}
+        categories={categoryOptions}
+        onSave={handleAdd}
+        isSubmitting={isSubmitting}
+      />
       <EditBudgetDialog
         open={editDialogOpen}
         onOpenChange={setEditDialogOpen}
-        categoryName={editCategory.name}
-        currentLimit={editCategory.limit}
+        budget={editBudget}
+        onSave={handleEditSave}
+        isSubmitting={isSubmitting}
       />
       <DeleteBudgetDialog
         open={deleteOpen}
         onOpenChange={(open) => {
           setDeleteOpen(open);
-          if (!open) setDeleteTargetId(null);
+          if (!open) setDeleteTarget(null);
         }}
-        categoryName={deleteTargetId ? mockCategoryNames[deleteTargetId] : undefined}
+        categoryName={deleteTarget?.name}
         onConfirm={handleDeleteConfirm}
       />
     </div>

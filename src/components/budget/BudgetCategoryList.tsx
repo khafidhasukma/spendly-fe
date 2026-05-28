@@ -1,16 +1,10 @@
+/* eslint-disable camelcase */
 import {
-  ShoppingCart,
-  Utensils,
-  Car,
-  Gamepad2,
-  Zap,
-  GraduationCap,
-  Heart,
   MoreHorizontal,
   Pencil,
   Trash2,
 } from 'lucide-react';
-import type { BudgetCategory } from '@/types/budget';
+import type { BudgetItem } from '@/types/budget';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,91 +14,30 @@ import {
 import { Button } from '@/components/ui/button';
 import { formatRupiah } from '@/utils';
 
-const mockCategories: BudgetCategory[] = [
-  {
-    id: '1',
-    label: 'Groceries',
-    icon: ShoppingCart,
-    iconBg: 'bg-blue-100 dark:bg-blue-900/30',
-    iconColor: 'text-blue-600 dark:text-blue-400',
-    limit: 3_000_000,
-    spent: 2_150_000,
-  },
-  {
-    id: '2',
-    label: 'Food & Dining',
-    icon: Utensils,
-    iconBg: 'bg-orange-100 dark:bg-orange-900/30',
-    iconColor: 'text-orange-600 dark:text-orange-400',
-    limit: 2_500_000,
-    spent: 1_800_000,
-  },
-  {
-    id: '3',
-    label: 'Transportation',
-    icon: Car,
-    iconBg: 'bg-purple-100 dark:bg-purple-900/30',
-    iconColor: 'text-purple-600 dark:text-purple-400',
-    limit: 1_500_000,
-    spent: 1_450_000,
-  },
-  {
-    id: '4',
-    label: 'Entertainment',
-    icon: Gamepad2,
-    iconBg: 'bg-pink-100 dark:bg-pink-900/30',
-    iconColor: 'text-pink-600 dark:text-pink-400',
-    limit: 1_000_000,
-    spent: 980_000,
-  },
-  {
-    id: '5',
-    label: 'Utilities',
-    icon: Zap,
-    iconBg: 'bg-yellow-100 dark:bg-yellow-900/30',
-    iconColor: 'text-yellow-600 dark:text-yellow-400',
-    limit: 800_000,
-    spent: 650_000,
-  },
-  {
-    id: '6',
-    label: 'Education',
-    icon: GraduationCap,
-    iconBg: 'bg-emerald-100 dark:bg-emerald-900/30',
-    iconColor: 'text-emerald-600 dark:text-emerald-400',
-    limit: 2_000_000,
-    spent: 1_200_000,
-  },
-  {
-    id: '7',
-    label: 'Health',
-    icon: Heart,
-    iconBg: 'bg-red-100 dark:bg-red-900/30',
-    iconColor: 'text-red-600 dark:text-red-400',
-    limit: 1_500_000,
-    spent: 500_000,
-  },
-];
-
 interface BudgetCategoryListProps {
-  categories?: BudgetCategory[];
+  budgets?: BudgetItem[];
+  isLoading?: boolean;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
 }
 
-const BudgetCategoryItem = ({
-  category,
+const BudgetCategoryItemCard = ({
+  budget,
   onEdit,
   onDelete,
 }: {
-  category: BudgetCategory;
+  budget: BudgetItem;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
 }) => {
-  const { id, label, icon: Icon, iconBg, iconColor, limit, spent } = category;
-  const pct = Math.min((spent / limit) * 100, 100);
-  const isDanger = pct >= 100;
-  const isWarning = pct >= 85 && !isDanger;
+  const { id, name, category_icon, category_color, amount, spent, percentage_used, is_exceeded, status } = budget;
+  const limit = parseFloat(amount);
+  const spentNum = parseFloat(spent);
+  const pct = parseFloat(percentage_used);
+  const remaining = Math.max(limit - spentNum, 0);
+
+  const isDanger = is_exceeded;
+  const isWarning = status === 'warning';
 
   const barColor = isDanger ? 'bg-red-500' : isWarning ? 'bg-secondary' : 'bg-emerald-500';
   const statusText = isDanger
@@ -122,11 +55,14 @@ const BudgetCategoryItem = ({
     <div className="rounded-xl border border-border bg-card p-4 shadow-sm transition-shadow hover:shadow-md sm:p-5">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className={`flex size-10 items-center justify-center rounded-lg ${iconBg} sm:size-11`}>
-            <Icon className={`size-5 ${iconColor}`} />
+          <div
+            className="flex size-10 items-center justify-center rounded-lg text-lg sm:size-11"
+            style={{ backgroundColor: `${category_color}20` }}
+          >
+            {category_icon}
           </div>
           <div>
-            <p className="text-sm font-semibold text-foreground sm:text-base">{label}</p>
+            <p className="text-sm font-semibold text-foreground sm:text-base">{name}</p>
             <p className={`text-xs font-medium ${statusColor}`}>{statusText}</p>
           </div>
         </div>
@@ -156,7 +92,7 @@ const BudgetCategoryItem = ({
       {/* Amount info */}
       <div className="mt-4 flex items-end justify-between text-sm">
         <span className="text-muted-foreground">
-          {formatRupiah(spent)} <span className="text-xs">spent</span>
+          {formatRupiah(spentNum)} <span className="text-xs">spent</span>
         </span>
         <span className="font-semibold text-foreground">
           {formatRupiah(limit)}
@@ -167,19 +103,38 @@ const BudgetCategoryItem = ({
       <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-muted">
         <div
           className={`h-full rounded-full transition-all ${barColor}`}
-          style={{ width: `${pct}%` }}
+          style={{ width: `${Math.min(pct, 100)}%` }}
         />
       </div>
 
       <p className="mt-2 text-xs text-muted-foreground">
-        {formatRupiah(Math.max(limit - spent, 0))} remaining
+        {formatRupiah(remaining)} remaining
       </p>
     </div>
   );
 };
 
+const SkeletonCard = () => (
+  <div className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5">
+    <div className="flex items-start gap-3">
+      <div className="size-10 animate-pulse rounded-lg bg-muted sm:size-11" />
+      <div className="space-y-2">
+        <div className="h-4 w-28 animate-pulse rounded bg-muted" />
+        <div className="h-3 w-20 animate-pulse rounded bg-muted" />
+      </div>
+    </div>
+    <div className="mt-4 flex justify-between">
+      <div className="h-3.5 w-24 animate-pulse rounded bg-muted" />
+      <div className="h-3.5 w-20 animate-pulse rounded bg-muted" />
+    </div>
+    <div className="mt-2 h-2.5 w-full animate-pulse rounded-full bg-muted" />
+    <div className="mt-2 h-3 w-28 animate-pulse rounded bg-muted" />
+  </div>
+);
+
 const BudgetCategoryList = ({
-  categories = mockCategories,
+  budgets = [],
+  isLoading = false,
   onEdit,
   onDelete,
 }: BudgetCategoryListProps) => {
@@ -190,20 +145,26 @@ const BudgetCategoryList = ({
           Budget per Category
         </h3>
         <p className="text-sm text-muted-foreground">
-          {categories.length} categories
+          {budgets.length} categories
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
-        {categories.map((cat) => (
-          <BudgetCategoryItem
-            key={cat.id}
-            category={cat}
-            onEdit={onEdit}
-            onDelete={onDelete}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+          {Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+          {budgets.map((budget) => (
+            <BudgetCategoryItemCard
+              key={budget.id}
+              budget={budget}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

@@ -34,7 +34,6 @@ const BudgetSettingsCard = () => {
           Monthly Limit (Rp)
         </p>
         <div className="flex items-baseline gap-2 rounded-lg bg-muted px-3 py-4 sm:px-4 sm:py-6">
-          <span className="text-xl sm:text-2xl font-medium text-muted-foreground">Rp</span>
           <span className="text-2xl sm:text-3xl font-bold tracking-tight text-primary">
             {formatRupiah(monthlyLimit)}
           </span>

@@ -1,14 +1,4 @@
 import { useState } from 'react';
-import {
-  ShoppingCart,
-  Utensils,
-  Car,
-  Gamepad2,
-  Zap,
-  GraduationCap,
-  Heart,
-  Home,
-} from 'lucide-react';
 import { toast } from 'sonner';
 import {
   Dialog,
@@ -21,69 +11,113 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import type { BudgetPayload } from '@/types/budget';
 
-const categoryOptions = [
-  { value: 'groceries', label: 'Groceries', icon: ShoppingCart },
-  { value: 'food', label: 'Food & Dining', icon: Utensils },
-  { value: 'transport', label: 'Transportation', icon: Car },
-  { value: 'entertainment', label: 'Entertainment', icon: Gamepad2 },
-  { value: 'utilities', label: 'Utilities', icon: Zap },
-  { value: 'education', label: 'Education', icon: GraduationCap },
-  { value: 'health', label: 'Health', icon: Heart },
-  { value: 'housing', label: 'Housing', icon: Home },
-];
+interface CategoryOption {
+  id: string;
+  name: string;
+  icon: string;
+}
 
 interface AddBudgetDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave?: (data: { category: string; limit: number }) => void;
+  categories?: CategoryOption[];
+  onSave?: (data: BudgetPayload) => void | Promise<void>;
+  isSubmitting?: boolean;
 }
 
-const AddBudgetDialog = ({ open, onOpenChange, onSave }: AddBudgetDialogProps) => {
-  const [selectedCategory, setSelectedCategory] = useState('');
+const AddBudgetDialog = ({
+  open,
+  onOpenChange,
+  categories = [],
+  onSave,
+  isSubmitting = false,
+}: AddBudgetDialogProps) => {
+  const [name, setName] = useState('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [limit, setLimit] = useState('');
+  const [period] = useState('monthly');
 
-  const handleSave = () => {
-    if (selectedCategory && limit) {
-      onSave?.({ category: selectedCategory, limit: Number(limit) });
+  const resetForm = () => {
+    setName('');
+    setSelectedCategoryId('');
+    setLimit('');
+  };
+
+  const handleSave = async () => {
+    if (!selectedCategoryId || !limit || !name.trim()) return;
+
+    const now = new Date();
+    const startDate = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+    const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
+
+    const payload: BudgetPayload = {
+      name: name.trim(),
+      category_id: selectedCategoryId,
+      amount: Number(limit),
+      period,
+      start_date: startDate,
+      end_date: endDate,
+    };
+
+    try {
+      await onSave?.(payload);
       toast.success('Budget added successfully');
-      setSelectedCategory('');
-      setLimit('');
+      resetForm();
       onOpenChange(false);
+    } catch {
+      toast.error('Failed to add budget');
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(v) => { if (!v) resetForm(); onOpenChange(v); }}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className='text-start'>Add Budget Category</DialogTitle>
-          <DialogDescription className='text-start'>
+          <DialogTitle className="text-start">Add Budget Category</DialogTitle>
+          <DialogDescription className="text-start">
             Set a spending limit for a category.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-2">
+          {/* Budget name */}
+          <div className="space-y-2">
+            <Label htmlFor="budget-name">Budget Name</Label>
+            <Input
+              id="budget-name"
+              placeholder="e.g. Monthly Groceries"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+
           {/* Category selection */}
           <div className="space-y-2">
             <Label>Category</Label>
-            <div className="grid grid-cols-4 gap-2">
-              {categoryOptions.map((cat) => (
-                <button
-                  key={cat.value}
-                  type="button"
-                  onClick={() => setSelectedCategory(cat.value)}
-                  className={`flex flex-col items-center gap-1.5 rounded-lg border p-2 text-[11px] transition-colors ${
-                    selectedCategory === cat.value
-                      ? 'border-primary bg-primary/10 text-primary'
-                      : 'border-border hover:border-primary/50 hover:bg-muted/50'
-                  }`}
-                >
-                  <cat.icon className="size-4" />
-                  <span className="text-center leading-tight">{cat.label}</span>
-                </button>
-              ))}
-            </div>
+            <Select value={selectedCategoryId} onValueChange={setSelectedCategoryId}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.id}>
+                    <span className="flex items-center gap-2">
+                      <span>{cat.icon}</span>
+                      <span>{cat.name}</span>
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Limit input */}
@@ -104,8 +138,11 @@ const AddBudgetDialog = ({ open, onOpenChange, onSave }: AddBudgetDialogProps) =
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={!selectedCategory || !limit}>
-            Add Budget
+          <Button
+            onClick={handleSave}
+            disabled={!selectedCategoryId || !limit || !name.trim() || isSubmitting}
+          >
+            {isSubmitting ? 'Saving...' : 'Add Budget'}
           </Button>
         </DialogFooter>
       </DialogContent>

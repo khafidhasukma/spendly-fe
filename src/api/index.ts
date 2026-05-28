@@ -2,3 +2,5 @@ export { api, client } from './client';
 export { tokenStorage } from './token';
 export { authApi } from './endpoints/auth';
 export { dashboardApi } from './endpoints/dashboard';
+export { budgetApi } from './endpoints/budget';
+export { categoriesApi } from './endpoints/categories';

@@ -11,36 +11,40 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import type { BudgetItem, BudgetUpdatePayload } from '@/types/budget';
 
 interface EditBudgetDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  categoryName?: string;
-  currentLimit?: number;
-  onSave?: (data: { limit: number }) => void;
+  budget?: BudgetItem | null;
+  onSave?: (id: string, data: BudgetUpdatePayload) => void | Promise<void>;
+  isSubmitting?: boolean;
 }
 
 const EditBudgetDialog = ({
   open,
   onOpenChange,
-  categoryName = 'Category',
-  currentLimit = 0,
+  budget,
   onSave,
+  isSubmitting = false,
 }: EditBudgetDialogProps) => {
-  const [limit, setLimit] = useState(String(currentLimit));
+  const [amount, setAmount] = useState('');
 
   useEffect(() => {
-    if (open) {
+    if (open && budget) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setLimit(String(currentLimit));
+      setAmount(String(parseFloat(budget.amount)));
     }
-  }, [open, currentLimit]);
+  }, [open, budget]);
 
-  const handleSave = () => {
-    if (limit && Number(limit) > 0) {
-      onSave?.({ limit: Number(limit) });
+  const handleSave = async () => {
+    if (!amount || Number(amount) <= 0 || !budget) return;
+    try {
+      await onSave?.(budget.id, { amount: Number(amount) });
       toast.success('Budget updated successfully');
       onOpenChange(false);
+    } catch {
+      toast.error('Failed to update budget');
     }
   };
 
@@ -48,35 +52,33 @@ const EditBudgetDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className='text-start'>Edit Budget {categoryName}</DialogTitle>
-          <DialogDescription className='text-start'>
+          <DialogTitle className="text-start">Edit Budget {budget?.name}</DialogTitle>
+          <DialogDescription className="text-start">
             Adjust the spending limit for this category.
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-2">
-          <div className="space-y-2">
-            <Label htmlFor="edit-budget-limit">Budget Limit (Rp)</Label>
-            <Input
-              id="edit-budget-limit"
-              type="number"
-              min="0"
-              placeholder="e.g. 2000000"
-              value={limit}
-              onChange={(e) => setLimit(e.target.value)}
-            />
-            <p className="text-xs text-muted-foreground">
-              Set the maximum amount you want to spend in this category.
-            </p>
-          </div>
+        <div className="space-y-2 py-2">
+          <Label htmlFor="edit-budget-amount">Budget Limit (Rp)</Label>
+          <Input
+            id="edit-budget-amount"
+            type="number"
+            min="0"
+            placeholder="e.g. 2000000"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
         </div>
 
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={!limit || Number(limit) <= 0}>
-            Save
+          <Button
+            onClick={handleSave}
+            disabled={!amount || Number(amount) <= 0 || isSubmitting}
+          >
+            {isSubmitting ? 'Saving...' : 'Save'}
           </Button>
         </DialogFooter>
       </DialogContent>
