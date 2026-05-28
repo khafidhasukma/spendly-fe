@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { useState } from 'react';
 import {
   Wallet,
@@ -7,7 +8,6 @@ import {
   Banknote,
   Smartphone,
 } from 'lucide-react';
-import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -19,6 +19,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import type { CreateWalletPayload } from '@/api/endpoints/wallets';
 
 const walletTypes = [
   { value: 'cash', label: 'Cash', icon: Banknote },
@@ -29,40 +30,60 @@ const walletTypes = [
   { value: 'other', label: 'Other', icon: Wallet },
 ];
 
+const TYPE_COLORS: Record<string, string> = {
+  cash: '#10B981',
+  bank: '#3B82F6',
+  'e-wallet': '#8B5CF6',
+  credit: '#EF4444',
+  savings: '#F59E0B',
+  other: '#6B7280',
+};
+
 interface AddWalletDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave?: (data: { name: string; balance: number; type: string }) => void;
+  onSave?: (payload: CreateWalletPayload) => void | Promise<void>;
+  isSubmitting?: boolean;
 }
 
-const AddWalletDialog = ({ open, onOpenChange, onSave }: AddWalletDialogProps) => {
+const AddWalletDialog = ({ open, onOpenChange, onSave, isSubmitting = false }: AddWalletDialogProps) => {
   const [name, setName] = useState('');
   const [balance, setBalance] = useState('');
   const [selectedType, setSelectedType] = useState('');
+  const [bankName, setBankName] = useState('');
 
-  const handleSave = () => {
-    if (name && balance && selectedType) {
-      onSave?.({ name, balance: Number(balance), type: selectedType });
-      toast.success('Wallet added successfully');
-      setName('');
-      setBalance('');
-      setSelectedType('');
-      onOpenChange(false);
-    }
+  const reset = () => {
+    setName('');
+    setBalance('');
+    setSelectedType('');
+    setBankName('');
+  };
+
+  const handleSave = async () => {
+    if (!name || !balance || !selectedType) return;
+    const payload: CreateWalletPayload = {
+      name,
+      type: selectedType,
+      balance: Number(balance),
+      color: TYPE_COLORS[selectedType] ?? '#6366f1',
+      bank_name: bankName.trim() || undefined,
+    };
+    await onSave?.(payload);
+    reset();
+    onOpenChange(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(v) => { if (!v) reset(); onOpenChange(v); }}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add New Wallet</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-start">Add New Wallet</DialogTitle>
+          <DialogDescription className="text-start">
             Add a new wallet to track your balance and transactions.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-2">
-          {/* Wallet type selection */}
           <div className="space-y-2">
             <Label>Wallet Type</Label>
             <div className="grid grid-cols-3 gap-2">
@@ -84,7 +105,6 @@ const AddWalletDialog = ({ open, onOpenChange, onSave }: AddWalletDialogProps) =
             </div>
           </div>
 
-          {/* Wallet name */}
           <div className="space-y-2">
             <Label htmlFor="wallet-name">Wallet Name</Label>
             <Input
@@ -95,7 +115,18 @@ const AddWalletDialog = ({ open, onOpenChange, onSave }: AddWalletDialogProps) =
             />
           </div>
 
-          {/* Initial balance */}
+          {(selectedType === 'bank' || selectedType === 'credit') && (
+            <div className="space-y-2">
+              <Label htmlFor="bank-name">Bank Name</Label>
+              <Input
+                id="bank-name"
+                placeholder="e.g. Bank BCA"
+                value={bankName}
+                onChange={(e) => setBankName(e.target.value)}
+              />
+            </div>
+          )}
+
           <div className="space-y-2">
             <Label htmlFor="wallet-balance">Initial Balance (Rp)</Label>
             <Input
@@ -109,7 +140,6 @@ const AddWalletDialog = ({ open, onOpenChange, onSave }: AddWalletDialogProps) =
                 if (val === '' || Number(val) >= 0) setBalance(val);
               }}
             />
-            <p className="text-xs text-muted-foreground">Balance cannot be negative</p>
           </div>
         </div>
 
@@ -117,8 +147,8 @@ const AddWalletDialog = ({ open, onOpenChange, onSave }: AddWalletDialogProps) =
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={!name || !balance || !selectedType}>
-            Add Wallet
+          <Button onClick={handleSave} disabled={!name || !balance || !selectedType || isSubmitting}>
+            {isSubmitting ? 'Saving...' : 'Add Wallet'}
           </Button>
         </DialogFooter>
       </DialogContent>

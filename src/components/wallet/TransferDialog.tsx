@@ -19,23 +19,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-
-const walletOptions = [
-  { id: '1', name: 'Cash' },
-  { id: '2', name: 'BCA' },
-  { id: '3', name: 'Mandiri' },
-  { id: '4', name: 'GoPay' },
-  { id: '5', name: 'Credit Card' },
-  { id: '6', name: 'Savings' },
-];
+import type { ApiWallet } from '@/api/endpoints/wallets';
 
 interface TransferDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  wallets?: ApiWallet[];
   onTransfer?: (data: { fromWalletId: string; toWalletId: string; amount: number }) => void;
 }
 
-const TransferDialog = ({ open, onOpenChange, onTransfer }: TransferDialogProps) => {
+const TransferDialog = ({ open, onOpenChange, wallets = [], onTransfer }: TransferDialogProps) => {
   const [fromWallet, setFromWallet] = useState('');
   const [toWallet, setToWallet] = useState('');
   const [amount, setAmount] = useState('');
@@ -70,7 +63,7 @@ const TransferDialog = ({ open, onOpenChange, onTransfer }: TransferDialogProps)
                 <SelectValue placeholder="Select source wallet" />
               </SelectTrigger>
               <SelectContent>
-                {walletOptions.map((w) => (
+                {wallets.map((w) => (
                   <SelectItem key={w.id} value={w.id}>
                     {w.name}
                   </SelectItem>
@@ -94,7 +87,7 @@ const TransferDialog = ({ open, onOpenChange, onTransfer }: TransferDialogProps)
                 <SelectValue placeholder="Select destination wallet" />
               </SelectTrigger>
               <SelectContent>
-                {walletOptions
+                {wallets
                   .filter((w) => w.id !== fromWallet)
                   .map((w) => (
                     <SelectItem key={w.id} value={w.id}>

@@ -1,4 +1,6 @@
-import { useState } from 'react';
+/* eslint-disable camelcase */
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useCallback, useEffect, useState } from 'react';
 import { Plus, ArrowLeftRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -13,51 +15,107 @@ import {
   WalletRecentActivity,
 } from '@/components/wallet';
 import { usePageTitle } from '@/hooks';
-
-const mockWalletNames: Record<string, string> = {
-  '1': 'Cash',
-  '2': 'BCA',
-  '3': 'Mandiri',
-  '4': 'GoPay',
-  '5': 'Credit Card',
-  '6': 'Savings',
-};
-
-const mockWalletData: Record<string, { name: string; balance: number }> = {
-  '1': { name: 'Cash', balance: 2_500_000 },
-  '2': { name: 'BCA', balance: 5_750_000 },
-  '3': { name: 'Mandiri', balance: 3_200_000 },
-  '4': { name: 'GoPay', balance: 850_000 },
-  '5': { name: 'Credit Card', balance: 0 },
-  '6': { name: 'Savings', balance: 2_000_000 },
-};
+import { walletsApi } from '@/api';
+import type { ApiWallet, WalletBalance, CreateWalletPayload, UpdateWalletPayload } from '@/api/endpoints/wallets';
 
 const WalletPage = () => {
   usePageTitle('Wallet');
-  const [addWalletOpen, setAddWalletOpen] = useState(false);
-  const [editWalletOpen, setEditWalletOpen] = useState(false);
-  const [transferOpen, setTransferOpen] = useState(false);
-  const [editWallet, setEditWallet] = useState({ name: '', balance: 0 });
 
-  // Delete state
+  const [wallets, setWallets] = useState<ApiWallet[]>([]);
+  const [balance, setBalance] = useState<WalletBalance | undefined>();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [addOpen, setAddOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editTarget, setEditTarget] = useState<ApiWallet | null>(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<ApiWallet | null>(null);
+  const [transferOpen, setTransferOpen] = useState(false);
+
+  const fetchWallets = useCallback(async () => {
+    try {
+      const [walletData, balanceData] = await Promise.all([
+        walletsApi.getAll(),
+        walletsApi.getBalance(),
+      ]);
+      setWallets(walletData);
+      setBalance(balanceData);
+    } catch {
+      toast.error('Failed to load wallets');
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchWallets();
+  }, [fetchWallets]);
+
+  const handleAdd = async (payload: CreateWalletPayload) => {
+    setIsSubmitting(true);
+    try {
+      await walletsApi.create(payload);
+      toast.success('Wallet added successfully');
+      await fetchWallets();
+    } catch {
+      toast.error('Failed to add wallet');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleEdit = (id: string) => {
-    const wallet = mockWalletData[id] ?? { name: 'Wallet', balance: 0 };
-    setEditWallet(wallet);
-    setEditWalletOpen(true);
+    const wallet = wallets.find((w) => w.id === id);
+    if (wallet) {
+      setEditTarget(wallet);
+      setEditOpen(true);
+    }
+  };
+
+  const handleSetDefault = async (id: string) => {
+    try {
+      await walletsApi.update(id, { is_default: true });
+      toast.success('Default wallet updated');
+      await fetchWallets();
+    } catch {
+      toast.error('Failed to set default wallet');
+    }
+  };
+
+  const handleEditSave = async (id: string, payload: UpdateWalletPayload) => {
+    setIsSubmitting(true);
+    try {
+      await walletsApi.update(id, payload);
+      toast.success('Wallet updated successfully');
+      await fetchWallets();
+    } catch {
+      toast.error('Failed to update wallet');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleDeleteRequest = (id: string) => {
-    setDeleteTargetId(id);
-    setDeleteOpen(true);
+    const wallet = wallets.find((w) => w.id === id);
+    if (wallet) {
+      setDeleteTarget(wallet);
+      setDeleteOpen(true);
+    }
   };
 
-  const handleDeleteConfirm = () => {
-    // TODO: delete wallet by deleteTargetId
-    toast.success('Wallet deleted successfully');
-    setDeleteTargetId(null);
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
+    try {
+      await walletsApi.delete(deleteTarget.id);
+      toast.success('Wallet deleted successfully');
+      await fetchWallets();
+    } catch {
+      toast.error('Failed to delete wallet');
+    } finally {
+      setDeleteTarget(null);
+      setDeleteOpen(false);
+    }
   };
 
   return (
@@ -75,7 +133,7 @@ const WalletPage = () => {
               <ArrowLeftRight className="size-4" />
               Transfer
             </Button>
-            <Button onClick={() => setAddWalletOpen(true)} className="flex-1 sm:flex-none">
+            <Button onClick={() => setAddOpen(true)} className="flex-1 sm:flex-none">
               <Plus className="size-4" />
               Add Wallet
             </Button>
@@ -83,35 +141,48 @@ const WalletPage = () => {
         }
       />
 
-      {/* Overview */}
-      <WalletOverviewCard />
+      <WalletOverviewCard balance={balance} wallets={wallets} isLoading={isLoading} />
 
-      {/* Wallet list + Recent activity */}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-5 lg:gap-6">
         <div className="lg:col-span-3">
-          <WalletList onEdit={handleEdit} onDelete={handleDeleteRequest} />
+          <WalletList
+            wallets={wallets}
+            isLoading={isLoading}
+            onEdit={handleEdit}
+            onDelete={handleDeleteRequest}
+            onSetDefault={handleSetDefault}
+          />
         </div>
         <div className="lg:col-span-2">
           <WalletRecentActivity />
         </div>
       </div>
 
-      {/* Dialogs */}
-      <AddWalletDialog open={addWalletOpen} onOpenChange={setAddWalletOpen} />
-      <EditWalletDialog
-        open={editWalletOpen}
-        onOpenChange={setEditWalletOpen}
-        walletName={editWallet.name}
-        currentBalance={editWallet.balance}
+      <AddWalletDialog
+        open={addOpen}
+        onOpenChange={setAddOpen}
+        onSave={handleAdd}
+        isSubmitting={isSubmitting}
       />
-      <TransferDialog open={transferOpen} onOpenChange={setTransferOpen} />
+      <EditWalletDialog
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        wallet={editTarget}
+        onSave={handleEditSave}
+        isSubmitting={isSubmitting}
+      />
+      <TransferDialog
+        open={transferOpen}
+        onOpenChange={setTransferOpen}
+        wallets={wallets}
+      />
       <DeleteWalletDialog
         open={deleteOpen}
         onOpenChange={(open) => {
           setDeleteOpen(open);
-          if (!open) setDeleteTargetId(null);
+          if (!open) setDeleteTarget(null);
         }}
-        walletName={deleteTargetId ? mockWalletNames[deleteTargetId] : undefined}
+        walletName={deleteTarget?.name}
         onConfirm={handleDeleteConfirm}
       />
     </div>

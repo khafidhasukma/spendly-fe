@@ -61,7 +61,7 @@ const WalletRecentActivity = ({ activities = mockActivity }: WalletRecentActivit
           return (
             <div
               key={activity.id}
-              className="flex items-center justify-between gap-3 rounded-xl bg-muted/50 dark:bg-muted/20 p-3 sm:p-4"
+              className="flex items-center justify-between gap-3 rounded-xl bg-muted/50 dark:bg-muted/20 py-3 sm:py-4"
             >
               <div className="flex items-center gap-3">
                 <div className={`flex size-9 items-center justify-center rounded-lg ${config.iconBg} sm:size-10`}>

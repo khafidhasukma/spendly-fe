@@ -1,5 +1,5 @@
+/* eslint-disable camelcase */
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -11,53 +11,59 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import type { ApiWallet, UpdateWalletPayload } from '@/api/endpoints/wallets';
 
 interface EditWalletDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  walletName?: string;
-  currentBalance?: number;
-  onSave?: (data: { name: string; balance: number }) => void;
+  wallet?: ApiWallet | null;
+  onSave?: (id: string, payload: UpdateWalletPayload) => void | Promise<void>;
+  isSubmitting?: boolean;
 }
 
 const EditWalletDialog = ({
   open,
   onOpenChange,
-  walletName = '',
-  currentBalance = 0,
+  wallet,
   onSave,
+  isSubmitting = false,
 }: EditWalletDialogProps) => {
-  const [name, setName] = useState(walletName);
-  const [balance, setBalance] = useState(String(currentBalance));
+  const [name, setName] = useState('');
+  const [bankName, setBankName] = useState('');
+  const [balance, setBalance] = useState('');
 
   useEffect(() => {
-    if (open) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setName(walletName);
-      setBalance(String(currentBalance));
+    if (open && wallet) {
+      setName(wallet.name);
+      setBankName(wallet.bank_name ?? '');
+      setBalance(String(Math.round(parseFloat(wallet.balance))));
     }
-  }, [open, walletName, currentBalance]);
+  }, [open, wallet]);
 
-  const handleSave = () => {
-    if (name && balance && Number(balance) >= 0) {
-      onSave?.({ name, balance: Number(balance) });
-      toast.success('Wallet updated successfully');
-      onOpenChange(false);
-    }
+  const handleSave = async () => {
+    if (!name.trim() || !wallet) return;
+    const payload: UpdateWalletPayload = {
+      name: name.trim(),
+      bank_name: bankName.trim() || undefined,
+      balance: balance ? Number(balance) : undefined,
+    };
+    await onSave?.(wallet.id, payload);
+    onOpenChange(false);
   };
+
+  const showBankField = wallet?.type === 'bank' || wallet?.type === 'credit';
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className='text-start'>Edit Wallet</DialogTitle>
-          <DialogDescription className='text-start'>
-            Update your wallet name and balance.
+          <DialogTitle className="text-start">Edit Wallet</DialogTitle>
+          <DialogDescription className="text-start">
+            Update your wallet details.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-2">
-          {/* Wallet name */}
           <div className="space-y-2">
             <Label htmlFor="edit-wallet-name">Wallet Name</Label>
             <Input
@@ -68,7 +74,18 @@ const EditWalletDialog = ({
             />
           </div>
 
-          {/* Balance */}
+          {showBankField && (
+            <div className="space-y-2">
+              <Label htmlFor="edit-bank-name">Bank Name</Label>
+              <Input
+                id="edit-bank-name"
+                placeholder="e.g. Bank BCA"
+                value={bankName}
+                onChange={(e) => setBankName(e.target.value)}
+              />
+            </div>
+          )}
+
           <div className="space-y-2">
             <Label htmlFor="edit-wallet-balance">Balance (Rp)</Label>
             <Input
@@ -82,7 +99,6 @@ const EditWalletDialog = ({
                 if (val === '' || Number(val) >= 0) setBalance(val);
               }}
             />
-            <p className="text-xs text-muted-foreground">Balance cannot be negative</p>
           </div>
         </div>
 
@@ -90,8 +106,8 @@ const EditWalletDialog = ({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={!name || !balance || Number(balance) < 0}>
-            Save Changes
+          <Button onClick={handleSave} disabled={!name.trim() || isSubmitting}>
+            {isSubmitting ? 'Saving...' : 'Save Changes'}
           </Button>
         </DialogFooter>
       </DialogContent>

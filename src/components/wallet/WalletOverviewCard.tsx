@@ -1,20 +1,24 @@
 import { ArrowDownLeft, ArrowUpRight, Wallet } from 'lucide-react';
 import { formatRupiah } from '@/utils';
+import type { ApiWallet, WalletBalance } from '@/api/endpoints/wallets';
 
 interface WalletOverviewCardProps {
-  totalBalance?: number;
-  totalIncome?: number;
-  totalExpense?: number;
+  balance?: WalletBalance;
+  wallets?: ApiWallet[];
+  isLoading?: boolean;
 }
 
-const WalletOverviewCard = ({
-  totalBalance = 12_850_000,
-  totalIncome = 8_345_678,
-  totalExpense = 3_345_678,
-}: WalletOverviewCardProps) => {
+const Skeleton = ({ className }: { className?: string }) => (
+  <div className={`animate-pulse rounded bg-white/20 ${className}`} />
+);
+
+const WalletOverviewCard = ({ balance, wallets = [], isLoading = false }: WalletOverviewCardProps) => {
+  const totalBalance = balance ? parseFloat(balance.total_balance) : 0;
+  const totalIncome = wallets.reduce((s, w) => s + parseFloat(w.total_income), 0);
+  const totalExpense = wallets.reduce((s, w) => s + parseFloat(w.total_expense), 0);
+
   return (
     <div className="relative overflow-hidden rounded-2xl bg-primary p-5 text-white sm:p-6 md:p-8">
-      {/* Background decoration */}
       <div className="pointer-events-none absolute right-6 top-4 opacity-10">
         <Wallet className="size-24 sm:size-28" />
       </div>
@@ -22,12 +26,23 @@ const WalletOverviewCard = ({
       <p className="text-xs font-semibold uppercase tracking-widest text-white/70">
         Total Balance (All Wallets)
       </p>
-      <h2 className="mt-2 text-3xl font-bold font-manrope sm:text-4xl lg:text-5xl">
-        {formatRupiah(totalBalance)}
-      </h2>
-      <p className="mt-1 text-sm text-white/70">Combined balance from all your wallets</p>
 
-      {/* Income / Expense summary */}
+      {isLoading ? (
+        <>
+          <Skeleton className="mt-2 h-10 w-52" />
+          <Skeleton className="mt-2 h-4 w-40" />
+        </>
+      ) : (
+        <>
+          <h2 className="mt-2 text-3xl font-bold font-manrope sm:text-4xl lg:text-5xl">
+            {formatRupiah(totalBalance)}
+          </h2>
+          <p className="mt-1 text-sm text-white/70">
+            Combined balance from {balance?.wallet_count ?? wallets.length} wallet{(balance?.wallet_count ?? wallets.length) !== 1 ? 's' : ''}
+          </p>
+        </>
+      )}
+
       <div className="mt-6 grid grid-cols-2 gap-4 sm:mt-8">
         <div className="flex items-center gap-3">
           <span className="flex size-10 items-center justify-center rounded-full bg-white/10 sm:size-12">
@@ -35,7 +50,10 @@ const WalletOverviewCard = ({
           </span>
           <div>
             <p className="text-xs text-white/60">Total Income</p>
-            <p className="text-base font-semibold sm:text-lg">{formatRupiah(totalIncome)}</p>
+            {isLoading
+              ? <Skeleton className="h-5 w-24" />
+              : <p className="text-base font-semibold sm:text-lg">{formatRupiah(totalIncome)}</p>
+            }
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -44,7 +62,10 @@ const WalletOverviewCard = ({
           </span>
           <div>
             <p className="text-xs text-white/60">Total Expense</p>
-            <p className="text-base font-semibold sm:text-lg">{formatRupiah(totalExpense)}</p>
+            {isLoading
+              ? <Skeleton className="h-5 w-24" />
+              : <p className="text-base font-semibold sm:text-lg">{formatRupiah(totalExpense)}</p>
+            }
           </div>
         </div>
       </div>

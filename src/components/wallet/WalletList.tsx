@@ -1,78 +1,25 @@
-import {
-  Wallet,
-  CreditCard,
-  Landmark,
-  PiggyBank,
-  Banknote,
-} from 'lucide-react';
-import type { Wallet as WalletType } from '@/types/wallet';
+import type { ApiWallet } from '@/api/endpoints/wallets';
 import WalletCard from './WalletCard';
 
-const mockWallets: WalletType[] = [
-  {
-    id: '1',
-    name: 'Cash',
-    balance: 2_500_000,
-    icon: Banknote,
-    iconBg: 'bg-emerald-100 dark:bg-emerald-900/30',
-    iconColor: 'text-emerald-600 dark:text-emerald-400',
-    isDefault: true,
-  },
-  {
-    id: '2',
-    name: 'BCA',
-    balance: 5_750_000,
-    icon: Landmark,
-    iconBg: 'bg-blue-100 dark:bg-blue-900/30',
-    iconColor: 'text-blue-600 dark:text-blue-400',
-  },
-  {
-    id: '3',
-    name: 'Mandiri',
-    balance: 3_200_000,
-    icon: Landmark,
-    iconBg: 'bg-yellow-100 dark:bg-yellow-900/30',
-    iconColor: 'text-yellow-600 dark:text-yellow-400',
-  },
-  {
-    id: '4',
-    name: 'GoPay',
-    balance: 850_000,
-    icon: Wallet,
-    iconBg: 'bg-cyan-100 dark:bg-cyan-900/30',
-    iconColor: 'text-cyan-600 dark:text-cyan-400',
-  },
-  {
-    id: '5',
-    name: 'Credit Card',
-    balance: 0,
-    icon: CreditCard,
-    iconBg: 'bg-red-100 dark:bg-red-900/30',
-    iconColor: 'text-red-600 dark:text-red-400',
-  },
-  {
-    id: '6',
-    name: 'Savings',
-    balance: 2_000_000,
-    icon: PiggyBank,
-    iconBg: 'bg-purple-100 dark:bg-purple-900/30',
-    iconColor: 'text-purple-600 dark:text-purple-400',
-  },
-];
+const SkeletonCard = () => (
+  <div className="flex items-center gap-3 rounded-xl border border-border bg-card p-4 shadow-sm sm:p-5">
+    <div className="size-10 animate-pulse rounded-xl bg-muted sm:size-11" />
+    <div className="space-y-2">
+      <div className="h-4 w-28 animate-pulse rounded bg-muted" />
+      <div className="h-5 w-20 animate-pulse rounded bg-muted" />
+    </div>
+  </div>
+);
 
 interface WalletListProps {
-  wallets?: WalletType[];
+  wallets?: ApiWallet[];
+  isLoading?: boolean;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
   onSetDefault?: (id: string) => void;
 }
 
-const WalletList = ({
-  wallets = mockWallets,
-  onEdit,
-  onDelete,
-  onSetDefault,
-}: WalletListProps) => {
+const WalletList = ({ wallets = [], isLoading = false, onEdit, onDelete, onSetDefault }: WalletListProps) => {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -84,17 +31,23 @@ const WalletList = ({
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
-        {wallets.map((wallet) => (
-          <WalletCard
-            key={wallet.id}
-            wallet={wallet}
-            onEdit={onEdit}
-            onDelete={onDelete}
-            onSetDefault={onSetDefault}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+          {Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+          {wallets.map((wallet) => (
+            <WalletCard
+              key={wallet.id}
+              wallet={wallet}
+              onEdit={onEdit}
+              onDelete={onDelete}
+              onSetDefault={onSetDefault}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
