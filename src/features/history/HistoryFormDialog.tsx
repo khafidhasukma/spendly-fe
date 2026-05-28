@@ -125,20 +125,20 @@ const HistoryFormDialog = ({ open, onOpenChange, mode, editTarget, onSuccess }: 
     }
   }, [open, isEdit, editTarget]);
 
-  // Load categories + wallets when type changes or dialog opens
+  // Load wallets once when dialog opens
   useEffect(() => {
     if (!open) return;
-    const load = async () => {
-      try {
-        const [cats, wals] = await Promise.all([
-          categoriesApi.getAll(form.txType),
-          walletsApi.getAll(),
-        ]);
-        setCategories(cats);
-        setWallets(wals);
-      } catch { /* noop */ }
-    };
-    load();
+    walletsApi.getAll()
+      .then(setWallets)
+      .catch(() => { /* noop */ });
+  }, [open]);
+
+  // Reload categories when type changes
+  useEffect(() => {
+    if (!open) return;
+    categoriesApi.getAll(form.txType)
+      .then(setCategories)
+      .catch(() => { /* noop */ });
   }, [open, form.txType]);
 
   const amountNum = parseInt(form.amountRaw || '0', 10) || 0;
