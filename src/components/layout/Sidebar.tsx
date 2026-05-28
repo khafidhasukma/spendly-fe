@@ -196,7 +196,6 @@ const Sidebar = ({ onClose }: SidebarProps) => {
       <LogoutConfirmDialog
         open={logoutOpen}
         onOpenChange={setLogoutOpen}
-        onConfirm={() => console.log('Logging out...')}
       />
     </>
   );

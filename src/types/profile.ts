@@ -24,38 +24,24 @@ export interface SecurityCardProps {
 }
 
 export interface ProfileHeaderProps {
-  name?: string;
-  email?: string;
-  avatarUrl?: string;
-  isPremium?: boolean;
   onEditProfile?: () => void;
 }
 
 export interface LogoutConfirmDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onConfirm?: () => void;
 }
 
 export interface EditProfileModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  initialData?: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    avatarUrl: string;
-  };
-  onSave?: (data: { firstName: string; lastName: string; email: string; avatarUrl: string }) => void;
 }
 
 export interface ChangePasswordModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSave?: (newPassword: string) => void;
 }
 
 export interface BudgetSettingsCardProps {
-  monthlyLimit?: number;
   spendingAlerts?: boolean;
 }

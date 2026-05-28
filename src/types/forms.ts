@@ -8,6 +8,7 @@ export interface GroupInputProps {
   icon?: ReactNode;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: string;
 }
 
 export interface PasswordInputProps {
@@ -16,4 +17,5 @@ export interface PasswordInputProps {
   placeholder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  error?: string;
 }

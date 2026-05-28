@@ -15,6 +15,7 @@ const PasswordInput = ({
   placeholder = '••••••••',
   value,
   onChange,
+  error,
 }: PasswordInputProps) => {
   const [show, setShow] = useState(false);
 
@@ -29,6 +30,7 @@ const PasswordInput = ({
         </InputGroupAddon>
         <Input
           id={id}
+          aria-invalid={!!error}
           className="border-0 bg-transparent! shadow-none! ring-0! text-sm"
           type={show ? 'text' : 'password'}
           placeholder={placeholder}
@@ -45,6 +47,9 @@ const PasswordInput = ({
           </InputGroupButton>
         </InputGroupAddon>
       </InputGroup>
+      {error && (
+        <p className="text-xs font-medium text-destructive">{error}</p>
+      )}
     </div>
   );
 };

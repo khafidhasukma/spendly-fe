@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import {
   Dialog,
@@ -9,18 +11,29 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
+import { useAuth } from '@/contexts/AuthContext';
 import type { LogoutConfirmDialogProps } from '@/types';
 
 const LogoutConfirmDialog = ({
   open,
   onOpenChange,
-  onConfirm,
 }: LogoutConfirmDialogProps) => {
-  // confirm
-  const handleConfirm = () => {
-    onConfirm?.();
-    toast.success('Logged out successfully');
-    onOpenChange(false);
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handleConfirm = async () => {
+    setLoading(true);
+    try {
+      await logout();
+      onOpenChange(false);
+      toast.success('Logged out successfully');
+      navigate('/login', { replace: true });
+    } catch {
+      toast.error('Failed to logout. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -45,16 +58,18 @@ const LogoutConfirmDialog = ({
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
+            disabled={loading}
             className="flex-1 sm:flex-none"
           >
             Cancel
           </Button>
           <Button
             onClick={handleConfirm}
+            disabled={loading}
             className="flex-1 bg-error hover:bg-error/90 text-white sm:flex-none"
           >
             <LogOut className="mr-2 h-4 w-4" />
-            Logout
+            {loading ? 'Logging out...' : 'Logout'}
           </Button>
         </DialogFooter>
       </DialogContent>

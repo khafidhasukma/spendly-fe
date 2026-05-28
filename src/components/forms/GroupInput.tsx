@@ -14,6 +14,7 @@ const GroupInput = ({
   icon,
   value,
   onChange,
+  error,
 }: GroupInputProps) => {
   return (
     <div className="space-y-1.5">
@@ -26,6 +27,7 @@ const GroupInput = ({
         )}
         <Input
           id={id}
+          aria-invalid={!!error}
           className="border-0 bg-transparent! shadow-none! ring-0! text-sm"
           type={type}
           placeholder={placeholder}
@@ -33,6 +35,9 @@ const GroupInput = ({
           onChange={onChange}
         />
       </InputGroup>
+      {error && (
+        <p className="text-xs font-medium text-destructive">{error}</p>
+      )}
     </div>
   );
 };

@@ -6,6 +6,8 @@ import AuthStepIndicator from './AuthStepIndicator';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import ForgotPasswordForm from './ForgotPasswordForm';
+export { ProtectedRoute } from './ProtectedRoute';
+export { GuestRoute } from './GuestRoute';
 
 export {
   AuthDivider,

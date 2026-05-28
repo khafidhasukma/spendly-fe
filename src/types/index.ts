@@ -1,6 +1,18 @@
 export type { Transaction, OCRResult, Prediction, ApiResponse } from './api';
 
 export type {
+  LoginPayload,
+  RegisterPayload,
+  AuthTokens,
+  UserProfile,
+  UpdateProfilePayload,
+  UpdatePasswordPayload,
+  UpdatePreferencesPayload,
+  AuthResponse,
+  ProfileResponse,
+} from './auth';
+
+export type {
   HistoryCategory,
   HistoryTransaction,
   HistoryFiltersValue,

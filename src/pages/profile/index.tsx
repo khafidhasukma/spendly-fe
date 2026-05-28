@@ -16,10 +16,6 @@ const ProfilePage = () => {
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
 
-  const handleLogout = () => {
-    console.log('Logging out...');
-  };
-
   return (
     <div className="space-y-4 sm:space-y-5 md:space-y-6">
       {/* Profile header  */}
@@ -41,11 +37,7 @@ const ProfilePage = () => {
       {/* Modals */}
       <EditProfileModal open={editOpen} onOpenChange={setEditOpen} />
       <ChangePasswordModal open={changePasswordOpen} onOpenChange={setChangePasswordOpen} />
-      <LogoutConfirmDialog
-        open={logoutOpen}
-        onOpenChange={setLogoutOpen}
-        onConfirm={handleLogout}
-      />
+      <LogoutConfirmDialog open={logoutOpen} onOpenChange={setLogoutOpen} />
     </div>
   );
 };

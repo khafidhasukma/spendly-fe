@@ -5,22 +5,43 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GroupInput, PasswordInput } from '@/components/forms';
-// import AuthStepIndicator from './AuthStepIndicator';
-
-// const STEPS = [
-//   { num: '1', label: 'DETAILS' },
-//   { num: '2', label: 'VERIFICATION' },
-// ];
+import { useAuth } from '@/contexts/AuthContext';
+import { useForm } from '@/hooks/useForm';
+import { registerSchema, type RegisterFormData } from '@/lib/validations/auth';
 
 const RegisterForm = () => {
   const [agreed, setAgreed] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { register } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const form = useForm<RegisterFormData>({
+    schema: registerSchema,
+    initialValues: { firstName: '', lastName: '', email: '', password: '', confirmPassword: '' },
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: integrate with API
-    toast.success('Account created successfully');
-    navigate('/login');
+    const data = form.validate();
+    if (!data) return;
+
+    setLoading(true);
+    try {
+      await register({
+        email: data.email,
+        password: data.password,
+        ['first_name']: data.firstName,
+        ['last_name']: data.lastName,
+      });
+      toast.success('Account created successfully');
+      navigate('/dashboard', { replace: true });
+    } catch (err: unknown) {
+      const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message
+        || 'Registration failed. Please try again.';
+      toast.error(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -30,30 +51,59 @@ const RegisterForm = () => {
         Join Spendly today to track spending, get insights, and budget smarter to save more.
       </p>
 
-      {/* <div className="mt-6">
-        <AuthStepIndicator steps={STEPS} currentStep={0} />
-      </div> */}
-
       <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
-        {/* full Name + Email */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-          <GroupInput id="fullname" label="Full name" type="text" icon={<User />} placeholder="Jane Doe" />
           <GroupInput
-            id="reg-email"
-            label="Email Address"
-            type="email"
-            icon={<Mail />}
-            placeholder="jane@example.com"
+            id="firstName"
+            label="First Name"
+            type="text"
+            icon={<User />}
+            placeholder="Jane"
+            value={form.values.firstName}
+            onChange={form.handleChange('firstName')}
+            error={form.getFieldError('firstName')}
+          />
+          <GroupInput
+            id="lastName"
+            label="Last Name"
+            type="text"
+            icon={<User />}
+            placeholder="Doe"
+            value={form.values.lastName}
+            onChange={form.handleChange('lastName')}
+            error={form.getFieldError('lastName')}
           />
         </div>
 
-        {/* password + confirm */}
+        <GroupInput
+          id="reg-email"
+          label="Email Address"
+          type="email"
+          icon={<Mail />}
+          placeholder="jane@example.com"
+          value={form.values.email}
+          onChange={form.handleChange('email')}
+          error={form.getFieldError('email')}
+        />
+
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-          <PasswordInput id="password" placeholder="Min. 8 characters" />
-          <PasswordInput id="confirm-password" label="Confirm Password" placeholder="Repeat password" />
+          <PasswordInput
+            id="password"
+            placeholder="Min. 8 characters"
+            value={form.values.password}
+            onChange={form.handleChange('password')}
+            error={form.getFieldError('password')}
+          />
+          <PasswordInput
+            id="confirm-password"
+            label="Confirm Password"
+            placeholder="Repeat password"
+            value={form.values.confirmPassword}
+            onChange={form.handleChange('confirmPassword')}
+            error={form.getFieldError('confirmPassword')}
+          />
         </div>
 
-        {/* Terms checkbox */}
         <div className="flex items-start gap-2.5">
           <Checkbox id="terms" checked={agreed} onCheckedChange={(v) => setAgreed(!!v)} className="mt-0.5 shrink-0" />
           <label htmlFor="terms" className="cursor-pointer select-none text-xs leading-relaxed text-muted-foreground">
@@ -62,21 +112,20 @@ const RegisterForm = () => {
               Terms of Service
             </Link>{' '}
             and{' '}
-            <Link to="/tnc" className="font-medium text-primary hover:underline">
+            <Link to="/privacy-policy" className="font-medium text-primary hover:underline">
               Privacy Policy
             </Link>
           </label>
         </div>
 
-        {/* Submit */}
         <Button
           type="submit"
-          disabled={!agreed}
-          className="w-full bg-primary hover:bg-primary/90 disabled:opacity-50 h-auto py-3 font-semibold">
-          Continue to Verification
+          disabled={!agreed || loading}
+          className="w-full bg-primary hover:bg-primary/90 disabled:opacity-50 h-auto py-3 font-semibold"
+        >
+          {loading ? 'Creating account...' : 'Create Account'}
         </Button>
 
-        {/* Already a member */}
         <p className="text-center text-sm text-muted-foreground">
           Already a member?{' '}
           <Link to="/login" className="font-semibold text-primary hover:underline">
