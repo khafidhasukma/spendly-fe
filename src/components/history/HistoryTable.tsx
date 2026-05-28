@@ -1,10 +1,15 @@
 ﻿import { groupHistoryByRelativeDay } from '.';
 import { HistoryTableDesktop, HistoryTableMobile, HistoryTableEmpty } from '.';
-import type { HistoryTableProps } from '@/types';
+import type { TransactionItem } from '@/types';
 
-export type { HistoryCategory, HistoryTransaction } from '@/types';
+type Props = {
+  transactions: TransactionItem[];
+  onView?: (id: string) => void;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
+};
 
-const HistoryTable = ({ transactions, onView, onEdit, onDelete }: HistoryTableProps) => {
+const HistoryTable = ({ transactions, onView, onEdit, onDelete }: Props) => {
   if (transactions.length === 0) {
     return <HistoryTableEmpty />;
   }
@@ -13,9 +18,7 @@ const HistoryTable = ({ transactions, onView, onEdit, onDelete }: HistoryTablePr
 
   return (
     <div className="overflow-hidden rounded-lg border border-border bg-card">
-      {/* desktop version */}
       <HistoryTableDesktop transactions={transactions} onView={onView} onEdit={onEdit} onDelete={onDelete} />
-      {/* mobile version */}
       <HistoryTableMobile groups={mobileGroups} onView={onView} onEdit={onEdit} onDelete={onDelete} />
     </div>
   );

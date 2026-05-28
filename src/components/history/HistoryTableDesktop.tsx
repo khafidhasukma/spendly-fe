@@ -2,11 +2,17 @@ import { Eye, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { formatRupiah, formatDate, paymentSourceLabel } from '@/utils';
-import { getHistoryCategoryIcon, getHistoryCategoryStyle } from '@/lib/history-category-palette';
-import type { HistoryTableDesktopProps } from '@/types';
+import { formatRupiah, formatDate } from '@/utils';
+import type { TransactionItem } from '@/types';
 
-const HistoryTableDesktop = ({ transactions, onView, onEdit, onDelete }: HistoryTableDesktopProps) => {
+type Props = {
+  transactions: TransactionItem[];
+  onView?: (id: string) => void;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
+};
+
+const HistoryTableDesktop = ({ transactions, onView, onEdit, onDelete }: Props) => {
   return (
     <div className="hidden overflow-x-auto md:block">
       <table className="w-full text-sm">
@@ -31,45 +37,49 @@ const HistoryTableDesktop = ({ transactions, onView, onEdit, onDelete }: History
         </thead>
         <tbody className="divide-y divide-border">
           {transactions.map((tx) => {
-            const Icon = tx.icon ?? getHistoryCategoryIcon(tx.category.id);
-            const style = getHistoryCategoryStyle(tx.category.id);
-            const source = paymentSourceLabel(tx.paymentMethod);
+            const amount = parseFloat(tx.amount);
+            const isExpense = tx.type === 'expense';
             return (
               <tr key={tx.id} className="transition-colors hover:bg-muted/30">
                 <td className="px-4 py-4 sm:px-6">
-                  {/* transaction icon and merchant name */}
                   <div className="flex items-center gap-3">
                     <div
-                      className={cn(
-                        'flex h-9 w-9 shrink-0 items-center justify-center rounded-full',
-                        style.iconBg,
-                      )}
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-base"
+                      style={{ backgroundColor: `${tx.category_color}20` }}
                     >
-                      <Icon className={cn('h-4 w-4', style.iconColor)} />
+                      {tx.category_icon}
                     </div>
                     <div className="min-w-0">
-                      <p className="font-medium text-sm text-foreground">{tx.merchant}</p>
-                      <p className="text-xs text-muted-foreground">{source}</p>
+                      <p className="font-medium text-sm text-foreground">{tx.merchant_name}</p>
+                      <p className="text-xs text-muted-foreground">{tx.wallet_name}</p>
                     </div>
                   </div>
                 </td>
 
-                {/* category */}
                 <td className="px-4 py-4 sm:px-6 text-center">
-                  <Badge className={cn('font-medium', style.badgeClass)}>{tx.category.name}</Badge>
+                  <Badge
+                    className="font-medium"
+                    style={{
+                      backgroundColor: `${tx.category_color}20`,
+                      color: tx.category_color,
+                      borderColor: `${tx.category_color}40`,
+                    }}
+                  >
+                    {tx.category_name}
+                  </Badge>
                 </td>
 
-                {/* date */}
-                <td className="px-4 py-4 text-sm text-muted-foreground sm:px-6">{formatDate(tx.date)}</td>
+                <td className="px-4 py-4 text-sm text-muted-foreground sm:px-6">
+                  {formatDate(tx.date)}
+                </td>
 
-                {/* amount */}
                 <td
                   className={cn(
                     'px-4 py-4 text-right text-sm font-semibold tabular-nums sm:px-6',
-                    tx.amount < 0 ? 'text-destructive' : 'text-green-600 dark:text-green-400',
+                    isExpense ? 'text-destructive' : 'text-green-600 dark:text-green-400',
                   )}
                 >
-                  {formatRupiah(tx.amount)}
+                  {isExpense ? '-' : '+'}{formatRupiah(amount)}
                 </td>
 
                 <td className="px-4 py-4 sm:px-6">

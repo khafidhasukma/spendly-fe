@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable camelcase */
+import { useEffect, useReducer, useState } from 'react';
 import { format } from 'date-fns';
-import {
-  Store,
-  Banknote,
-  CalendarDays,
-} from 'lucide-react';
+import { Store, Banknote, CalendarDays } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -27,129 +25,241 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Separator } from '@/components/ui/separator';
-import type { HistoryFormDialogProps } from '@/types';
+import { cn } from '@/lib/utils';
 import { formatRupiah } from '@/utils';
+import { transactionsApi, categoriesApi, walletsApi } from '@/api';
+import type { ApiCategory } from '@/api/endpoints/categories';
+import type { ApiWallet } from '@/api/endpoints/wallets';
+import type { TransactionItem } from '@/types';
 
-const CATEGORIES = [
-  { id: 'groceries', name: 'Groceries' },
-  { id: 'dining', name: 'F&B' },
-  { id: 'shopping', name: 'Shopping' },
-  { id: 'transport', name: 'Transport' },
-  { id: 'utilities', name: 'Household' },
-  { id: 'health', name: 'Health' },
-  { id: 'entertainment', name: 'Entertainment' },
-  { id: 'beauty', name: 'Beauty' },
-  { id: 'electricity', name: 'Electricity' },
-  { id: 'payroll', name: 'Payroll' },
-  { id: 'others', name: 'Others' },
-];
+type FormMode = 'add' | 'edit';
+type TxType = 'expense' | 'income';
 
-const PAYMENT_METHODS = [
-  { id: 'cash', name: 'Cash' },
-  { id: 'debit-card', name: 'Debit Card' },
-  { id: 'credit-card', name: 'Credit Card' },
-  { id: 'gopay', name: 'GoPay' },
-  { id: 'ovo', name: 'OVO' },
-  { id: 'dana', name: 'DANA' },
-  { id: 'shopeepay', name: 'ShopeePay' },
-  { id: 'bank-transfer', name: 'Bank Transfer' },
-  { id: 'apple-pay', name: 'Apple Pay' },
-  { id: 'auto-debit', name: 'Auto-Debit' },
-];
+interface FormState {
+  txType: TxType;
+  merchant: string;
+  amountRaw: string;
+  amountDisplay: string;
+  date: Date | undefined;
+  categoryId: string;
+  walletId: string;
+  notes: string;
+}
 
-const HistoryFormDialog = ({ open, onOpenChange, mode, transaction, onSave }: HistoryFormDialogProps) => {
-  const [merchant, setMerchant] = useState('');
-  const [amount, setAmount] = useState(0);
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [category, setCategory] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('');
-  const [notes, setNotes] = useState('');
+type FormAction =
+  | { type: 'RESET' }
+  | { type: 'PREFILL'; payload: FormState }
+  | { type: 'SET_TX_TYPE'; value: TxType }
+  | { type: 'SET_MERCHANT'; value: string }
+  | { type: 'SET_AMOUNT_RAW'; value: string }
+  | { type: 'SET_AMOUNT_DISPLAY'; value: string }
+  | { type: 'SET_DATE'; value: Date | undefined }
+  | { type: 'SET_CATEGORY'; value: string }
+  | { type: 'SET_WALLET'; value: string }
+  | { type: 'SET_NOTES'; value: string };
 
-  // Reset form when dialog opens or transaction changes
+const EMPTY: FormState = {
+  txType: 'expense',
+  merchant: '',
+  amountRaw: '',
+  amountDisplay: '',
+  date: new Date(),
+  categoryId: '',
+  walletId: '',
+  notes: '',
+};
+
+function formReducer(state: FormState, action: FormAction): FormState {
+  switch (action.type) {
+  case 'RESET': return { ...EMPTY, date: new Date() };
+  case 'PREFILL': return action.payload;
+  case 'SET_TX_TYPE': return { ...state, txType: action.value, categoryId: '' };
+  case 'SET_MERCHANT': return { ...state, merchant: action.value };
+  case 'SET_AMOUNT_RAW': return { ...state, amountRaw: action.value };
+  case 'SET_AMOUNT_DISPLAY': return { ...state, amountDisplay: action.value };
+  case 'SET_DATE': return { ...state, date: action.value };
+  case 'SET_CATEGORY': return { ...state, categoryId: action.value };
+  case 'SET_WALLET': return { ...state, walletId: action.value };
+  case 'SET_NOTES': return { ...state, notes: action.value };
+  default: return state;
+  }
+}
+
+interface Props {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  mode: FormMode;
+  editTarget?: TransactionItem;
+  onSuccess: () => void;
+}
+
+const HistoryFormDialog = ({ open, onOpenChange, mode, editTarget, onSuccess }: Props) => {
+  const isEdit = mode === 'edit';
+
+  const [form, dispatch] = useReducer(formReducer, { ...EMPTY, date: new Date() });
+  const [isFocused, setIsFocused] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [categories, setCategories] = useState<ApiCategory[]>([]);
+  const [wallets, setWallets] = useState<ApiWallet[]>([]);
+
+  // Pre-fill or reset when dialog opens
   useEffect(() => {
-    if (open) {
-      if (mode === 'edit' && transaction) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setMerchant(transaction.merchant);
-        setAmount(Math.abs(transaction.amount));
-        setDate(new Date(transaction.date));
-        setCategory(transaction.category.id);
-        // Try to match payment method
-        const matchedMethod = PAYMENT_METHODS.find(
-          (m) => m.name.toLowerCase() === transaction.paymentMethod.toLowerCase() ||
-                 m.id === transaction.paymentMethod.toLowerCase().replace(/\s/g, '-')
-        );
-        setPaymentMethod(matchedMethod?.id ?? 'cash');
-        setNotes(transaction.notes ?? '');
-      } else {
-        setMerchant('');
-        setAmount(0);
-        setDate(new Date());
-        setCategory('');
-        setPaymentMethod('');
-        setNotes('');
-      }
+    if (!open) return;
+    if (isEdit && editTarget) {
+      const parsed = Math.round(parseFloat(editTarget.amount));
+      dispatch({
+        type: 'PREFILL',
+        payload: {
+          txType: (editTarget.type as TxType) ?? 'expense',
+          merchant: editTarget.merchant_name,
+          amountRaw: String(parsed),
+          amountDisplay: formatRupiah(parsed),
+          date: new Date(editTarget.date),
+          categoryId: editTarget.category_id,
+          walletId: editTarget.wallet_id,
+          notes: editTarget.notes ?? '',
+        },
+      });
+    } else {
+      dispatch({ type: 'RESET' });
     }
-  }, [open, mode, transaction]);
+  }, [open, isEdit, editTarget]);
+
+  // Load categories + wallets when type changes or dialog opens
+  useEffect(() => {
+    if (!open) return;
+    const load = async () => {
+      try {
+        const [cats, wals] = await Promise.all([
+          categoriesApi.getAll(form.txType),
+          walletsApi.getAll(),
+        ]);
+        setCategories(cats);
+        setWallets(wals);
+      } catch { /* noop */ }
+    };
+    load();
+  }, [open, form.txType]);
+
+  const amountNum = parseInt(form.amountRaw || '0', 10) || 0;
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const raw = e.target.value.replace(/\./g, '');
-    const num = parseInt(raw, 10);
-    setAmount(isNaN(num) ? 0 : num);
+    const digits = e.target.value.replace(/\D/g, '');
+    dispatch({ type: 'SET_AMOUNT_RAW', value: digits });
   };
 
-  const isValid = merchant.trim() !== '' && amount > 0 && date && category !== '' && paymentMethod !== '';
+  const handleAmountFocus = () => {
+    setIsFocused(true);
+  };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleAmountBlur = () => {
+    setIsFocused(false);
+    const num = parseInt(form.amountRaw || '0', 10) || 0;
+    dispatch({ type: 'SET_AMOUNT_DISPLAY', value: num > 0 ? formatRupiah(num) : '' });
+  };
+
+  const isValid = form.merchant.trim() !== '' && amountNum > 0 && !!form.date && form.categoryId !== '' && form.walletId !== '';
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!isValid || !date) return;
+    if (!isValid || !form.date) return;
 
-    onSave({
-      merchant: merchant.trim(),
-      amount,
-      date: format(date, 'yyyy-MM-dd'),
-      category,
-      paymentMethod,
-      notes: notes.trim(),
-    });
-    onOpenChange(false);
+    setIsSubmitting(true);
+    try {
+      const dateStr = format(form.date, 'yyyy-MM-dd');
+      const notesVal = form.notes.trim() || undefined;
+
+      if (isEdit && editTarget) {
+        await transactionsApi.update(editTarget.id, {
+          type: form.txType,
+          amount: amountNum,
+          merchant_name: form.merchant.trim(),
+          category_id: form.categoryId,
+          wallet_id: form.walletId,
+          date: dateStr,
+          notes: notesVal,
+        });
+        toast.success('Transaction updated');
+      } else {
+        await transactionsApi.create({
+          type: form.txType,
+          amount: amountNum,
+          merchant_name: form.merchant.trim(),
+          category_id: form.categoryId,
+          wallet_id: form.walletId,
+          date: dateStr,
+          notes: notesVal,
+        });
+        toast.success('Transaction added');
+      }
+
+      onSuccess();
+      onOpenChange(false);
+    } catch {
+      toast.error(isEdit ? 'Failed to update transaction' : 'Failed to add transaction');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>
-            {mode === 'add' ? 'Add Transaction' : 'Edit Transaction'}
-          </DialogTitle>
+          <DialogTitle>{isEdit ? 'Edit Transaction' : 'Add Transaction'}</DialogTitle>
           <DialogDescription>
-            {mode === 'add'
-              ? 'Enter transaction details manually'
-              : 'Modify existing transaction details'}
+            {isEdit ? 'Modify existing transaction details' : 'Record a new transaction'}
           </DialogDescription>
         </DialogHeader>
 
         <Separator />
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Merchant Name */}
+          {!isEdit && (
+            <div className="flex rounded-lg border border-border p-1 gap-1">
+              <button
+                type="button"
+                onClick={() => dispatch({ type: 'SET_TX_TYPE', value: 'expense' })}
+                className={cn(
+                  'flex-1 rounded-md py-2 text-sm font-semibold transition-colors',
+                  form.txType === 'expense'
+                    ? 'bg-destructive text-destructive-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                Expense
+              </button>
+              <button
+                type="button"
+                onClick={() => dispatch({ type: 'SET_TX_TYPE', value: 'income' })}
+                className={cn(
+                  'flex-1 rounded-md py-2 text-sm font-semibold transition-colors',
+                  form.txType === 'income'
+                    ? 'bg-emerald-500 text-white shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground',
+                )}
+              >
+                Income
+              </button>
+            </div>
+          )}
+
           <div className="space-y-1.5">
             <Label htmlFor="form-merchant" className="text-xs font-medium text-muted-foreground">
-              Merchant Name
+              {form.txType === 'income' ? 'Source' : 'Merchant Name'}
             </Label>
             <div className="relative">
               <Store className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 id="form-merchant"
-                placeholder="e.g. Indomaret Sudirman"
+                placeholder={form.txType === 'income' ? 'e.g. Salary Deposit' : 'e.g. Indomaret Sudirman'}
                 className="pl-9"
-                value={merchant}
-                onChange={(e) => setMerchant(e.target.value)}
+                value={form.merchant}
+                onChange={(e) => dispatch({ type: 'SET_MERCHANT', value: e.target.value })}
               />
             </div>
           </div>
 
-          {/* Amount & Date */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="form-amount" className="text-xs font-medium text-muted-foreground">
@@ -162,8 +272,10 @@ const HistoryFormDialog = ({ open, onOpenChange, mode, transaction, onSave }: Hi
                   inputMode="numeric"
                   placeholder="0"
                   className="pl-9"
-                  value={amount > 0 ? formatRupiah(amount) : ''}
+                  value={isFocused ? form.amountRaw : form.amountDisplay}
                   onChange={handleAmountChange}
+                  onFocus={handleAmountFocus}
+                  onBlur={handleAmountBlur}
                 />
               </div>
             </div>
@@ -172,30 +284,36 @@ const HistoryFormDialog = ({ open, onOpenChange, mode, transaction, onSave }: Hi
               <Label className="text-xs font-medium text-muted-foreground">Date</Label>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button variant="outline" className="w-full justify-start gap-2 font-normal">
+                  <Button variant="outline" className="w-full justify-start gap-2 font-normal h-12 rounded-[0.75rem]">
                     <CalendarDays className="h-4 w-4 text-muted-foreground" />
-                    {date ? format(date, 'PPP') : 'Pick a date'}
+                    {form.date ? format(form.date, 'PPP') : 'Pick a date'}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar mode="single" selected={date} onSelect={setDate} />
+                  <Calendar
+                    mode="single"
+                    selected={form.date}
+                    onSelect={(d) => dispatch({ type: 'SET_DATE', value: d })}
+                  />
                 </PopoverContent>
               </Popover>
             </div>
           </div>
 
-          {/* Category & Payment Method */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label className="text-xs font-medium text-muted-foreground">Category</Label>
-              <Select value={category} onValueChange={setCategory}>
+              <Select value={form.categoryId} onValueChange={(v) => dispatch({ type: 'SET_CATEGORY', value: v })}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {CATEGORIES.map((cat) => (
+                  {categories.map((cat) => (
                     <SelectItem key={cat.id} value={cat.id}>
-                      {cat.name}
+                      <span className="flex items-center gap-2">
+                        <span>{cat.icon}</span>
+                        <span>{cat.name}</span>
+                      </span>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -203,15 +321,15 @@ const HistoryFormDialog = ({ open, onOpenChange, mode, transaction, onSave }: Hi
             </div>
 
             <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-muted-foreground">Payment Method</Label>
-              <Select value={paymentMethod} onValueChange={setPaymentMethod}>
+              <Label className="text-xs font-medium text-muted-foreground">Wallet</Label>
+              <Select value={form.walletId} onValueChange={(v) => dispatch({ type: 'SET_WALLET', value: v })}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select method" />
+                  <SelectValue placeholder="Select wallet" />
                 </SelectTrigger>
                 <SelectContent>
-                  {PAYMENT_METHODS.map((method) => (
-                    <SelectItem key={method.id} value={method.id}>
-                      {method.name}
+                  {wallets.map((w) => (
+                    <SelectItem key={w.id} value={w.id}>
+                      {w.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -219,7 +337,6 @@ const HistoryFormDialog = ({ open, onOpenChange, mode, transaction, onSave }: Hi
             </div>
           </div>
 
-          {/* Notes */}
           <div className="space-y-1.5">
             <Label htmlFor="form-notes" className="text-xs font-medium text-muted-foreground">
               Notes (optional)
@@ -229,8 +346,8 @@ const HistoryFormDialog = ({ open, onOpenChange, mode, transaction, onSave }: Hi
               placeholder="Add notes for this transaction..."
               rows={3}
               className="resize-none"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+              value={form.notes}
+              onChange={(e) => dispatch({ type: 'SET_NOTES', value: e.target.value })}
             />
           </div>
 
@@ -238,8 +355,8 @@ const HistoryFormDialog = ({ open, onOpenChange, mode, transaction, onSave }: Hi
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={!isValid} className="gap-2">
-              {mode === 'add' ? 'Save Transaction' : 'Save Changes'}
+            <Button type="submit" disabled={!isValid || isSubmitting}>
+              {isSubmitting ? 'Saving...' : isEdit ? 'Save Changes' : 'Save'}
             </Button>
           </DialogFooter>
         </form>

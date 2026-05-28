@@ -1,9 +1,9 @@
 import { formatRelativeDayHeading } from '@/utils';
-import type { HistoryTransaction } from './historyTypes';
+import type { TransactionItem } from '@/types';
 
-const groupHistoryByRelativeDay = (transactions: HistoryTransaction[]): [string, HistoryTransaction[]][] => {
+const groupHistoryByRelativeDay = (transactions: TransactionItem[]): [string, TransactionItem[]][] => {
   const sorted = [...transactions].sort((a, b) => b.date.localeCompare(a.date));
-  const map = new Map<string, HistoryTransaction[]>();
+  const map = new Map<string, TransactionItem[]>();
   for (const tx of sorted) {
     const label = formatRelativeDayHeading(tx.date);
     const list = map.get(label) ?? [];

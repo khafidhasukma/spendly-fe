@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/static-components */
 import {
   Dialog,
   DialogContent,
@@ -6,68 +5,71 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { formatRupiah, formatDate, paymentSourceLabel } from '@/utils';
-import { getHistoryCategoryIcon, getHistoryCategoryStyle } from '@/lib/history-category-palette';
-import { CalendarDays, Store, Banknote, CreditCard, Tag, FileText } from 'lucide-react';
-import type { HistoryViewDialogProps } from '@/types';
+import { formatRupiah, formatDate } from '@/utils';
+import { CalendarDays, Store, Banknote, CreditCard, Tag, FileText, Wallet } from 'lucide-react';
+import type { TransactionItem } from '@/types';
 
-const HistoryViewDialog = ({ open, onOpenChange, transaction }: HistoryViewDialogProps) => {
+type Props = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  transaction: TransactionItem | undefined;
+};
+
+const HistoryViewDialog = ({ open, onOpenChange, transaction }: Props) => {
   if (!transaction) return null;
 
-  const Icon = transaction.icon ?? getHistoryCategoryIcon(transaction.category.id);
-  const style = getHistoryCategoryStyle(transaction.category.id);
-  const source = paymentSourceLabel(transaction.paymentMethod);
+  const amount = parseFloat(transaction.amount);
+  const isExpense = transaction.type === 'expense';
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className='text-start'>Transaction Details</DialogTitle>
-          <DialogDescription className='text-start'>
+          <DialogTitle className="text-start">Transaction Details</DialogTitle>
+          <DialogDescription className="text-start">
             Complete transaction information
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-5">
-          {/* Header with icon and amount */}
           <div className="flex flex-col items-center gap-3 pt-2">
             <div
-              className={cn(
-                'flex h-14 w-14 items-center justify-center rounded-full',
-                style.iconBg,
-              )}
+              className="flex h-14 w-14 items-center justify-center rounded-full text-2xl"
+              style={{ backgroundColor: `${transaction.category_color}20` }}
             >
-              <Icon className={cn('h-7 w-7', style.iconColor)} />
+              {transaction.category_icon}
             </div>
             <div className="text-center">
-              <p className="text-lg font-semibold text-foreground">{transaction.merchant}</p>
+              <p className="text-lg font-semibold text-foreground">{transaction.merchant_name}</p>
               <p
                 className={cn(
                   'text-2xl font-bold tabular-nums mt-1',
-                  transaction.amount < 0
-                    ? 'text-destructive'
-                    : 'text-green-600 dark:text-green-400',
+                  isExpense ? 'text-destructive' : 'text-green-600 dark:text-green-400',
                 )}
               >
-                {formatRupiah(transaction.amount)}
+                {isExpense ? '-' : '+'}Rp{formatRupiah(amount)}
               </p>
             </div>
           </div>
 
           <Separator />
 
-          {/* Detail rows */}
           <div className="space-y-3.5">
             <DetailRow
               icon={<Tag className="h-4 w-4" />}
               label="Category"
               value={
-                <Badge className={cn('font-medium', style.badgeClass)}>
-                  {transaction.category.name}
-                </Badge>
+                <span
+                  className="rounded-full px-2.5 py-0.5 text-xs font-semibold"
+                  style={{
+                    backgroundColor: `${transaction.category_color}20`,
+                    color: transaction.category_color,
+                  }}
+                >
+                  {transaction.category_name}
+                </span>
               }
             />
             <DetailRow
@@ -76,14 +78,14 @@ const HistoryViewDialog = ({ open, onOpenChange, transaction }: HistoryViewDialo
               value={<span className="text-sm text-foreground">{formatDate(transaction.date)}</span>}
             />
             <DetailRow
-              icon={<CreditCard className="h-4 w-4" />}
-              label="Payment Method"
-              value={<span className="text-sm text-foreground">{source}</span>}
+              icon={<Wallet className="h-4 w-4" />}
+              label="Wallet"
+              value={<span className="text-sm text-foreground">{transaction.wallet_name}</span>}
             />
             <DetailRow
               icon={<Store className="h-4 w-4" />}
               label="Merchant"
-              value={<span className="text-sm text-foreground">{transaction.merchant}</span>}
+              value={<span className="text-sm text-foreground">{transaction.merchant_name}</span>}
             />
             <DetailRow
               icon={<Banknote className="h-4 w-4" />}
@@ -92,17 +94,21 @@ const HistoryViewDialog = ({ open, onOpenChange, transaction }: HistoryViewDialo
                 <span
                   className={cn(
                     'text-sm font-semibold tabular-nums',
-                    transaction.amount < 0
-                      ? 'text-destructive'
-                      : 'text-green-600 dark:text-green-400',
+                    isExpense ? 'text-destructive' : 'text-green-600 dark:text-green-400',
                   )}
                 >
-                  {formatRupiah(transaction.amount)}
+                  {isExpense ? '-' : '+'}Rp{formatRupiah(amount)}
                 </span>
               }
             />
+            <DetailRow
+              icon={<CreditCard className="h-4 w-4" />}
+              label="Type"
+              value={
+                <span className="text-sm capitalize text-foreground">{transaction.type}</span>
+              }
+            />
 
-            {/* Notes section */}
             {transaction.notes && (
               <>
                 <Separator />
@@ -124,15 +130,7 @@ const HistoryViewDialog = ({ open, onOpenChange, transaction }: HistoryViewDialo
   );
 };
 
-function DetailRow({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: React.ReactNode;
-}) {
+function DetailRow({ icon, label, value }: { icon: React.ReactNode; label: string; value: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-2 text-muted-foreground">

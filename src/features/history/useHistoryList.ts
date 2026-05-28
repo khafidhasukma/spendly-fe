@@ -1,217 +1,189 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
-import type { HistoryFiltersValue, HistoryTransaction, HistoryTransactionFormData, UseHistoryListOptions } from '@/types';
-import { MOCK_HISTORY_TRANSACTIONS } from '.';
+import { transactionsApi } from '@/api';
+import type { TransactionItem, TransactionPagination, HistoryFiltersValue } from '@/types';
 
-const CATEGORIES_MAP: Record<string, string> = {
-  groceries: 'Groceries',
-  dining: 'F&B',
-  shopping: 'Shopping',
-  transport: 'Transport',
-  utilities: 'Household',
-  health: 'Health',
-  entertainment: 'Entertainment',
-  beauty: 'Beauty',
-  electricity: 'Electricity',
-  payroll: 'Payroll',
-  others: 'Others',
+const PAGE_SIZE = 10;
+const DEBOUNCE_MS = 500;
+
+const dateRangeToParams = (range: string): { date_from?: string; date_to?: string } => {
+  const now = new Date();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  const fmt = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const today = fmt(now);
+
+  switch (range) {
+    case 'last-7': { const f = new Date(now); f.setDate(f.getDate() - 7); return { date_from: fmt(f), date_to: today }; }
+    case 'last-30': { const f = new Date(now); f.setDate(f.getDate() - 30); return { date_from: fmt(f), date_to: today }; }
+    case 'last-90': { const f = new Date(now); f.setDate(f.getDate() - 90); return { date_from: fmt(f), date_to: today }; }
+    case 'this-month': return { date_from: fmt(new Date(now.getFullYear(), now.getMonth(), 1)), date_to: today };
+    case 'last-month': {
+      const first = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const last = new Date(now.getFullYear(), now.getMonth(), 0);
+      return { date_from: fmt(first), date_to: fmt(last) };
+    }
+    case 'this-year': return { date_from: fmt(new Date(now.getFullYear(), 0, 1)), date_to: today };
+    default: return {};
+  }
 };
 
-const PAYMENT_METHODS_MAP: Record<string, string> = {
-  cash: 'Cash',
-  'debit-card': 'Debit Card',
-  'credit-card': 'Credit Card',
-  gopay: 'GoPay',
-  ovo: 'OVO',
-  dana: 'DANA',
-  shopeepay: 'ShopeePay',
-  'bank-transfer': 'Bank Transfer',
-  'apple-pay': 'Apple Pay',
-  'auto-debit': 'Auto-Debit',
-};
+const useHistoryList = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
 
-const useHistoryList = (options: UseHistoryListOptions = {}) => {
-  const pageSize = options.pageSize ?? 10;
-  const [transactions, setTransactions] = useState<HistoryTransaction[]>(
-    () => options.initialTransactions ?? MOCK_HISTORY_TRANSACTIONS,
-  );
-  const [filters, setFilters] = useState<HistoryFiltersValue>({
-    dateRange: 'last-30',
-    category: 'all',
-    amountMin: '',
-    amountMax: '',
+  const initialFilters: HistoryFiltersValue = {
+    dateRange: searchParams.get('dateRange') || 'last-30',
+    category: searchParams.get('category') || 'all',
+    amountMin: searchParams.get('amountMin') || '',
+    amountMax: searchParams.get('amountMax') || '',
+  };
+  const initialPage = Number(searchParams.get('page')) || 1;
+
+  const [transactions, setTransactions] = useState<TransactionItem[]>([]);
+  const [pagination, setPagination] = useState<TransactionPagination>({
+    total: 0, page: 1, limit: PAGE_SIZE, totalPages: 1, hasNext: false, hasPrev: false,
   });
-  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [filters, setFilters] = useState<HistoryFiltersValue>(initialFilters);
+  const [currentPage, setCurrentPage] = useState(initialPage);
 
-  // Delete dialog state
   const [deleteOpen, setDeleteOpen] = useState(false);
-  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
-
-  // View dialog state
+  const [deleteTarget, setDeleteTarget] = useState<TransactionItem | undefined>();
   const [viewOpen, setViewOpen] = useState(false);
-  const [viewTargetId, setViewTargetId] = useState<string | null>(null);
-
-  // Form dialog state (add/edit)
+  const [viewTarget, setViewTarget] = useState<TransactionItem | undefined>();
   const [formOpen, setFormOpen] = useState(false);
   const [formMode, setFormMode] = useState<'add' | 'edit'>('add');
-  const [editTargetId, setEditTargetId] = useState<string | null>(null);
+  const [editTarget, setEditTarget] = useState<TransactionItem | undefined>();
 
-  const categoryFilterOptions = useMemo(() => {
-    const byId = new Map<string, string>();
-    for (const tx of transactions) {
-      byId.set(tx.category.id, tx.category.name);
+  // Sync state → URL
+  useEffect(() => {
+    const params: Record<string, string> = {};
+    if (currentPage > 1) params.page = String(currentPage);
+    if (filters.dateRange !== 'last-30') params.dateRange = filters.dateRange;
+    if (filters.category !== 'all') params.category = filters.category;
+    if (filters.amountMin) params.amountMin = filters.amountMin;
+    if (filters.amountMax) params.amountMax = filters.amountMax;
+    setSearchParams(params, { replace: true });
+  }, [filters, currentPage, setSearchParams]);
+
+  // Debounced fetch
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const fetchTransactions = useCallback(async (page: number, f: HistoryFiltersValue) => {
+    setIsLoading(true);
+    try {
+      const dateParams = dateRangeToParams(f.dateRange);
+      const result = await transactionsApi.getAll({
+        page,
+        limit: PAGE_SIZE,
+        sort: 'date',
+        order: 'DESC',
+        category_id: f.category !== 'all' ? f.category : undefined,
+        amount_min: f.amountMin ? Number(f.amountMin) : undefined,
+        amount_max: f.amountMax ? Number(f.amountMax) : undefined,
+        ...dateParams,
+      });
+      setTransactions(result.data);
+      setPagination(result.pagination);
+    } catch {
+      toast.error('Failed to load transactions');
+    } finally {
+      setIsLoading(false);
     }
-    return Array.from(byId.entries())
-      .map(([id, name]) => ({ id, name }))
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [transactions]);
-
-  const filtered = useMemo(() => {
-    const list = transactions.filter((tx) => {
-      if (filters.category !== 'all' && tx.category.id !== filters.category) return false;
-      if (filters.amountMin && Math.abs(tx.amount) < Number(filters.amountMin)) return false;
-      if (filters.amountMax && Math.abs(tx.amount) > Number(filters.amountMax)) return false;
-      return true;
-    });
-    list.sort((a, b) => b.date.localeCompare(a.date));
-    return list;
-  }, [transactions, filters]);
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
-  const paginated = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  }, []);
 
   useEffect(() => {
-    if (currentPage > totalPages) setCurrentPage(totalPages);
-  }, [currentPage, totalPages]);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      fetchTransactions(currentPage, filters);
+    }, DEBOUNCE_MS);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [currentPage, filters, fetchTransactions]);
 
-  const deleteTarget = useMemo(
-    () => (deleteTargetId ? transactions.find((t) => t.id === deleteTargetId) : undefined),
-    [transactions, deleteTargetId],
-  );
-
-  const viewTarget = useMemo(
-    () => (viewTargetId ? transactions.find((t) => t.id === viewTargetId) : undefined),
-    [transactions, viewTargetId],
-  );
-
-  const editTarget = useMemo(
-    () => (editTargetId ? transactions.find((t) => t.id === editTargetId) : undefined),
-    [transactions, editTargetId],
-  );
-
-  const handleFilterChange = useCallback((value: HistoryFiltersValue) => {
+  const onFilterChange = useCallback((value: HistoryFiltersValue) => {
     setFilters(value);
     setCurrentPage(1);
   }, []);
 
+  const refetch = useCallback(() => {
+    fetchTransactions(currentPage, filters);
+  }, [fetchTransactions, currentPage, filters]);
+
   // View
   const requestView = useCallback((id: string) => {
-    setViewTargetId(id);
+    setViewTarget(transactions.find((t) => t.id === id));
     setViewOpen(true);
-  }, []);
+  }, [transactions]);
 
   const onViewDialogOpenChange = useCallback((open: boolean) => {
     setViewOpen(open);
-    if (!open) setViewTargetId(null);
+    if (!open) setViewTarget(undefined);
   }, []);
 
   // Add
   const requestAdd = useCallback(() => {
     setFormMode('add');
-    setEditTargetId(null);
+    setEditTarget(undefined);
     setFormOpen(true);
   }, []);
 
   // Edit
   const requestEdit = useCallback((id: string) => {
     setFormMode('edit');
-    setEditTargetId(id);
+    setEditTarget(transactions.find((t) => t.id === id));
     setFormOpen(true);
-  }, []);
+  }, [transactions]);
 
   const onFormDialogOpenChange = useCallback((open: boolean) => {
     setFormOpen(open);
-    if (!open) setEditTargetId(null);
+    if (!open) setEditTarget(undefined);
   }, []);
-
-  const handleFormSave = useCallback((data: HistoryTransactionFormData) => {
-    const categoryName = CATEGORIES_MAP[data.category] ?? data.category;
-    const paymentMethodName = PAYMENT_METHODS_MAP[data.paymentMethod] ?? data.paymentMethod;
-
-    if (formMode === 'add') {
-      const newTx: HistoryTransaction = {
-        id: crypto.randomUUID(),
-        merchant: data.merchant,
-        amount: -data.amount, // expenses are negative
-        date: data.date,
-        category: { id: data.category, name: categoryName },
-        paymentMethod: paymentMethodName,
-        notes: data.notes || undefined,
-      };
-      setTransactions((prev) => [newTx, ...prev]);
-      toast.success('Transaction added successfully');
-    } else if (formMode === 'edit' && editTargetId) {
-      setTransactions((prev) =>
-        prev.map((tx) =>
-          tx.id === editTargetId
-            ? {
-                ...tx,
-                merchant: data.merchant,
-                amount: tx.amount >= 0 ? data.amount : -data.amount,
-                date: data.date,
-                category: { id: data.category, name: categoryName },
-                paymentMethod: paymentMethodName,
-                notes: data.notes || undefined,
-              }
-            : tx,
-        ),
-      );
-      toast.success('Transaction updated successfully');
-    }
-  }, [formMode, editTargetId]);
 
   // Delete
   const requestDelete = useCallback((id: string) => {
-    setDeleteTargetId(id);
+    setDeleteTarget(transactions.find((t) => t.id === id));
     setDeleteOpen(true);
-  }, []);
+  }, [transactions]);
 
-  const confirmDelete = useCallback(() => {
-    if (!deleteTargetId) return;
-    setTransactions((prev) => prev.filter((t) => t.id !== deleteTargetId));
-    setDeleteTargetId(null);
-    toast.success('Transaction deleted successfully');
-  }, [deleteTargetId]);
+  const confirmDelete = useCallback(async () => {
+    if (!deleteTarget) return;
+    try {
+      await transactionsApi.delete(deleteTarget.id);
+      toast.success('Transaction deleted');
+      setDeleteOpen(false);
+      setDeleteTarget(undefined);
+      refetch();
+    } catch {
+      toast.error('Failed to delete transaction');
+    }
+  }, [deleteTarget, refetch]);
 
   const onDeleteDialogOpenChange = useCallback((open: boolean) => {
     setDeleteOpen(open);
-    if (!open) setDeleteTargetId(null);
+    if (!open) setDeleteTarget(undefined);
   }, []);
 
   return {
-    pageSize,
+    transactions,
+    isLoading,
+    pageSize: PAGE_SIZE,
     filters,
-    onFilterChange: handleFilterChange,
-    categoryFilterOptions,
-    paginated,
-    filteredCount: filtered.length,
-    totalPages,
+    onFilterChange,
     currentPage,
     setCurrentPage,
-    // View
+    totalPages: pagination.totalPages,
+    totalItems: pagination.total,
     viewOpen,
     viewTarget,
     onViewDialogOpenChange,
     requestView,
-    // Form (add/edit)
     formOpen,
     formMode,
     editTarget,
     onFormDialogOpenChange,
     requestAdd,
     requestEdit,
-    handleFormSave,
-    // Delete
+    refetch,
     deleteOpen,
     deleteTarget,
     onDeleteDialogOpenChange,

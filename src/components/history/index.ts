@@ -7,8 +7,6 @@ import HistoryTableMobile from './HistoryTableMobile';
 import HistoryTableEmpty from './HistoryTableEmpty';
 import groupHistoryByRelativeDay from './groupHistoryByDay';
 
-export type { HistoryCategory, HistoryTransaction, HistoryFiltersValue } from '@/types';
-
 export {
   HistoryHeader,
   HistoryFilters,

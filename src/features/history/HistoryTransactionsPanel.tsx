@@ -1,5 +1,18 @@
 import { HistoryPagination, HistoryTable } from '@/components/history';
-import type { HistoryTransactionsPanelProps } from '@/types';
+import type { TransactionItem } from '@/types';
+
+type Props = {
+  transactions: TransactionItem[];
+  isLoading?: boolean;
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  pageSize: number;
+  onPageChange: (page: number) => void;
+  onView?: (id: string) => void;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string) => void;
+};
 
 const HistoryTransactionsPanel = ({
   transactions,
@@ -11,7 +24,7 @@ const HistoryTransactionsPanel = ({
   onView,
   onEdit,
   onDelete,
-}: HistoryTransactionsPanelProps) => {
+}: Props) => {
   return (
     <div className="space-y-4">
       <HistoryTable transactions={transactions} onView={onView} onEdit={onEdit} onDelete={onDelete} />

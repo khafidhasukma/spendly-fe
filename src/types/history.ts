@@ -120,3 +120,47 @@ export type HistoryFormDialogProps = {
   transaction?: HistoryTransaction;
   onSave: (data: HistoryTransactionFormData) => void;
 };
+
+export interface TransactionItem {
+  id: string;
+  user_id: string;
+  wallet_id: string;
+  category_id: string;
+  type: 'expense' | 'income' | 'transfer';
+  amount: string;
+  description: string | null;
+  merchant_name: string;
+  notes: string | null;
+  receipt_url: string | null;
+  date: string;
+  created_at: string;
+  updated_at: string;
+  category_name: string;
+  category_icon: string;
+  category_color: string;
+  wallet_name: string;
+  wallet_type: string;
+}
+
+export interface TransactionPagination {
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
+export interface TransactionFilters {
+  page?: number;
+  limit?: number;
+  type?: 'expense' | 'income' | 'transfer';
+  sort?: string;
+  order?: 'ASC' | 'DESC';
+  date_from?: string;
+  date_to?: string;
+  category_id?: string;
+  search?: string;
+  amount_min?: number;
+  amount_max?: number;
+}

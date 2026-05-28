@@ -5,37 +5,34 @@ import {
   HistoryFormDialog,
   HistoryFiltersPanel,
   HistoryTransactionsPanel,
-  useHistoryList
+  useHistoryList,
 } from '@/features/history';
-
 import { usePageTitle } from '@/hooks';
 
 const HistoryPage = () => {
   usePageTitle('Transaction History');
+
   const {
+    transactions,
+    isLoading,
     pageSize,
     filters,
     onFilterChange,
-    categoryFilterOptions,
-    paginated,
-    filteredCount,
-    totalPages,
     currentPage,
     setCurrentPage,
-    // View
+    totalPages,
+    totalItems,
     viewOpen,
     viewTarget,
     onViewDialogOpenChange,
     requestView,
-    // Form (add/edit)
     formOpen,
     formMode,
     editTarget,
     onFormDialogOpenChange,
     requestAdd,
     requestEdit,
-    handleFormSave,
-    // Delete
+    refetch,
     deleteOpen,
     deleteTarget,
     onDeleteDialogOpenChange,
@@ -45,17 +42,20 @@ const HistoryPage = () => {
 
   return (
     <div className="space-y-6">
-      <HistoryHeader onAddExpense={requestAdd} />
+      <HistoryHeader onAdd={requestAdd} />
+
       <HistoryFiltersPanel
         value={filters}
         onChange={onFilterChange}
-        categoryOptions={categoryFilterOptions}
+        categoryOptions={[]}
       />
+
       <HistoryTransactionsPanel
-        transactions={paginated}
+        transactions={transactions}
+        isLoading={isLoading}
         currentPage={currentPage}
         totalPages={totalPages}
-        totalItems={filteredCount}
+        totalItems={totalItems}
         pageSize={pageSize}
         onPageChange={setCurrentPage}
         onView={requestView}
@@ -63,23 +63,20 @@ const HistoryPage = () => {
         onDelete={requestDelete}
       />
 
-      {/* View Detail Dialog */}
       <HistoryViewDialog
         open={viewOpen}
         onOpenChange={onViewDialogOpenChange}
         transaction={viewTarget}
       />
 
-      {/* Add/Edit Form Dialog */}
       <HistoryFormDialog
         open={formOpen}
         onOpenChange={onFormDialogOpenChange}
         mode={formMode}
-        transaction={editTarget}
-        onSave={handleFormSave}
+        editTarget={editTarget}
+        onSuccess={refetch}
       />
 
-      {/* Delete Confirmation Dialog */}
       <HistoryDeleteDialog
         open={deleteOpen}
         onOpenChange={onDeleteDialogOpenChange}

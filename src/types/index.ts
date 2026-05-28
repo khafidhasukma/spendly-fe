@@ -30,6 +30,9 @@ export type {
   HistoryTransactionFormData,
   HistoryViewDialogProps,
   HistoryFormDialogProps,
+  TransactionItem,
+  TransactionPagination,
+  TransactionFilters,
 } from './history';
 
 export type {

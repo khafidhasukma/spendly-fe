@@ -4,3 +4,5 @@ export { authApi } from './endpoints/auth';
 export { dashboardApi } from './endpoints/dashboard';
 export { budgetApi } from './endpoints/budget';
 export { categoriesApi } from './endpoints/categories';
+export { transactionsApi } from './endpoints/transactions';
+export { walletsApi } from './endpoints/wallets';
