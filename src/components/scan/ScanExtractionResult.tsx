@@ -14,6 +14,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
+import { formatRupiah } from '@/utils';
 
 interface ExtractionData {
   merchant: string;
@@ -39,8 +40,6 @@ const PAYMENT_METHODS = [
   'Cash', 'Debit - BCA', 'Debit - Mandiri', 'Credit Card',
   'GoPay', 'OVO', 'DANA', 'ShopeePay', 'Bank Transfer',
 ];
-
-const formatRupiah = (n: number) => new Intl.NumberFormat('id-ID').format(n);
 
 const ScanExtractionResult = ({ data, onSave, onDiscard }: ScanExtractionResultProps) => {
   const [merchant, setMerchant] = useState(data.merchant);

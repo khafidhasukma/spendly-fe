@@ -1,6 +1,5 @@
 import { useState } from 'react';
-
-const formatRupiah = (n: number) => new Intl.NumberFormat('id-ID').format(n);
+import { formatRupiah } from '@/utils';
 
 const monthlyData = [
   { month: 'Jul', income: 8_200_000, expense: 5_100_000 },
@@ -41,7 +40,7 @@ const MonthlyTrendChart = () => {
                 />
                 {hoveredBar?.month === d.month && hoveredBar.type === 'income' && (
                   <div className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-foreground px-2.5 py-1 text-[10px] font-medium text-background shadow-lg z-10">
-                    Rp{formatRupiah(d.income)}
+                    {formatRupiah(d.income)}
                   </div>
                 )}
               </div>
@@ -54,7 +53,7 @@ const MonthlyTrendChart = () => {
                 />
                 {hoveredBar?.month === d.month && hoveredBar.type === 'expense' && (
                   <div className="absolute -top-8 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md bg-foreground px-2.5 py-1 text-[10px] font-medium text-background shadow-lg z-10">
-                    Rp{formatRupiah(d.expense)}
+                    {formatRupiah(d.expense)}
                   </div>
                 )}
               </div>

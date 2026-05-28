@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-import { formatRupiahAmount, formatDate } from '@/utils';
+import { formatRupiah, formatDate } from '@/utils';
 import { getHistoryCategoryIcon, getHistoryCategoryStyle } from '@/lib/history-category-palette';
 import type { HistoryTableMobileProps } from '@/types';
 
@@ -44,7 +44,7 @@ const HistoryTableMobile = ({ groups, onView, onEdit, onDelete }: HistoryTableMo
                             tx.amount < 0 ? 'text-destructive' : 'text-green-600 dark:text-green-400',
                           )}
                         >
-                          {formatRupiahAmount(tx.amount)}
+                          {formatRupiah(tx.amount)}
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground">

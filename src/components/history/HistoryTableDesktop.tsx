@@ -2,7 +2,7 @@ import { Eye, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { formatRupiahAmount, formatDate, paymentSourceLabel } from '@/utils';
+import { formatRupiah, formatDate, paymentSourceLabel } from '@/utils';
 import { getHistoryCategoryIcon, getHistoryCategoryStyle } from '@/lib/history-category-palette';
 import type { HistoryTableDesktopProps } from '@/types';
 
@@ -69,7 +69,7 @@ const HistoryTableDesktop = ({ transactions, onView, onEdit, onDelete }: History
                     tx.amount < 0 ? 'text-destructive' : 'text-green-600 dark:text-green-400',
                   )}
                 >
-                  {formatRupiahAmount(tx.amount)}
+                  {formatRupiah(tx.amount)}
                 </td>
 
                 <td className="px-4 py-4 sm:px-6">

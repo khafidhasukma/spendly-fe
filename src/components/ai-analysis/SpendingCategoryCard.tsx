@@ -8,8 +8,7 @@ import {
   HeartPulse,
 } from 'lucide-react';
 import type { CategoryItem } from '@/types/ai-analysis';
-
-const formatRupiah = (n: number) => new Intl.NumberFormat('id-ID').format(n);
+import { formatRupiah } from '@/utils';
 
 const categoryBreakdown: CategoryItem[] = [
   { name: 'Lifestyle & Dining', amount: 1_850_000, pct: 35, color: '#10B981', tag: 'Frequent', icon: UtensilsCrossed },
@@ -105,7 +104,7 @@ const DonutChart = () => {
             className="absolute z-30 pointer-events-none whitespace-nowrap rounded-lg bg-foreground px-3 py-1.5 text-xs font-medium text-background shadow-lg"
             style={{ left: tooltipPos.x, top: tooltipPos.y, transform: 'translateX(-50%)' }}
           >
-            {hoveredCat.name}: Rp{formatRupiah(hoveredCat.amount)}
+            {hoveredCat.name}: {formatRupiah(hoveredCat.amount)}
           </div>
         )}
       </div>
@@ -135,7 +134,7 @@ const SpendingCategoryCard = () => {
             <span className="text-sm font-semibold tabular-nums text-foreground">{cat.pct}%</span>
             <span className="h-1 w-1 shrink-0 rounded-full bg-muted-foreground/40" />
             <span className="text-sm font-semibold tabular-nums text-foreground w-24 text-right">
-              Rp{formatRupiah(cat.amount)}
+              {formatRupiah(cat.amount)}
             </span>
           </div>
         ))}

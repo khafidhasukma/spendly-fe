@@ -1,6 +1,5 @@
 import { ArrowDownLeft, ArrowUpRight, Wallet } from 'lucide-react';
-
-const formatRupiah = (amount: number) => new Intl.NumberFormat('id-ID').format(amount);
+import { formatRupiah } from '@/utils';
 
 interface WalletOverviewCardProps {
   totalBalance?: number;
@@ -24,7 +23,7 @@ const WalletOverviewCard = ({
         Total Balance (All Wallets)
       </p>
       <h2 className="mt-2 text-3xl font-bold font-manrope sm:text-4xl lg:text-5xl">
-        Rp{formatRupiah(totalBalance)}
+        {formatRupiah(totalBalance)}
       </h2>
       <p className="mt-1 text-sm text-white/70">Combined balance from all your wallets</p>
 
@@ -36,7 +35,7 @@ const WalletOverviewCard = ({
           </span>
           <div>
             <p className="text-xs text-white/60">Total Income</p>
-            <p className="text-base font-semibold sm:text-lg">Rp{formatRupiah(totalIncome)}</p>
+            <p className="text-base font-semibold sm:text-lg">{formatRupiah(totalIncome)}</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
@@ -45,7 +44,7 @@ const WalletOverviewCard = ({
           </span>
           <div>
             <p className="text-xs text-white/60">Total Expense</p>
-            <p className="text-base font-semibold sm:text-lg">Rp{formatRupiah(totalExpense)}</p>
+            <p className="text-base font-semibold sm:text-lg">{formatRupiah(totalExpense)}</p>
           </div>
         </div>
       </div>

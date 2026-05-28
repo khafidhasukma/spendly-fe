@@ -1,4 +1,5 @@
 import { type LucideIcon } from 'lucide-react';
+import { formatRupiah } from '@/utils';
 
 interface CategoryCardProps {
   id: string;
@@ -8,10 +9,6 @@ interface CategoryCardProps {
   bgColor: string;
   transactions: number;
   total: number;
-}
-
-function formatRupiah(amount: number) {
-  return amount === 0 ? 'Rp 0' : `Rp ${new Intl.NumberFormat('id-ID').format(amount)}`;
 }
 
 const CategoryCard = ({
@@ -32,7 +29,7 @@ const CategoryCard = ({
 
       <p className="mt-3 sm:mt-4 mb-0.5 sm:mb-1 font-semibold text-foreground text-sm sm:text-base">{name}</p>
       <p className="text-xs sm:text-sm text-muted-foreground">{transactions} Transactions</p>
-      <p className="mt-3 sm:mt-4 text-base sm:text-lg font-bold text-foreground">{formatRupiah(total)}</p>
+      <p className="mt-3 sm:mt-4 text-base sm:text-lg font-bold text-foreground">{total === 0 ? 'Rp 0' : `Rp ${formatRupiah(total)}`}</p>
     </div>
   );
 };

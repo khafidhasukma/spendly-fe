@@ -9,7 +9,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
-import { formatRupiahAmount, formatDate, paymentSourceLabel } from '@/utils';
+import { formatRupiah, formatDate, paymentSourceLabel } from '@/utils';
 import { getHistoryCategoryIcon, getHistoryCategoryStyle } from '@/lib/history-category-palette';
 import { CalendarDays, Store, Banknote, CreditCard, Tag, FileText } from 'lucide-react';
 import type { HistoryViewDialogProps } from '@/types';
@@ -52,7 +52,7 @@ const HistoryViewDialog = ({ open, onOpenChange, transaction }: HistoryViewDialo
                     : 'text-green-600 dark:text-green-400',
                 )}
               >
-                {formatRupiahAmount(transaction.amount)}
+                {formatRupiah(transaction.amount)}
               </p>
             </div>
           </div>
@@ -97,7 +97,7 @@ const HistoryViewDialog = ({ open, onOpenChange, transaction }: HistoryViewDialo
                       : 'text-green-600 dark:text-green-400',
                   )}
                 >
-                  {formatRupiahAmount(transaction.amount)}
+                  {formatRupiah(transaction.amount)}
                 </span>
               }
             />

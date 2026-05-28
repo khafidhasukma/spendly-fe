@@ -28,6 +28,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { Separator } from '@/components/ui/separator';
 import type { HistoryFormDialogProps } from '@/types';
+import { formatRupiah } from '@/utils';
 
 const CATEGORIES = [
   { id: 'groceries', name: 'Groceries' },
@@ -55,8 +56,6 @@ const PAYMENT_METHODS = [
   { id: 'apple-pay', name: 'Apple Pay' },
   { id: 'auto-debit', name: 'Auto-Debit' },
 ];
-
-const formatRupiah = (n: number) => new Intl.NumberFormat('id-ID').format(n);
 
 const HistoryFormDialog = ({ open, onOpenChange, mode, transaction, onSave }: HistoryFormDialogProps) => {
   const [merchant, setMerchant] = useState('');

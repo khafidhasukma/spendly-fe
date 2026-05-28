@@ -13,7 +13,7 @@ interface BudgetHistoryChartProps {
   history?: BudgetHistoryItem[];
 }
 
-const formatRupiah = (amount: number) => {
+const formatRupiahShort = (amount: number) => {
   if (amount >= 1_000_000) return `${(amount / 1_000_000).toFixed(1)}M`;
   if (amount >= 1_000) return `${(amount / 1_000).toFixed(0)}K`;
   return amount.toString();
@@ -73,7 +73,7 @@ const BudgetHistoryChart = ({ history = mockHistory }: BudgetHistoryChartProps) 
         {/* Y-axis labels */}
         <div className="mt-3 flex items-center justify-between border-t border-border pt-3">
           <span className="text-xs text-muted-foreground">Rp0</span>
-          <span className="text-xs text-muted-foreground">Rp{formatRupiah(maxValue)}</span>
+          <span className="text-xs text-muted-foreground">{formatRupiahShort(maxValue)}</span>
         </div>
       </div>
     </div>

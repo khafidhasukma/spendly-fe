@@ -1,9 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Wallet, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-
-const formatRupiah = (amount: number) =>
-  new Intl.NumberFormat('id-ID').format(amount);
+import { formatRupiah } from '@/utils';
 
 const BudgetSettingsCard = () => {
   const { user } = useAuth();

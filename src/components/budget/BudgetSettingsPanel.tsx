@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Bell, Shield, Calendar, AlertTriangle } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
+import { formatRupiah } from '@/utils';
 
 interface BudgetSettingsPanelProps {
   monthlyLimit?: number;
@@ -8,8 +9,6 @@ interface BudgetSettingsPanelProps {
   weeklyReport?: boolean;
   autoReset?: boolean;
 }
-
-const formatRupiah = (amount: number) => new Intl.NumberFormat('id-ID').format(amount);
 
 const BudgetSettingsPanel = ({
   monthlyLimit = 25_000_000,

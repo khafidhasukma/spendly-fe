@@ -21,6 +21,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
+import { formatRupiah } from '@/utils';
 
 const CATEGORIES = [
   'F&B', 'Shopping', 'Transport', 'Household',
@@ -31,8 +32,6 @@ const PAYMENT_METHODS = [
   'Cash', 'Debit Card', 'Credit Card',
   'GoPay', 'OVO', 'DANA', 'ShopeePay', 'Bank Transfer',
 ];
-
-const formatRupiah = (n: number) => new Intl.NumberFormat('id-ID').format(n);
 
 const ScanManualInput = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());

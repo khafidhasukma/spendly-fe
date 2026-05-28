@@ -1,7 +1,6 @@
 import { TrendingDown, TrendingUp, Wallet } from 'lucide-react';
 import type { BudgetOverview } from '@/types/budget';
-
-const formatRupiah = (amount: number) => new Intl.NumberFormat('id-ID').format(amount);
+import { formatRupiah } from '@/utils';
 
 interface BudgetOverviewCardProps {
   overview?: BudgetOverview;
@@ -36,7 +35,7 @@ const BudgetOverviewCard = ({
         Budget Overview
       </p>
       <h2 className="mt-2 text-2xl font-bold font-manrope sm:text-3xl md:text-4xl">
-        Rp{formatRupiah(totalLimit)}
+        {formatRupiah(totalLimit)}
       </h2>
       <p className="mt-1 text-xs text-white/70 sm:text-sm">Total budget limit</p>
 
@@ -44,7 +43,7 @@ const BudgetOverviewCard = ({
       <div className="mt-4 sm:mt-6">
         <div className="flex items-center justify-between text-xs sm:text-sm">
           <span className="text-white/80">{percentageUsed}% used</span>
-          <span className="text-white/80">Rp{formatRupiah(totalRemaining)} remaining</span>
+          <span className="text-white/80">{formatRupiah(totalRemaining)} remaining</span>
         </div>
         <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-white/20 sm:h-3">
           <div
@@ -62,7 +61,7 @@ const BudgetOverviewCard = ({
           </span>
           <div>
             <p className="text-[10px] text-white/60 sm:text-xs">Spent</p>
-            <p className="text-sm font-semibold sm:text-lg">Rp{formatRupiah(totalSpent)}</p>
+            <p className="text-sm font-semibold sm:text-lg">{formatRupiah(totalSpent)}</p>
           </div>
         </div>
         <div className="flex items-center gap-2 sm:gap-3">
@@ -71,7 +70,7 @@ const BudgetOverviewCard = ({
           </span>
           <div>
             <p className="text-[10px] text-white/60 sm:text-xs">Remaining</p>
-            <p className="text-sm font-semibold sm:text-lg">Rp{formatRupiah(totalRemaining)}</p>
+            <p className="text-sm font-semibold sm:text-lg">{formatRupiah(totalRemaining)}</p>
           </div>
         </div>
       </div>

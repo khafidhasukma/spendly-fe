@@ -21,6 +21,7 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '@/components/ui/drawer';
+import { formatRupiah } from '@/utils';
 
 interface ReviewData {
   merchant: string;
@@ -49,10 +50,6 @@ const PAYMENT_METHODS = [
   'GoPay', 'OVO', 'DANA', 'ShopeePay', 'Bank Transfer',
 ];
 
-// Format number as Rp10.000 (no space, dot as thousand separator)
-const formatRupiah = (n: number) =>
-  `Rp${new Intl.NumberFormat('id-ID').format(n)}`;
-
 // Strip everything except digits
 const stripNonDigits = (s: string) => s.replace(/\D/g, '');
 
@@ -63,7 +60,7 @@ const ScanMobileReviewDrawer = ({ open, onOpenChange, data, onSave, onRetake }: 
   const [merchant, setMerchant] = useState(data.merchant);
   const [amount, setAmount] = useState(data.amount);
   const [amountDisplay, setAmountDisplay] = useState(
-    data.amount > 0 ? formatRupiah(data.amount) : '',
+    data.amount > 0 ? `Rp${formatRupiah(data.amount)}` : '',
   );
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [category, setCategory] = useState(data.category.toLowerCase());
@@ -76,7 +73,7 @@ const ScanMobileReviewDrawer = ({ open, onOpenChange, data, onSave, onRetake }: 
     const digits = stripNonDigits(e.target.value);
     const num = digits === '' ? 0 : parseInt(digits, 10);
     setAmount(num);
-    setAmountDisplay(num > 0 ? formatRupiah(num) : '');
+    setAmountDisplay(num > 0 ? `Rp${formatRupiah(num)}` : '');
   };
 
   // On focus: show raw number so user can type freely
@@ -86,7 +83,7 @@ const ScanMobileReviewDrawer = ({ open, onOpenChange, data, onSave, onRetake }: 
 
   // On blur: reformat back to Rp display
   const handleAmountBlur = () => {
-    setAmountDisplay(amount > 0 ? formatRupiah(amount) : '');
+    setAmountDisplay(amount > 0 ? `Rp${formatRupiah(amount)}` : '');
   };
 
   return (

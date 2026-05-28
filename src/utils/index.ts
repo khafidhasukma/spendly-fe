@@ -1,4 +1,5 @@
 import moment from 'moment';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - moment locale imports lack type declarations
 import 'moment/locale/id';
 
@@ -6,11 +7,8 @@ moment.locale('id');
 
 export { moment };
 
-export const formatCurrency = (amount: number, locale = 'id-ID'): string =>
-  new Intl.NumberFormat(locale, { style: 'currency', currency: 'IDR' }).format(amount);
-
 // id rupiah amount
-export function formatRupiahAmount(amount: number): string {
+export function formatRupiah(amount: number): string {
   const abs = new Intl.NumberFormat('id-ID', {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,

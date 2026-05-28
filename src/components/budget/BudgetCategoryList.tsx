@@ -18,8 +18,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-
-const formatRupiah = (amount: number) => new Intl.NumberFormat('id-ID').format(amount);
+import { formatRupiah } from '@/utils';
 
 const mockCategories: BudgetCategory[] = [
   {
@@ -157,10 +156,10 @@ const BudgetCategoryItem = ({
       {/* Amount info */}
       <div className="mt-4 flex items-end justify-between text-sm">
         <span className="text-muted-foreground">
-          Rp{formatRupiah(spent)} <span className="text-xs">spent</span>
+          {formatRupiah(spent)} <span className="text-xs">spent</span>
         </span>
         <span className="font-semibold text-foreground">
-          Rp{formatRupiah(limit)}
+          {formatRupiah(limit)}
         </span>
       </div>
 
@@ -173,7 +172,7 @@ const BudgetCategoryItem = ({
       </div>
 
       <p className="mt-2 text-xs text-muted-foreground">
-        Rp{formatRupiah(Math.max(limit - spent, 0))} remaining
+        {formatRupiah(Math.max(limit - spent, 0))} remaining
       </p>
     </div>
   );

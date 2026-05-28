@@ -43,6 +43,12 @@ export type {
   BudgetTrackingProps,
   BalanceCardProps,
   AIInsightCardProps,
+  DashboardBalance,
+  DashboardTransaction,
+  DashboardBudget,
+  DashboardWealthPoint,
+  DashboardApiData,
+  DashboardApiResponse,
 } from './dashboard';
 
 export type {

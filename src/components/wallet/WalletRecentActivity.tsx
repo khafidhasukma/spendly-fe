@@ -1,4 +1,5 @@
 import { ArrowDownLeft, ArrowUpRight, ArrowLeftRight } from 'lucide-react';
+import { formatRupiah } from '@/utils';
 
 interface ActivityItem {
   id: string;
@@ -16,8 +17,6 @@ const mockActivity: ActivityItem[] = [
   { id: '4', type: 'expense', description: 'Electricity Bill', amount: 350_000, date: '21 May 2026', wallet: 'Mandiri' },
   { id: '5', type: 'income', description: 'Freelance Payment', amount: 2_500_000, date: '20 May 2026', wallet: 'BCA' },
 ];
-
-const formatRupiah = (amount: number) => new Intl.NumberFormat('id-ID').format(amount);
 
 const typeConfig = {
   income: {
@@ -76,7 +75,7 @@ const WalletRecentActivity = ({ activities = mockActivity }: WalletRecentActivit
                 </div>
               </div>
               <p className={`text-sm font-semibold ${config.amountColor} sm:text-base`}>
-                {config.prefix}Rp{formatRupiah(activity.amount)}
+                {config.prefix}{formatRupiah(activity.amount)}
               </p>
             </div>
           );

@@ -8,8 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-
-const formatRupiah = (amount: number) => new Intl.NumberFormat('id-ID').format(amount);
+import { formatRupiah } from '@/utils';
 
 interface WalletCardProps {
   wallet: Wallet;
@@ -37,7 +36,7 @@ const WalletCard = ({ wallet, onEdit, onDelete, onSetDefault }: WalletCardProps)
             )}
           </div>
           <p className="text-base font-bold text-foreground sm:text-lg">
-            Rp{formatRupiah(balance)}
+            {formatRupiah(balance)}
           </p>
         </div>
       </div>
