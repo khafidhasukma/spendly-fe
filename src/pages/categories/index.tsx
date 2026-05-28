@@ -8,15 +8,9 @@ import {
   Zap,
   Fuel,
   LayoutGrid,
-  Trash2,
-  Plus,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/ui/page-header';
 import { CategoriesEmptyState, CategoryCard, CategoriesFeaturesSection } from '@/components/categories';
-import { ConfirmDialog } from '@/components/ui/confirm-dialog';
-import { EditCategoryDialog } from '@/components/ui/edit-category-dialog';
-import { getIconById, getNextColor } from '@/lib/category-icons';
 import { usePageTitle } from '@/hooks';
 import type { Category } from '@/types';
 
@@ -34,59 +28,7 @@ const INITIAL_CATEGORIES: Category[] = [
 
 const CategoriesPage = () => {
   usePageTitle('Categories');
-  const [categories, setCategories] = useState<Category[]>(INITIAL_CATEGORIES);
-
-  const [editTarget, setEditTarget] = useState<Category | null>(null);
-  const [editOpen, setEditOpen] = useState(false);
-
-  const [addOpen, setAddOpen] = useState(false);
-
-  const [deleteTarget, setDeleteTarget] = useState<Category | null>(null);
-  const [deleteOpen, setDeleteOpen] = useState(false);
-
-  const openEdit = (category: Category) => {
-    setEditTarget(category);
-    setEditOpen(true);
-  };
-
-  const openDelete = (category: Category) => {
-    setDeleteTarget(category);
-    setDeleteOpen(true);
-  };
-
-  const handleSaveEdit = (newName: string, newIconId: string) => {
-    if (!editTarget) return;
-    const newIcon = getIconById(newIconId);
-    setCategories((prev) =>
-      prev.map((c) =>
-        c.id === editTarget.id
-          ? { ...c, name: newName, iconId: newIconId, icon: newIcon }
-          : c
-      )
-    );
-  };
-
-  const handleAddCategory = (newName: string, newIconId: string) => {
-    const newIcon = getIconById(newIconId);
-    const { color, bgColor } = getNextColor(categories.length);
-    const newCategory: Category = {
-      id: `cat-${Date.now()}`,
-      name: newName,
-      iconId: newIconId,
-      icon: newIcon,
-      color,
-      bgColor,
-      transactions: 0,
-      total: 0,
-    };
-    setCategories((prev) => [...prev, newCategory]);
-  };
-
-  const handleConfirmDelete = () => {
-    if (!deleteTarget) return;
-    setCategories((prev) => prev.filter((c) => c.id !== deleteTarget.id));
-  };
-
+  const [categories] = useState<Category[]>(INITIAL_CATEGORIES);
   const hasTransactions = categories.some((c) => c.transactions > 0);
 
   return (
@@ -97,14 +39,8 @@ const CategoriesPage = () => {
           { label: 'Dashboard', to: '/dashboard' },
           { label: 'Categories Management' },
         ]}
-        title="Manajemen Kategori"
-        description="Kelola kategori pengeluaran Anda untuk mendapatkan laporan keuangan yang lebih akurat."
-        action={
-          <Button onClick={() => setAddOpen(true)} className="bg-primary hover:bg-primary/90 w-full sm:w-auto">
-            <Plus className="mr-2 h-4 w-4" />
-            Tambah Kategori
-          </Button>
-        }
+        title="Categories Management"
+        description="Manage your spending categories to get more accurate financial reports."
       />
 
       {/* Category Grid */}
@@ -113,8 +49,6 @@ const CategoriesPage = () => {
           <CategoryCard
             key={category.id}
             {...category}
-            onEdit={() => openEdit(category)}
-            onDelete={() => openDelete(category)}
           />
         ))}
       </div>
@@ -124,32 +58,6 @@ const CategoriesPage = () => {
 
       {/* Features Section */}
       <CategoriesFeaturesSection />
-
-      {/* Edit Category Modal */}
-      <EditCategoryDialog
-        open={editOpen}
-        onOpenChange={setEditOpen}
-        mode="edit"
-        categoryName={editTarget?.name ?? ''}
-        categoryIconId={editTarget?.iconId}
-        onSave={handleSaveEdit}
-      />
-
-      {/* Add Category Modal */}
-      <EditCategoryDialog open={addOpen} onOpenChange={setAddOpen} mode="add" onSave={handleAddCategory} />
-
-      {/* Delete Confirmation Modal */}
-      <ConfirmDialog
-        open={deleteOpen}
-        onOpenChange={setDeleteOpen}
-        title="Hapus Kategori?"
-        description={`Kategori "${deleteTarget?.name}" akan dihapus secara permanen. Tindakan ini tidak dapat dibatalkan.`}
-        confirmLabel="Hapus"
-        cancelLabel="Batal"
-        variant="destructive"
-        onConfirm={handleConfirmDelete}
-        icon={<Trash2 className="h-6 w-6" />}
-      />
     </div>
   );
 };

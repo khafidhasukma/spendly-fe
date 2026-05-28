@@ -15,6 +15,9 @@ export type {
   HistoryFiltersPanelProps,
   HistoryDeleteDialogProps,
   HistoryTransactionsPanelProps,
+  HistoryTransactionFormData,
+  HistoryViewDialogProps,
+  HistoryFormDialogProps,
 } from './history';
 
 export type {

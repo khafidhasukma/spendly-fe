@@ -4,9 +4,9 @@ import {
   Banknote,
   CalendarDays,
   FileText,
-  CheckCircle2,
 } from 'lucide-react';
 import { format } from 'date-fns';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -58,7 +58,7 @@ const ScanManualInput = () => {
 
       <Separator className="my-5" />
 
-      <form className="space-y-4">
+      <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); toast.success('Transaction saved successfully'); }}>
         <div className="space-y-1.5">
           <Label htmlFor="merchant" className="text-xs font-medium text-muted-foreground">
             Merchant Name
@@ -91,7 +91,7 @@ const ScanManualInput = () => {
             <Label className="text-xs font-medium text-muted-foreground">Date</Label>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full justify-start gap-2 font-normal">
+                <Button variant="outline" className="w-full text-sm md:text-base justify-start gap-2 font-normal border-border shadow-none py-0 bg-white h-12 rounded-[0.75rem]">
                   <CalendarDays className="h-4 w-4 text-muted-foreground" />
                   {date ? format(date, 'PPP') : 'Pick a date'}
                 </Button>
@@ -148,8 +148,7 @@ const ScanManualInput = () => {
         </div>
 
         <Button type="submit" className="w-full gap-2 bg-primary hover:bg-primary/90 sm:w-auto">
-          <CheckCircle2 className="h-4 w-4" />
-          Save Transaction
+          Save
         </Button>
       </form>
     </div>

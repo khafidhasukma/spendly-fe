@@ -1,4 +1,4 @@
-import { Download, FileText, PlusCircle } from 'lucide-react';
+import { Download, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import PageHeader from '@/components/ui/page-header';
 import type { HistoryHeaderProps } from '@/types';
@@ -14,16 +14,10 @@ const HistoryHeader = ({ onAddExpense }: HistoryHeaderProps) => {
             <Download className="h-4 w-4 shrink-0" />
             <span>CSV</span>
           </Button>
-          <Button variant="outline" size="sm" className="h-10 gap-2 sm:h-9">
-            <FileText className="h-4 w-4 shrink-0" />
-            <span className="truncate sm:max-w-none">
-              <span className="sm:hidden">PDF</span>
-              <span className="hidden sm:inline">PDF Report</span>
-            </span>
-          </Button>
-          <Button size="sm" className="col-span-2 h-10 gap-2 sm:col-span-1 sm:h-9 sm:w-auto" onClick={onAddExpense}>
-            <PlusCircle className="h-4 w-4 shrink-0" />
-            <span className="truncate sm:max-w-[11rem]">
+
+          <Button size="sm" className="h-10 gap-2 col-span-1 sm:h-9 sm:w-auto" onClick={onAddExpense}>
+            <Plus className="h-4 w-4 shrink-0" />
+            <span className="truncate sm:max-w-44">
               <span className="hidden sm:inline">Add Manual Expense</span>
               <span className="sm:hidden">Add expense</span>
             </span>

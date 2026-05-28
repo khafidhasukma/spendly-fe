@@ -12,6 +12,7 @@ export interface HistoryTransaction {
   category: HistoryCategory;
   date: string;
   amount: number;
+  notes?: string;
   icon?: LucideIcon;
 }
 
@@ -30,18 +31,21 @@ export interface HistoryFiltersProps {
 
 export interface HistoryTableProps {
   transactions: HistoryTransaction[];
+  onView?: (id: string) => void;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
 }
 
 export type HistoryTableDesktopProps = {
   transactions: HistoryTransaction[];
+  onView?: (id: string) => void;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
 };
 
 export type HistoryTableMobileProps = {
   groups: [string, HistoryTransaction[]][];
+  onView?: (id: string) => void;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
 };
@@ -89,6 +93,30 @@ export type HistoryTransactionsPanelProps = {
   totalItems: number;
   pageSize: number;
   onPageChange: (page: number) => void;
+  onView?: (id: string) => void;
   onEdit?: (id: string) => void;
   onDelete?: (id: string) => void;
+};
+
+export interface HistoryTransactionFormData {
+  merchant: string;
+  amount: number;
+  date: string;
+  category: string;
+  paymentMethod: string;
+  notes: string;
+}
+
+export type HistoryViewDialogProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  transaction: HistoryTransaction | undefined;
+};
+
+export type HistoryFormDialogProps = {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  mode: 'add' | 'edit';
+  transaction?: HistoryTransaction;
+  onSave: (data: HistoryTransactionFormData) => void;
 };

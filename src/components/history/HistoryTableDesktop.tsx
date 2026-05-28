@@ -1,4 +1,4 @@
-import { Pencil, Trash2 } from 'lucide-react';
+import { Eye, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -6,7 +6,7 @@ import { formatRupiahAmount, formatDate, paymentSourceLabel } from '@/utils';
 import { getHistoryCategoryIcon, getHistoryCategoryStyle } from '@/lib/history-category-palette';
 import type { HistoryTableDesktopProps } from '@/types';
 
-const HistoryTableDesktop = ({ transactions, onEdit, onDelete }: HistoryTableDesktopProps) => {
+const HistoryTableDesktop = ({ transactions, onView, onEdit, onDelete }: HistoryTableDesktopProps) => {
   return (
     <div className="hidden overflow-x-auto md:block">
       <table className="w-full text-sm">
@@ -74,6 +74,15 @@ const HistoryTableDesktop = ({ transactions, onEdit, onDelete }: HistoryTableDes
 
                 <td className="px-4 py-4 sm:px-6">
                   <div className="flex items-center justify-end gap-0.5 sm:gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-9 w-9 text-muted-foreground hover:text-blue-600 sm:h-8 sm:w-8"
+                      onClick={() => onView?.(tx.id)}
+                      aria-label="View transaction"
+                    >
+                      <Eye className="h-3.5 w-3.5" />
+                    </Button>
                     <Button
                       variant="ghost"
                       size="icon"

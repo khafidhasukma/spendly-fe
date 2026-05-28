@@ -8,6 +8,7 @@ const MOCK_HISTORY_TRANSACTIONS: HistoryTransaction[] = [
     category: { id: 'groceries', name: 'Groceries' },
     date: '2023-10-24',
     amount: -288000,
+    notes: 'Weekly groceries: vegetables, fruits, and kitchen supplies',
   },
   {
     id: '2',
@@ -16,6 +17,7 @@ const MOCK_HISTORY_TRANSACTIONS: HistoryTransaction[] = [
     category: { id: 'dining', name: 'Dining' },
     date: '2023-10-24',
     amount: -1020000,
+    notes: 'Family dinner, 4 people',
   },
   {
     id: '3',

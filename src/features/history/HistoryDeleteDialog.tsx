@@ -7,14 +7,14 @@ const HistoryDeleteDialog = ({ open, onOpenChange, target, onConfirm }: HistoryD
     <ConfirmDialog
       open={open}
       onOpenChange={onOpenChange}
-      title="Hapus riwayat transaksi?"
+      title="Delete transaction?"
       description={
         target
-          ? `Transaksi "${target.merchant}" akan dihapus dari riwayat. Tindakan ini tidak dapat dibatalkan.`
+          ? `Transaction "${target.merchant}" will be removed from history. This action cannot be undone.`
           : undefined
       }
-      confirmLabel="Hapus"
-      cancelLabel="Batal"
+      confirmLabel="Delete"
+      cancelLabel="Cancel"
       variant="destructive"
       onConfirm={onConfirm}
       icon={<Trash2 className="h-6 w-6" />}

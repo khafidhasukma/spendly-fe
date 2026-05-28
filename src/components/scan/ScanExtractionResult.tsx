@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Sparkles, CheckCircle2, CreditCard, Tag, CalendarDays } from 'lucide-react';
+import { Sparkles, CreditCard, Tag, CalendarDays } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -169,7 +169,6 @@ const ScanExtractionResult = ({ data, onSave, onDiscard }: ScanExtractionResultP
 
       <div className="mt-5 space-y-2">
         <Button onClick={onSave} className="w-full gap-2 bg-primary hover:bg-primary/90">
-          <CheckCircle2 className="h-4 w-4" />
           Save Transaction
         </Button>
         <button

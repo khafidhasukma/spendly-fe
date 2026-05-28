@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -30,6 +31,7 @@ const EditBudgetDialog = ({
 
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLimit(String(currentLimit));
     }
   }, [open, currentLimit]);
@@ -37,6 +39,7 @@ const EditBudgetDialog = ({
   const handleSave = () => {
     if (limit && Number(limit) > 0) {
       onSave?.({ limit: Number(limit) });
+      toast.success('Budget updated successfully');
       onOpenChange(false);
     }
   };
@@ -45,8 +48,8 @@ const EditBudgetDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Edit Budget — {categoryName}</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className='text-start'>Edit Budget {categoryName}</DialogTitle>
+          <DialogDescription className='text-start'>
             Adjust the spending limit for this category.
           </DialogDescription>
         </DialogHeader>
@@ -73,7 +76,7 @@ const EditBudgetDialog = ({
             Cancel
           </Button>
           <Button onClick={handleSave} disabled={!limit || Number(limit) <= 0}>
-            Save Changes
+            Save
           </Button>
         </DialogFooter>
       </DialogContent>

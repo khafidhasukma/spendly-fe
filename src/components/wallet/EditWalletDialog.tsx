@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -31,6 +32,7 @@ const EditWalletDialog = ({
 
   useEffect(() => {
     if (open) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setName(walletName);
       setBalance(String(currentBalance));
     }
@@ -39,6 +41,7 @@ const EditWalletDialog = ({
   const handleSave = () => {
     if (name && balance && Number(balance) >= 0) {
       onSave?.({ name, balance: Number(balance) });
+      toast.success('Wallet updated successfully');
       onOpenChange(false);
     }
   };
@@ -47,8 +50,8 @@ const EditWalletDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Edit Wallet</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className='text-start'>Edit Wallet</DialogTitle>
+          <DialogDescription className='text-start'>
             Update your wallet name and balance.
           </DialogDescription>
         </DialogHeader>

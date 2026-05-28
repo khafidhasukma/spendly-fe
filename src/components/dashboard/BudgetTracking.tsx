@@ -58,9 +58,9 @@ const BudgetTracking = ({ budgets = mockBudgets }: BudgetTrackingProps) => {
             <EmptyMedia variant="icon">
               <BarChart3 />
             </EmptyMedia>
-            <EmptyTitle>Belum Ada Budget</EmptyTitle>
+            <EmptyTitle>Budget</EmptyTitle>
             <EmptyDescription>
-              Atur batas pengeluaran untuk setiap kategori agar kondisi keuangan Anda tetap sehat.
+              Set spending limits for each category to keep your finances healthy.
             </EmptyDescription>
           </EmptyHeader>
         </Empty>

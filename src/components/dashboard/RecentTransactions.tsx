@@ -77,13 +77,13 @@ const RecentTransactions = ({ transactions = mockTransactions }: RecentTransacti
             <EmptyMedia variant="icon">
               <ScanLine />
             </EmptyMedia>
-            <EmptyTitle>Belum Ada Transaksi</EmptyTitle>
+            <EmptyTitle>No Transactions Yet</EmptyTitle>
             <EmptyDescription>
-              Mulai scan struk belanja Anda untuk mencatat pengeluaran pertama.
+              Start scanning your receipts to record your first expense.
             </EmptyDescription>
           </EmptyHeader>
           <Button asChild size="sm" className="bg-primary hover:bg-primary/90">
-            <Link to="/scan">Scan Struk Sekarang</Link>
+            <Link to="/scan">Scan Receipt Now</Link>
           </Button>
         </Empty>
       ) : (

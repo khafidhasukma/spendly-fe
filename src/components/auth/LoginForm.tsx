@@ -1,11 +1,21 @@
 import { Mail } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GroupInput, PasswordInput } from '@/components/forms';
 import AuthDivider from './AuthDivider';
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: integrate with API
+    toast.success('Logged in successfully');
+    navigate('/dashboard');
+  };
+
   return (
     <>
       <h1 className="text-2xl font-bold text-foreground font-manrope">Welcome Back</h1>
@@ -13,7 +23,7 @@ const LoginForm = () => {
         Sign in to your Spendly account to track spending, review insights, and stay on top of your finances.
       </p>
 
-      <form className="mt-8 space-y-6">
+      <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
         <GroupInput id="email" label="Email Address" type="email" icon={<Mail />} placeholder="name@company.com" />
 
         <PasswordInput id="password" />

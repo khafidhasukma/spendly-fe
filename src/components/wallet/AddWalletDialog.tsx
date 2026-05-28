@@ -7,6 +7,7 @@ import {
   Banknote,
   Smartphone,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -42,6 +43,7 @@ const AddWalletDialog = ({ open, onOpenChange, onSave }: AddWalletDialogProps) =
   const handleSave = () => {
     if (name && balance && selectedType) {
       onSave?.({ name, balance: Number(balance), type: selectedType });
+      toast.success('Wallet added successfully');
       setName('');
       setBalance('');
       setSelectedType('');

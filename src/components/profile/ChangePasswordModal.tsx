@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { KeyRound } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -26,6 +27,7 @@ const ChangePasswordModal = ({
 
   const handleSave = () => {
     onSave?.(newPassword);
+    toast.success('Password changed successfully');
     handleClose();
   };
 

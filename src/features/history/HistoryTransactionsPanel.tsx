@@ -8,12 +8,13 @@ const HistoryTransactionsPanel = ({
   totalItems,
   pageSize,
   onPageChange,
+  onView,
   onEdit,
   onDelete,
 }: HistoryTransactionsPanelProps) => {
   return (
     <div className="space-y-4">
-      <HistoryTable transactions={transactions} onEdit={onEdit} onDelete={onDelete} />
+      <HistoryTable transactions={transactions} onView={onView} onEdit={onEdit} onDelete={onDelete} />
       <HistoryPagination
         currentPage={currentPage}
         totalPages={totalPages}

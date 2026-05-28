@@ -9,6 +9,7 @@ import {
   Heart,
   Home,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -45,6 +46,7 @@ const AddBudgetDialog = ({ open, onOpenChange, onSave }: AddBudgetDialogProps) =
   const handleSave = () => {
     if (selectedCategory && limit) {
       onSave?.({ category: selectedCategory, limit: Number(limit) });
+      toast.success('Budget added successfully');
       setSelectedCategory('');
       setLimit('');
       onOpenChange(false);
@@ -55,8 +57,8 @@ const AddBudgetDialog = ({ open, onOpenChange, onSave }: AddBudgetDialogProps) =
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Add Budget Category</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className='text-start'>Add Budget Category</DialogTitle>
+          <DialogDescription className='text-start'>
             Set a spending limit for a category.
           </DialogDescription>
         </DialogHeader>

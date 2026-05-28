@@ -2,28 +2,28 @@ import { BarChart2, Building2, Sparkles } from 'lucide-react';
 
 const features = [
   {
-    id: 'visualisasi',
-    title: 'Visualisasi Akurat',
+    id: 'visualization',
+    title: 'Accurate Visualization',
     description:
-      'Kategori membantu Spendly memetakan kebiasaan belanja Anda dalam bentuk grafik yang indah.',
+      'Categories help Spendly map your spending habits into beautiful, insightful charts.',
     icon: BarChart2,
     iconBg: 'bg-primary/10',
     iconColor: 'text-primary',
   },
   {
-    id: 'anggaran',
-    title: 'Kontrol Anggaran',
+    id: 'budget-control',
+    title: 'Budget Control',
     description:
-      'Atur batas pengeluaran untuk setiap kategori agar kondisi keuangan Anda tetap sehat.',
+      'Set spending limits for each category to keep your finances healthy.',
     icon: Building2,
     iconBg: 'bg-secondary/10',
     iconColor: 'text-secondary',
   },
   {
-    id: 'saran',
-    title: 'Saran Pintar',
+    id: 'smart-tips',
+    title: 'Smart Tips',
     description:
-      'Dapatkan rekomendasi penghematan berdasarkan kategori pengeluaran tertinggi Anda.',
+      'Get savings recommendations based on your highest spending categories.',
     icon: Sparkles,
     iconBg: 'bg-tertiary/10',
     iconColor: 'text-tertiary',

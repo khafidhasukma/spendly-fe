@@ -1,7 +1,7 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Wallet, ArrowRight } from 'lucide-react';
-import { Switch } from '@/components/ui/switch';
+// import { Switch } from '@/components/ui/switch';
 import type { BudgetSettingsCardProps } from '@/types';
 
 const formatRupiah = (amount: number) => {
@@ -10,9 +10,9 @@ const formatRupiah = (amount: number) => {
 
 const BudgetSettingsCard = ({
   monthlyLimit = 25_000_000,
-  spendingAlerts: initialAlerts = true,
+  // spendingAlerts: initialAlerts = true,
 }: BudgetSettingsCardProps) => {
-  const [alerts, setAlerts] = useState(initialAlerts);
+  // const [alerts, setAlerts] = useState(initialAlerts);
   const navigate = useNavigate();
 
   return (
@@ -35,9 +35,9 @@ const BudgetSettingsCard = ({
       </div>
 
       {/* Monthly limit */}
-      <div className="mb-6 sm:mb-8 md:mb-10">
+      <div>
         <p className="mb-2 sm:mb-3 text-xs sm:text-sm font-medium uppercase tracking-wide text-muted-foreground">Monthly Limit (Rp)</p>
-        <div className="flex items-baseline gap-2 rounded-lg bg-muted/50 dark:bg-muted/20 px-3 py-4 sm:px-4 sm:py-6">
+        <div className="flex items-baseline gap-2 rounded-lg bg-muted px-3 py-4 sm:px-4 sm:py-6">
           <span className="text-xl sm:text-2xl font-medium text-muted-foreground">Rp</span>
           <span className="text-2xl sm:text-3xl font-bold tracking-tight text-primary">{formatRupiah(monthlyLimit)}</span>
         </div>
@@ -47,13 +47,13 @@ const BudgetSettingsCard = ({
       </div>
 
       {/* Spending alerts toggle */}
-      <div className="flex items-center justify-between gap-3 sm:gap-4 bg-muted/50 dark:bg-muted/20 p-3 sm:p-4 md:p-4.5 rounded-lg">
+      {/* <div className="mt-6 sm:mt-8 md:mt-10 flex items-center justify-between gap-3 sm:gap-4 bg-muted/50 dark:bg-muted/20 p-3 sm:p-4 md:p-4.5 rounded-lg">
         <div>
           <p className="text-base sm:text-lg font-semibold text-foreground">Spending Alerts</p>
           <p className="text-xs sm:text-sm text-muted-foreground">Notify me when I reach 80% of my budget</p>
         </div>
         <Switch checked={alerts} onCheckedChange={setAlerts} />
-      </div>
+      </div> */}
     </div>
   );
 };

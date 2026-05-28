@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { toast } from 'sonner';
 import PageHeader from '@/components/ui/page-header';
 import {
   ScanUploadZone,
@@ -82,6 +83,11 @@ const ScanStrukPage = () => {
     setReviewDrawerOpen(false);
   };
 
+  const handleSaveTransaction = () => {
+    toast.success('Transaction saved successfully');
+    handleReset();
+  };
+
   const handleModeChange = (newMode: ScanMode) => {
     setMode(newMode);
     handleReset();
@@ -125,7 +131,7 @@ const ScanStrukPage = () => {
               <img
                 src={preview}
                 alt="Scanned receipt"
-                className="max-h-full w-auto rounded-xl object-contain shadow-md"
+                className="max-h-full w-full rounded-xl object-contain shadow-md"
               />
             </div>
           )}
@@ -137,7 +143,7 @@ const ScanStrukPage = () => {
             open={reviewDrawerOpen}
             onOpenChange={setReviewDrawerOpen}
             data={MOCK_RESULT}
-            onSave={handleReset}
+            onSave={handleSaveTransaction}
             onRetake={handleReset}
           />
         )}
@@ -195,7 +201,7 @@ const ScanStrukPage = () => {
                 {state === 'result' ? (
                   <ScanExtractionResult
                     data={MOCK_RESULT}
-                    onSave={handleReset}
+                    onSave={handleSaveTransaction}
                     onDiscard={handleReset}
                   />
                 ) : (

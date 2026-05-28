@@ -1,4 +1,4 @@
-import { MoreVertical, Pencil, Trash2 } from 'lucide-react';
+import { Eye, MoreVertical, Pencil, Trash2 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   DropdownMenu,
@@ -11,7 +11,7 @@ import { formatRupiahAmount, formatDate } from '@/utils';
 import { getHistoryCategoryIcon, getHistoryCategoryStyle } from '@/lib/history-category-palette';
 import type { HistoryTableMobileProps } from '@/types';
 
-const HistoryTableMobile = ({ groups, onEdit, onDelete }: HistoryTableMobileProps) => {
+const HistoryTableMobile = ({ groups, onView, onEdit, onDelete }: HistoryTableMobileProps) => {
   return (
     <div className="space-y-5 p-3 sm:p-4 md:hidden">
       {groups.map(([label, txs]) => (
@@ -53,22 +53,28 @@ const HistoryTableMobile = ({ groups, onEdit, onDelete }: HistoryTableMobileProp
                         <span>{formatDate(tx.date)}</span>
                       </p>
                     </div>
-                    {(onEdit || onDelete) && (
+                    {(onView || onEdit || onDelete) && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <button
                             type="button"
                             className="inline-flex shrink-0 items-center text-muted-foreground transition-colors"
-                            aria-label="Opsi lainnya"
+                            aria-label="More options"
                           >
                             <MoreVertical className="h-4 w-4" />
                           </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-48">
+                          {onView ? (
+                            <DropdownMenuItem className="cursor-pointer" onSelect={() => onView(tx.id)}>
+                              <Eye className="mr-2 h-4 w-4" />
+                              View details
+                            </DropdownMenuItem>
+                          ) : null}
                           {onEdit ? (
                             <DropdownMenuItem className="cursor-pointer" onSelect={() => onEdit(tx.id)}>
                               <Pencil className="mr-2 h-4 w-4" />
-                              Edit transaksi
+                              Edit transaction
                             </DropdownMenuItem>
                           ) : null}
                           {onDelete ? (
@@ -77,7 +83,7 @@ const HistoryTableMobile = ({ groups, onEdit, onDelete }: HistoryTableMobileProp
                               onSelect={() => onDelete(tx.id)}
                             >
                               <Trash2 className="mr-2 h-4 w-4 text-red-500" />
-                              Hapus transaksi
+                              Delete transaction
                             </DropdownMenuItem>
                           ) : null}
                         </DropdownMenuContent>

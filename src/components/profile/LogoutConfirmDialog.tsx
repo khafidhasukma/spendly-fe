@@ -1,10 +1,10 @@
 import { LogOut } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
   DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,7 @@ const LogoutConfirmDialog = ({
   // confirm
   const handleConfirm = () => {
     onConfirm?.();
+    toast.success('Logged out successfully');
     onOpenChange(false);
   };
 
@@ -26,17 +27,7 @@ const LogoutConfirmDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-sm w-full gap-0 p-0 overflow-hidden">
         <DialogHeader className="px-6 pt-6 pb-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-error/10 shrink-0">
-              <LogOut className="h-5 w-5 text-error" />
-            </div>
-            <div>
-              <DialogTitle className="text-base">Logout Account</DialogTitle>
-              <DialogDescription className="text-xs mt-0.5">
-                This action will end your current session.
-              </DialogDescription>
-            </div>
-          </div>
+          <DialogTitle className="text-base text-start">Logout Account</DialogTitle>
         </DialogHeader>
 
         <Separator />
@@ -50,7 +41,7 @@ const LogoutConfirmDialog = ({
 
         <Separator />
 
-        <DialogFooter className="px-6 py-4 gap-2">
+        <DialogFooter className="px-6 py-4 gap-2 grid grid-cols-2">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}

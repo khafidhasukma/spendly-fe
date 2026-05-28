@@ -18,7 +18,7 @@ const SecurityCard = ({
 
       <div className="space-y-4 sm:space-y-6">
         {/* Change password */}
-        <div className="flex items-center justify-between gap-3 sm:gap-4 bg-muted/50 dark:bg-muted/20 p-3 sm:p-4 md:p-4.5 rounded-lg">
+        <div className="flex items-center justify-between gap-3 sm:gap-4 bg-muted p-3 sm:p-4 md:p-4.5 rounded-lg">
           <div className="flex items-center gap-3 sm:gap-4">
             <KeyRound className="h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
             <div>

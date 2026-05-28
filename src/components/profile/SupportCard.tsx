@@ -74,7 +74,7 @@ const SupportCard = ({ onLogout }: SupportCardProps) => {
         className="flex w-full items-center justify-center gap-2 rounded-2xl border border-error/30 bg-card p-4 text-sm font-semibold text-error shadow-sm transition-colors hover:bg-error/5 dark:hover:bg-error/10"
       >
         <LogOut className="h-4 w-4" />
-        Logout Account
+        Logout
       </button>
     </div>
   );

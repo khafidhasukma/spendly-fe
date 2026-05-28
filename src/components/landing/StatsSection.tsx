@@ -1,8 +1,8 @@
 const stats = [
-  { value: '10K+', label: 'Pengguna Aktif' },
-  { value: '2.5M+', label: 'Transaksi Tercatat' },
-  { value: 'Rp8.2B', label: 'Total Penghematan' },
-  { value: '4.8/5', label: 'Rating Pengguna' },
+  { value: '10K+', label: 'Active Users' },
+  { value: '2.5M+', label: 'Transactions Recorded' },
+  { value: 'Rp8.2B', label: 'Total Savings' },
+  { value: '4.8/5', label: 'User Rating' },
 ];
 
 const StatsSection = () => {

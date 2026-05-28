@@ -2,11 +2,9 @@
   AIInsightCard,
   BalanceCard,
   DashboardGreeting,
-  BudgetTracking,
   QuickCategories,
   RecentTransactions,
   WalletCTA,
-  WealthGrowth,
 } from '@/components/dashboard';
 import { usePageTitle } from '@/hooks';
 
@@ -32,15 +30,7 @@ const DashboardPage = () => {
       <QuickCategories />
 
       {/* Bottom row */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-6">
-        <div className="lg:col-span-3">
-          <RecentTransactions />
-        </div>
-        <div className="flex flex-col gap-4 lg:col-span-2 lg:gap-6">
-          <BudgetTracking />
-          <WealthGrowth />
-        </div>
-      </div>
+      <RecentTransactions />
     </div>
   );
 };

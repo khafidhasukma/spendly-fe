@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Mail, User } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { GroupInput, PasswordInput } from '@/components/forms';
@@ -13,6 +14,14 @@ import { GroupInput, PasswordInput } from '@/components/forms';
 
 const RegisterForm = () => {
   const [agreed, setAgreed] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: integrate with API
+    toast.success('Account created successfully');
+    navigate('/login');
+  };
 
   return (
     <>
@@ -25,7 +34,7 @@ const RegisterForm = () => {
         <AuthStepIndicator steps={STEPS} currentStep={0} />
       </div> */}
 
-      <form className="mt-6 space-y-6">
+      <form className="mt-6 space-y-6" onSubmit={handleSubmit}>
         {/* full Name + Email */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
           <GroupInput id="fullname" label="Full name" type="text" icon={<User />} placeholder="Jane Doe" />

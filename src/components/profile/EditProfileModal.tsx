@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { Camera, User } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -44,6 +45,7 @@ const EditProfileModal = ({
 
   const handleSave = () => {
     onSave?.({ firstName, lastName, email, avatarUrl });
+    toast.success('Profile updated successfully');
     onOpenChange(false);
   };
 
@@ -142,7 +144,7 @@ const EditProfileModal = ({
 
         <Separator />
 
-        <DialogFooter className="px-4 py-3 gap-2 sm:px-6 sm:py-4">
+        <DialogFooter className="px-4 py-3 gap-2 sm:px-6 sm:py-4 grid grid-cols-2">
           <Button variant="outline" onClick={handleCancel} className="flex-1 sm:flex-none">
             Cancel
           </Button>
@@ -150,7 +152,7 @@ const EditProfileModal = ({
             onClick={handleSave}
             className="flex-1 bg-primary hover:bg-primary/90 sm:flex-none"
           >
-            Save Changes
+            Save
           </Button>
         </DialogFooter>
       </DialogContent>

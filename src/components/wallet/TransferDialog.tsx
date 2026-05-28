@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   Dialog,
   DialogContent,
@@ -42,6 +43,7 @@ const TransferDialog = ({ open, onOpenChange, onTransfer }: TransferDialogProps)
   const handleTransfer = () => {
     if (fromWallet && toWallet && amount && fromWallet !== toWallet) {
       onTransfer?.({ fromWalletId: fromWallet, toWalletId: toWallet, amount: Number(amount) });
+      toast.success('Transfer completed successfully');
       setFromWallet('');
       setToWallet('');
       setAmount('');
@@ -53,8 +55,8 @@ const TransferDialog = ({ open, onOpenChange, onTransfer }: TransferDialogProps)
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Transfer Between Wallets</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className='text-start'>Transfer Between Wallets</DialogTitle>
+          <DialogDescription className='text-start'>
             Move funds from one wallet to another.
           </DialogDescription>
         </DialogHeader>
