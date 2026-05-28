@@ -1,5 +1,6 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
-import { Camera, VideoOff, Maximize, Minimize, Zap, ZapOff, ImagePlus } from 'lucide-react';
+import { useRef, useState, useCallback, useEffect } from 'react';
+import Webcam from 'react-webcam';
+import { Camera, VideoOff, Maximize, Minimize, Zap, ZapOff, ImagePlus, SwitchCamera } from 'lucide-react';
 
 interface ScanCameraViewProps {
   onCapture: (file: File) => void;
@@ -7,129 +8,66 @@ interface ScanCameraViewProps {
 
 const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const webcamRef = useRef<Webcam>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const trackRef = useRef<MediaStreamTrack | null>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
   const [error, setError] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [torchOn, setTorchOn] = useState(false);
   const [torchSupported, setTorchSupported] = useState(false);
+  const [facingMode, setFacingMode] = useState<'user' | 'environment'>('environment');
+  const [hasMultipleCameras, setHasMultipleCameras] = useState(false);
 
+  // Check for multiple cameras
   useEffect(() => {
-    let active = true;
-    let currentStream: MediaStream | null = null;
-
-    const startCamera = async () => {
-      try {
-        let deviceId: string | undefined;
-
-        try {
-          const probeStream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: { ideal: 'environment' } },
-            audio: false,
-          });
-          probeStream.getTracks().forEach((t) => t.stop());
-        } catch {
-          // ignore probe failure; we'll try without device enumeration
-        }
-
-        try {
-          const devices = await navigator.mediaDevices.enumerateDevices();
-          const videoInputs = devices.filter((d) => d.kind === 'videoinput');
-
-          // Prefer the device labelled as the main back camera.
-          // Heuristic: pick a back-facing camera that is NOT ultra-wide / wide / telephoto.
-          const back = videoInputs.filter((d) => /back|rear|environment/i.test(d.label));
-          const main = back.find(
-            (d) => !/ultra|wide|tele|0\.5|0,5/i.test(d.label),
-          );
-          deviceId = main?.deviceId ?? back[0]?.deviceId;
-        } catch {
-          // enumerateDevices may fail in some contexts
-        }
-
-        const constraints: MediaStreamConstraints = {
-          video: deviceId
-            ? {
-              deviceId: { exact: deviceId },
-              width: { ideal: 1920 },
-              height: { ideal: 1080 },
-              focusMode: { ideal: 'continuous' },
-            } as MediaTrackConstraints
-            : {
-              facingMode: { ideal: 'environment' },
-              width: { ideal: 1920 },
-              height: { ideal: 1080 },
-              focusMode: { ideal: 'continuous' },
-            } as MediaTrackConstraints,
-          audio: false,
-        };
-
-        const mediaStream = await navigator.mediaDevices.getUserMedia(constraints);
-
-        if (!active) {
-          mediaStream.getTracks().forEach((t) => t.stop());
-          return;
-        }
-
-        currentStream = mediaStream;
-        setStream(mediaStream);
-
-        const track = mediaStream.getVideoTracks()[0];
-        trackRef.current = track ?? null;
-
-        if (videoRef.current) {
-          videoRef.current.srcObject = mediaStream;
-        }
-
-        // Try to apply continuous focus and check torch capability.
-        if (track) {
-          try {
-            await track.applyConstraints({
-              advanced: [
-                { focusMode: 'continuous' } as unknown as MediaTrackConstraintSet,
-              ],
-            });
-          } catch {
-            // not supported, ignore
-          }
-
-          const detect = () => {
-            try {
-              const capabilities = track.getCapabilities() as MediaTrackCapabilities & { torch?: boolean };
-              if (capabilities?.torch) {
-                setTorchSupported(true);
-              }
-            } catch {
-              // ignore
-            }
-          };
-
-          detect();
-          setTimeout(detect, 600);
-          setTimeout(detect, 1500);
-        }
-      } catch {
-        if (active) setError(true);
-      }
-    };
-
-    startCamera();
-
-    return () => {
-      active = false;
-      currentStream?.getTracks().forEach((t) => t.stop());
-    };
+    navigator.mediaDevices.enumerateDevices().then((devices) => {
+      const videoInputs = devices.filter((d) => d.kind === 'videoinput');
+      setHasMultipleCameras(videoInputs.length > 1);
+    }).catch(() => {
+      // ignore
+    });
   }, []);
 
+  // Fullscreen listener
   useEffect(() => {
     const handleFsChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
     };
     document.addEventListener('fullscreenchange', handleFsChange);
     return () => document.removeEventListener('fullscreenchange', handleFsChange);
+  }, []);
+
+  // Check torch support when stream is available
+  const handleUserMedia = useCallback((stream: MediaStream) => {
+    const track = stream.getVideoTracks()[0];
+    if (!track) return;
+
+    // Apply continuous autofocus
+    try {
+      track.applyConstraints({
+        advanced: [{ focusMode: 'continuous' } as unknown as MediaTrackConstraintSet],
+      });
+    } catch {
+      // not supported
+    }
+
+    // Check torch capability
+    const checkTorch = () => {
+      try {
+        const capabilities = track.getCapabilities() as MediaTrackCapabilities & { torch?: boolean };
+        if (capabilities?.torch) {
+          setTorchSupported(true);
+        }
+      } catch {
+        // ignore
+      }
+    };
+
+    checkTorch();
+    setTimeout(checkTorch, 800);
+  }, []);
+
+  const handleUserMediaError = useCallback(() => {
+    setError(true);
   }, []);
 
   const toggleFullscreen = useCallback(async () => {
@@ -142,8 +80,12 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
   }, []);
 
   const toggleTorch = useCallback(async () => {
-    const track = trackRef.current;
+    const video = webcamRef.current?.video;
+    if (!video?.srcObject) return;
+    const stream = video.srcObject as MediaStream;
+    const track = stream.getVideoTracks()[0];
     if (!track) return;
+
     const next = !torchOn;
     try {
       await track.applyConstraints({
@@ -155,49 +97,48 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
     }
   }, [torchOn]);
 
-  // Tap-to-focus on mobile
-  const handleVideoTap = useCallback(async () => {
-    const track = trackRef.current;
-    if (!track) return;
-    try {
-      await track.applyConstraints({
-        advanced: [
-          { focusMode: 'continuous' } as unknown as MediaTrackConstraintSet,
-        ],
-      });
-    } catch {
-      // ignore
-    }
+  const switchCamera = useCallback(() => {
+    setFacingMode((prev) => (prev === 'environment' ? 'user' : 'environment'));
+    setTorchOn(false);
   }, []);
 
   const handleCapture = useCallback(() => {
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    if (!video || !canvas) return;
+    if (!webcamRef.current) return;
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const imageSrc = webcamRef.current.getScreenshot();
+    if (!imageSrc) return;
 
-    ctx.drawImage(video, 0, 0);
-    canvas.toBlob((blob) => {
-      if (blob) {
+    // Convert base64 to File
+    fetch(imageSrc)
+      .then((res) => res.blob())
+      .then((blob) => {
         const file = new File([blob], `receipt-${Date.now()}.jpg`, { type: 'image/jpeg' });
-        stream?.getTracks().forEach((t) => t.stop());
+
+        // Stop the stream before navigating away
+        const video = webcamRef.current?.video;
+        if (video?.srcObject) {
+          const stream = video.srcObject as MediaStream;
+          stream.getTracks().forEach((t) => t.stop());
+        }
+
         if (document.fullscreenElement) document.exitFullscreen();
         onCapture(file);
-      }
-    }, 'image/jpeg', 0.92);
-  }, [stream, onCapture]);
+      });
+  }, [onCapture]);
 
   const handleGallerySelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      stream?.getTracks().forEach((t) => t.stop());
-      onCapture(file);
+    if (!file) return;
+
+    // Stop the stream
+    const video = webcamRef.current?.video;
+    if (video?.srcObject) {
+      const stream = video.srcObject as MediaStream;
+      stream.getTracks().forEach((t) => t.stop());
     }
-  }, [stream, onCapture]);
+
+    onCapture(file);
+  }, [onCapture]);
 
   if (error) {
     return (
@@ -213,19 +154,28 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
     );
   }
 
+  const videoConstraints: MediaTrackConstraints = {
+    facingMode,
+    width: { ideal: 1920 },
+    height: { ideal: 1080 },
+  };
+
   return (
     <div
       ref={containerRef}
       className="relative h-full w-full overflow-hidden bg-black lg:rounded-2xl lg:border-2 lg:border-primary/30"
     >
-      {/* Live camera feed */}
-      <video
-        ref={videoRef}
-        autoPlay
-        playsInline
-        muted
-        onClick={handleVideoTap}
+      {/* Live camera feed via react-webcam */}
+      <Webcam
+        ref={webcamRef}
+        audio={false}
+        screenshotFormat="image/jpeg"
+        screenshotQuality={0.92}
+        videoConstraints={videoConstraints}
+        onUserMedia={handleUserMedia}
+        onUserMediaError={handleUserMediaError}
         className="block h-full w-full object-cover"
+        mirrored={facingMode === 'user'}
       />
 
       {/* Viewfinder overlay */}
@@ -292,17 +242,33 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
           <Camera className="h-6 w-6 text-white sm:h-7 sm:w-7" />
         </button>
 
-        {/* Right: Torch (mobile) — always shown; gracefully degrades if unsupported */}
+        {/* Right: Switch camera (mobile) */}
         <div className="flex flex-col items-center gap-1 lg:hidden">
-          <button
-            type="button"
-            onClick={toggleTorch}
-            className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25 active:scale-95"
-            aria-label={torchOn ? 'Turn off flash' : 'Turn on flash'}
-          >
-            {torchOn ? <Zap className="h-5 w-5 text-yellow-400" /> : <ZapOff className="h-5 w-5" />}
-          </button>
-          <span className="text-[9px] uppercase tracking-wide text-white/70 font-medium">Flash</span>
+          {hasMultipleCameras ? (
+            <>
+              <button
+                type="button"
+                onClick={switchCamera}
+                className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25 active:scale-95"
+                aria-label="Switch camera"
+              >
+                <SwitchCamera className="h-5 w-5" />
+              </button>
+              <span className="text-[9px] uppercase tracking-wide text-white/70 font-medium">Flip</span>
+            </>
+          ) : (
+            <>
+              <button
+                type="button"
+                onClick={toggleTorch}
+                className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 backdrop-blur-sm border border-white/20 text-white transition-colors hover:bg-white/25 active:scale-95"
+                aria-label={torchOn ? 'Turn off flash' : 'Turn on flash'}
+              >
+                {torchOn ? <Zap className="h-5 w-5 text-yellow-400" /> : <ZapOff className="h-5 w-5" />}
+              </button>
+              <span className="text-[9px] uppercase tracking-wide text-white/70 font-medium">Flash</span>
+            </>
+          )}
         </div>
 
         {/* Right: Fullscreen (desktop only) */}
@@ -315,9 +281,6 @@ const ScanCameraView = ({ onCapture }: ScanCameraViewProps) => {
           {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
         </button>
       </div>
-
-      {/* Hidden canvas for capture */}
-      <canvas ref={canvasRef} className="hidden" />
     </div>
   );
 };

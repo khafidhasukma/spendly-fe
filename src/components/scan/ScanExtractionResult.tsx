@@ -98,7 +98,7 @@ const ScanExtractionResult = ({ data, onSave, onDiscard }: ScanExtractionResultP
             <Label className="text-xs text-muted-foreground">Date</Label>
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full justify-start gap-2 font-normal">
+                <Button variant="outline" className="w-full justify-start gap-2 font-normal h-12 border-border bg-white shadow-none rounded-[0.75rem] py-0">
                   <CalendarDays className="h-4 w-4 text-muted-foreground" />
                   {date ? format(date, 'PPP') : 'Pick a date'}
                 </Button>
@@ -151,24 +151,10 @@ const ScanExtractionResult = ({ data, onSave, onDiscard }: ScanExtractionResultP
           <span className="text-sm text-muted-foreground">Total Amount</span>
           <span className="text-base font-bold text-foreground">Rp {formatRupiah(amount)}</span>
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">Confidence Score</span>
-          <div className="flex items-center gap-2">
-            <div className="h-2 w-16 overflow-hidden rounded-full bg-muted">
-              <div
-                className="h-full rounded-full bg-primary"
-                style={{ width: `${data.confidence}%` }}
-              />
-            </div>
-            <span className="text-xs font-semibold text-primary">
-              {data.confidence.toFixed(2)}%
-            </span>
-          </div>
-        </div>
       </div>
 
       <div className="mt-5 space-y-2">
-        <Button onClick={onSave} className="w-full gap-2 bg-primary hover:bg-primary/90">
+        <Button onClick={onSave} className="w-full gap-2 bg-primary hover:bg-primary/90 h-auto! py-2.5">
           Save Transaction
         </Button>
         <button
