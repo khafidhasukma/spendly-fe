@@ -88,6 +88,7 @@ export type HistoryDeleteDialogProps = {
 
 export type HistoryTransactionsPanelProps = {
   transactions: HistoryTransaction[];
+  isLoading?: boolean;
   currentPage: number;
   totalPages: number;
   totalItems: number;

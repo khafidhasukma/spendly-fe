@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
-/* eslint-disable react-hooks/set-state-in-effect */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { Plus, ArrowLeftRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -16,14 +15,33 @@ import {
 } from '@/components/wallet';
 import { usePageTitle } from '@/hooks';
 import { walletsApi } from '@/api';
-import type { ApiWallet, WalletBalance, CreateWalletPayload, UpdateWalletPayload } from '@/api/endpoints/wallets';
+import type { ApiWallet, WalletsApiData, CreateWalletPayload, UpdateWalletPayload } from '@/api/endpoints/wallets';
+import type { TransactionItem } from '@/types';
+
+type FetchState =
+  | { status: 'loading'; data: null }
+  | { status: 'success'; data: WalletsApiData }
+  | { status: 'error'; data: null };
+
+type FetchAction =
+  | { type: 'LOADING' }
+  | { type: 'SUCCESS'; payload: WalletsApiData }
+  | { type: 'ERROR' };
+
+function reducer(state: FetchState, action: FetchAction): FetchState {
+  switch (action.type) {
+  case 'LOADING': return { status: 'loading', data: null };
+  case 'SUCCESS': return { status: 'success', data: action.payload };
+  case 'ERROR':   return { status: 'error', data: null };
+  default: return state;
+  }
+}
 
 const WalletPage = () => {
   usePageTitle('Wallet');
 
-  const [wallets, setWallets] = useState<ApiWallet[]>([]);
-  const [balance, setBalance] = useState<WalletBalance | undefined>();
-  const [isLoading, setIsLoading] = useState(true);
+  const [tick, setTick] = useState(0);
+  const [state, dispatch] = useReducer(reducer, { status: 'loading', data: null });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [addOpen, setAddOpen] = useState(false);
@@ -33,31 +51,27 @@ const WalletPage = () => {
   const [deleteTarget, setDeleteTarget] = useState<ApiWallet | null>(null);
   const [transferOpen, setTransferOpen] = useState(false);
 
-  const fetchWallets = useCallback(async () => {
-    try {
-      const [walletData, balanceData] = await Promise.all([
-        walletsApi.getAll(),
-        walletsApi.getBalance(),
-      ]);
-      setWallets(walletData);
-      setBalance(balanceData);
-    } catch {
-      toast.error('Failed to load wallets');
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
-    fetchWallets();
-  }, [fetchWallets]);
+    let cancelled = false;
+    dispatch({ type: 'LOADING' });
+    walletsApi.getAll()
+      .then((result) => { if (!cancelled) dispatch({ type: 'SUCCESS', payload: result }); })
+      .catch(() => { if (!cancelled) dispatch({ type: 'ERROR' }); });
+    return () => { cancelled = true; };
+  }, [tick]);
+
+  const refetch = useCallback(() => setTick((t) => t + 1), []);
+
+  const wallets: ApiWallet[] = state.data?.wallets ?? [];
+  const recentActivity: TransactionItem[] = (state.data?.recent_activity ?? []).slice(0, 5);
+  const isLoading = state.status === 'loading';
 
   const handleAdd = async (payload: CreateWalletPayload) => {
     setIsSubmitting(true);
     try {
       await walletsApi.create(payload);
       toast.success('Wallet added successfully');
-      await fetchWallets();
+      refetch();
     } catch {
       toast.error('Failed to add wallet');
     } finally {
@@ -77,7 +91,7 @@ const WalletPage = () => {
     try {
       await walletsApi.update(id, { is_default: true });
       toast.success('Default wallet updated');
-      await fetchWallets();
+      refetch();
     } catch {
       toast.error('Failed to set default wallet');
     }
@@ -88,7 +102,7 @@ const WalletPage = () => {
     try {
       await walletsApi.update(id, payload);
       toast.success('Wallet updated successfully');
-      await fetchWallets();
+      refetch();
     } catch {
       toast.error('Failed to update wallet');
     } finally {
@@ -109,7 +123,7 @@ const WalletPage = () => {
     try {
       await walletsApi.delete(deleteTarget.id);
       toast.success('Wallet deleted successfully');
-      await fetchWallets();
+      refetch();
     } catch {
       toast.error('Failed to delete wallet');
     } finally {
@@ -141,7 +155,7 @@ const WalletPage = () => {
         }
       />
 
-      <WalletOverviewCard balance={balance} wallets={wallets} isLoading={isLoading} />
+      <WalletOverviewCard wallets={wallets} isLoading={isLoading} />
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-5 lg:gap-6">
         <div className="lg:col-span-3">
@@ -154,7 +168,7 @@ const WalletPage = () => {
           />
         </div>
         <div className="lg:col-span-2">
-          <WalletRecentActivity />
+          <WalletRecentActivity activities={recentActivity} isLoading={isLoading} />
         </div>
       </div>
 
@@ -175,6 +189,7 @@ const WalletPage = () => {
         open={transferOpen}
         onOpenChange={setTransferOpen}
         wallets={wallets}
+        onSuccess={refetch}
       />
       <DeleteWalletDialog
         open={deleteOpen}

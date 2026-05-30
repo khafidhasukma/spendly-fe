@@ -8,8 +8,24 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { formatRupiah, formatDate } from '@/utils';
+import { getIconByName, hexTint } from '@/lib/category-icons';
 import { CalendarDays, Store, Banknote, CreditCard, Tag, FileText, Wallet } from 'lucide-react';
 import type { TransactionItem } from '@/types';
+
+// renders a Lucide icon by name with hex color & tinted bg
+const CategoryIconBubble = ({ iconName, color, size = 'md' }: { iconName: string; color: string; size?: 'sm' | 'md' }) => {
+  const Icon = getIconByName(iconName);
+  const dim = size === 'sm' ? 'h-9 w-9' : 'h-14 w-14';
+  const iconDim = size === 'sm' ? 'h-4 w-4' : 'h-6 w-6';
+  return (
+    <div
+      className={`flex ${dim} items-center justify-center rounded-full`}
+      style={{ backgroundColor: hexTint(color) }}
+    >
+      <Icon className={iconDim} style={{ color }} />
+    </div>
+  );
+};
 
 type Props = {
   open: boolean;
@@ -35,12 +51,7 @@ const HistoryViewDialog = ({ open, onOpenChange, transaction }: Props) => {
 
         <div className="space-y-5">
           <div className="flex flex-col items-center gap-3 pt-2">
-            <div
-              className="flex h-14 w-14 items-center justify-center rounded-full text-2xl"
-              style={{ backgroundColor: `${transaction.category_color}20` }}
-            >
-              {transaction.category_icon}
-            </div>
+            <CategoryIconBubble iconName={transaction.category_icon} color={transaction.category_color} />
             <div className="text-center">
               <p className="text-lg font-semibold text-foreground">{transaction.merchant_name}</p>
               <p

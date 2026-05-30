@@ -1,16 +1,11 @@
+import React from 'react';
 import { ScanLine } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty';
 import { Button } from '@/components/ui/button';
-import type { RecentTransactionsProps } from '@/types';
+import { getIconByName, hexTint } from '@/lib/category-icons';
 import { formatRupiah } from '@/utils';
-
-function hexToTintClass(hex: string): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return `rgba(${r},${g},${b},0.12)`;
-}
+import type { RecentTransactionsProps } from '@/types';
 
 const SkeletonRow = () => (
   <li className="flex items-center gap-3 py-3 sm:py-3.5">
@@ -57,30 +52,36 @@ const RecentTransactions = ({ transactions = [], isLoading = false }: RecentTran
         </Empty>
       ) : (
         <ul className="mt-4 divide-y divide-border sm:mt-5">
-          {transactions.map((tx) => (
-            <li key={tx.id} className="flex items-center gap-3 py-3 sm:py-3.5">
-              <div
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg text-lg"
-                style={{ backgroundColor: hexToTintClass(tx.categoryColor) }}
-              >
-                {tx.categoryEmoji}
-              </div>
+          {transactions.map((tx) => {
+            const iconEl = React.createElement(getIconByName(tx.categoryIcon), {
+              className: 'h-4 w-4 sm:h-5 sm:w-5',
+              style: { color: tx.categoryColor },
+            });
+            return (
+              <li key={tx.id} className="flex items-center gap-3 py-3 sm:py-3.5">
+                <div
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: hexTint(tx.categoryColor) }}
+                >
+                  {iconEl}
+                </div>
 
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold text-foreground">{tx.merchant}</p>
-                <p className="text-xs text-muted-foreground">{tx.datetime}</p>
-              </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-foreground">{tx.merchant}</p>
+                  <p className="text-xs text-muted-foreground">{tx.datetime}</p>
+                </div>
 
-              <div className="shrink-0 text-right">
-                <p className={`text-sm font-bold tabular-nums ${tx.type !== 'expense' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-                  {formatRupiah(tx.amount)}
-                </p>
-                <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">
-                  {tx.categoryName}
-                </p>
-              </div>
-            </li>
-          ))}
+                <div className="shrink-0 text-right">
+                  <p className={`text-sm font-bold tabular-nums ${tx.type !== 'expense' ? 'text-green-600 dark:text-green-400' : 'text-foreground'}`}>
+                    {tx.amount > 0 ? '+' : ''}{formatRupiah(tx.amount)}
+                  </p>
+                  <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">
+                    {tx.categoryName}
+                  </p>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

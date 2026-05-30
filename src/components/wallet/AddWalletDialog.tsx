@@ -22,21 +22,21 @@ import { Label } from '@/components/ui/label';
 import type { CreateWalletPayload } from '@/api/endpoints/wallets';
 
 const walletTypes = [
-  { value: 'cash', label: 'Cash', icon: Banknote },
-  { value: 'bank', label: 'Bank', icon: Landmark },
-  { value: 'e-wallet', label: 'E-Wallet', icon: Smartphone },
-  { value: 'credit', label: 'Credit Card', icon: CreditCard },
-  { value: 'savings', label: 'Savings', icon: PiggyBank },
-  { value: 'other', label: 'Other', icon: Wallet },
+  { value: 'cash',     label: 'Cash',        icon: Banknote    },
+  { value: 'bank',     label: 'Bank',        icon: Landmark    },
+  { value: 'e-wallet', label: 'E-Wallet',    icon: Smartphone  },
+  { value: 'credit',   label: 'Credit Card', icon: CreditCard  },
+  { value: 'savings',  label: 'Savings',     icon: PiggyBank   },
+  { value: 'other',    label: 'Other',       icon: Wallet      },
 ];
 
 const TYPE_COLORS: Record<string, string> = {
-  cash: '#10B981',
-  bank: '#3B82F6',
-  'e-wallet': '#8B5CF6',
-  credit: '#EF4444',
-  savings: '#F59E0B',
-  other: '#6B7280',
+  cash:      '#10B981',
+  bank:      '#1B4D35',
+  'e-wallet':'#8B5CF6',
+  credit:    '#EF4444',
+  savings:   '#F59E0B',
+  other:     '#6B7280',
 };
 
 interface AddWalletDialogProps {
@@ -59,14 +59,17 @@ const AddWalletDialog = ({ open, onOpenChange, onSave, isSubmitting = false }: A
     setBankName('');
   };
 
+  const needsBankName = selectedType === 'bank' || selectedType === 'credit';
+  const isValid = name.trim() && balance && selectedType;
+
   const handleSave = async () => {
-    if (!name || !balance || !selectedType) return;
+    if (!isValid) return;
     const payload: CreateWalletPayload = {
-      name,
+      name: name.trim(),
       type: selectedType,
       balance: Number(balance),
-      color: TYPE_COLORS[selectedType] ?? '#6366f1',
-      bank_name: bankName.trim() || undefined,
+      color: TYPE_COLORS[selectedType] ?? '#6B7280',
+      ...(needsBankName && bankName.trim() && { bank_name: bankName.trim() }),
     };
     await onSave?.(payload);
     reset();
@@ -84,6 +87,7 @@ const AddWalletDialog = ({ open, onOpenChange, onSave, isSubmitting = false }: A
         </DialogHeader>
 
         <div className="space-y-4 py-2">
+          {/* wallet type */}
           <div className="space-y-2">
             <Label>Wallet Type</Label>
             <div className="grid grid-cols-3 gap-2">
@@ -105,17 +109,19 @@ const AddWalletDialog = ({ open, onOpenChange, onSave, isSubmitting = false }: A
             </div>
           </div>
 
+          {/* wallet name */}
           <div className="space-y-2">
             <Label htmlFor="wallet-name">Wallet Name</Label>
             <Input
               id="wallet-name"
-              placeholder="e.g. BCA, GoPay, Cash"
+              placeholder="e.g. BCA Savings, GoPay, Cash"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
 
-          {(selectedType === 'bank' || selectedType === 'credit') && (
+          {/* bank / credit fields */}
+          {needsBankName && (
             <div className="space-y-2">
               <Label htmlFor="bank-name">Bank Name</Label>
               <Input
@@ -127,6 +133,7 @@ const AddWalletDialog = ({ open, onOpenChange, onSave, isSubmitting = false }: A
             </div>
           )}
 
+          {/* initial balance */}
           <div className="space-y-2">
             <Label htmlFor="wallet-balance">Initial Balance (Rp)</Label>
             <Input
@@ -147,7 +154,7 @@ const AddWalletDialog = ({ open, onOpenChange, onSave, isSubmitting = false }: A
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={!name || !balance || !selectedType || isSubmitting}>
+          <Button onClick={handleSave} disabled={!isValid || isSubmitting}>
             {isSubmitting ? 'Saving...' : 'Add Wallet'}
           </Button>
         </DialogFooter>

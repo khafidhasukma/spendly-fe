@@ -13,8 +13,8 @@ const channels: ContactChannel[] = [
     icon: Mail,
     title: 'Email Us',
     description: 'Response within less than 2 business hours.',
-    linkLabel: 'support@spendly.id',
-    href: 'mailto:support@spendly.id',
+    linkLabel: 'spendly.company@gmail.com',
+    href: 'mailto:spendly.company@gmail.com',
   },
   {
     icon: LifeBuoy,

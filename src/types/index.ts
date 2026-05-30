@@ -50,6 +50,7 @@ export type {
   DashboardTransaction,
   DashboardBudget,
   DashboardWealthPoint,
+  DashboardCategory,
   DashboardApiData,
   DashboardApiResponse,
 } from './dashboard';

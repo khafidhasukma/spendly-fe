@@ -27,6 +27,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import { formatRupiah } from '@/utils';
+import { getIconByName } from '@/lib/category-icons';
 import { transactionsApi, categoriesApi, walletsApi } from '@/api';
 import type { ApiCategory } from '@/api/endpoints/categories';
 import type { ApiWallet } from '@/api/endpoints/wallets';
@@ -129,16 +130,16 @@ const HistoryFormDialog = ({ open, onOpenChange, mode, editTarget, onSuccess }: 
   useEffect(() => {
     if (!open) return;
     walletsApi.getAll()
-      .then(setWallets)
-      .catch(() => { /* noop */ });
+      .then((result) => setWallets(Array.isArray(result.wallets) ? result.wallets : []))
+      .catch(() => { setWallets([]); });
   }, [open]);
 
   // Reload categories when type changes
   useEffect(() => {
     if (!open) return;
     categoriesApi.getAll(form.txType)
-      .then(setCategories)
-      .catch(() => { /* noop */ });
+      .then((data) => setCategories(Array.isArray(data) ? data : []))
+      .catch(() => { setCategories([]); });
   }, [open, form.txType]);
 
   const amountNum = parseInt(form.amountRaw || '0', 10) || 0;
@@ -308,14 +309,17 @@ const HistoryFormDialog = ({ open, onOpenChange, mode, editTarget, onSuccess }: 
                   <SelectValue placeholder="Select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((cat) => (
-                    <SelectItem key={cat.id} value={cat.id}>
-                      <span className="flex items-center gap-2">
-                        <span>{cat.icon}</span>
-                        <span>{cat.name}</span>
-                      </span>
-                    </SelectItem>
-                  ))}
+                  {categories.map((cat) => {
+                    const CatIcon = getIconByName(cat.icon);
+                    return (
+                      <SelectItem key={cat.id} value={cat.id}>
+                        <span className="flex items-center gap-2">
+                          <CatIcon className="h-4 w-4" style={{ color: cat.color }} />
+                          <span>{cat.name}</span>
+                        </span>
+                      </SelectItem>
+                    );
+                  })}
                 </SelectContent>
               </Select>
             </div>

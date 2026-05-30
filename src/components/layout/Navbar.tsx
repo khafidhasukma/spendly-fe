@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
+import { resolveAvatarUrl } from '@/utils';
 import type { NavbarProps } from '@/types';
 
 const Navbar = ({ title = 'Dashboard' }: NavbarProps) => {
@@ -9,6 +10,7 @@ const Navbar = ({ title = 'Dashboard' }: NavbarProps) => {
   const initials = user
     ? `${user.first_name[0]}${user.last_name[0]}`.toUpperCase()
     : '?';
+  const avatarSrc = resolveAvatarUrl(user?.avatar_url);
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-card/95 backdrop-blur supports-backdrop-filter-bg-card/80 dark:border-border">
@@ -26,8 +28,8 @@ const Navbar = ({ title = 'Dashboard' }: NavbarProps) => {
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <Avatar className="size-9 sm:size-10">
-            {user?.avatar_url && (
-              <AvatarImage src={user.avatar_url} alt={fullName} />
+            {avatarSrc && (
+              <AvatarImage src={avatarSrc} alt={fullName} />
             )}
             <AvatarFallback>{initials}</AvatarFallback>
           </Avatar>

@@ -44,6 +44,15 @@ export const authApi = {
     return data.data;
   },
 
+  async uploadAvatar(file: File): Promise<UserProfile> {
+    const formData = new FormData();
+    formData.append('avatar', file);
+    const { data } = await api.put<ProfileResponse>('/auth/me/avatar', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return data.data;
+  },
+
   async updatePassword(payload: UpdatePasswordPayload): Promise<void> {
     await api.put('/auth/me/password', payload);
   },

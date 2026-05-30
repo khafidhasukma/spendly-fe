@@ -16,6 +16,7 @@ import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
 import { authApi } from '@/api';
 import { useForm } from '@/hooks/useForm';
+import { resolveAvatarUrl } from '@/utils';
 import { editProfileSchema, type EditProfileFormData } from '@/lib/validations/auth';
 import type { EditProfileModalProps } from '@/types';
 
@@ -42,11 +43,16 @@ const EditProfileModal = ({ open, onOpenChange }: EditProfileModalProps) => {
   // track avatar file selection separately from user's stored avatar
   const avatarPreview = avatarFile
     ? URL.createObjectURL(avatarFile)
-    : (user?.avatar_url ?? null);
+    : resolveAvatarUrl(user?.avatar_url);
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) setAvatarFile(file);
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Image must be smaller than 2MB');
+      return;
+    }
+    setAvatarFile(file);
   };
 
   const handleSave = async () => {
@@ -55,6 +61,11 @@ const EditProfileModal = ({ open, onOpenChange }: EditProfileModalProps) => {
 
     setLoading(true);
     try {
+      // upload avatar first if a new file was selected
+      if (avatarFile) {
+        await authApi.uploadAvatar(avatarFile);
+      }
+
       await authApi.updateProfile({
         ['first_name']: data.firstName,
         ['last_name']: data.lastName,
@@ -118,7 +129,7 @@ const EditProfileModal = ({ open, onOpenChange }: EditProfileModalProps) => {
                 onChange={handleAvatarChange}
               />
             </div>
-            <p className="text-xs text-muted-foreground">Click the camera icon to change photo</p>
+            <p className="text-xs text-muted-foreground">Click the camera icon to change photo (max 2MB)</p>
           </div>
 
           <Separator />

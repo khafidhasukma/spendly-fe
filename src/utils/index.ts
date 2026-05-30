@@ -36,3 +36,14 @@ export function paymentSourceLabel(paymentMethod: string): string {
   if (i === -1) return paymentMethod.trim();
   return paymentMethod.slice(0, i).trim();
 }
+
+// resolve avatar URL — handles relative paths from the backend
+export function resolveAvatarUrl(avatarUrl: string | null | undefined): string | null {
+  if (!avatarUrl) return null;
+  if (avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://') || avatarUrl.startsWith('blob:')) {
+    return avatarUrl;
+  }
+  // relative path — prepend backend base URL (strip /api suffix)
+  const base = (import.meta.env.VITE_BACKEND_URL as string ?? '').replace(/\/api$/, '');
+  return `${base}${avatarUrl}`;
+}

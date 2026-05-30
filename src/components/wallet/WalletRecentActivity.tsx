@@ -1,85 +1,70 @@
-import { ArrowDownLeft, ArrowUpRight, ArrowLeftRight } from 'lucide-react';
-import { formatRupiah } from '@/utils';
-
-interface ActivityItem {
-  id: string;
-  type: 'income' | 'expense' | 'transfer';
-  description: string;
-  amount: number;
-  date: string;
-  wallet: string;
-}
-
-const mockActivity: ActivityItem[] = [
-  { id: '1', type: 'income', description: 'Salary', amount: 8_000_000, date: '24 May 2026', wallet: 'BCA' },
-  { id: '2', type: 'expense', description: 'Grocery Shopping', amount: 450_000, date: '23 May 2026', wallet: 'Cash' },
-  { id: '3', type: 'transfer', description: 'BCA → GoPay', amount: 500_000, date: '22 May 2026', wallet: 'BCA' },
-  { id: '4', type: 'expense', description: 'Electricity Bill', amount: 350_000, date: '21 May 2026', wallet: 'Mandiri' },
-  { id: '5', type: 'income', description: 'Freelance Payment', amount: 2_500_000, date: '20 May 2026', wallet: 'BCA' },
-];
-
-const typeConfig = {
-  income: {
-    icon: ArrowDownLeft,
-    iconBg: 'bg-emerald-100 dark:bg-emerald-900/30',
-    iconColor: 'text-emerald-600 dark:text-emerald-400',
-    amountColor: 'text-emerald-600 dark:text-emerald-400',
-    prefix: '+',
-  },
-  expense: {
-    icon: ArrowUpRight,
-    iconBg: 'bg-red-100 dark:bg-red-900/30',
-    iconColor: 'text-red-600 dark:text-red-400',
-    amountColor: 'text-red-600 dark:text-red-400',
-    prefix: '-',
-  },
-  transfer: {
-    icon: ArrowLeftRight,
-    iconBg: 'bg-blue-100 dark:bg-blue-900/30',
-    iconColor: 'text-blue-600 dark:text-blue-400',
-    amountColor: 'text-blue-600 dark:text-blue-400',
-    prefix: '',
-  },
-};
+import React from 'react';
+import { getIconByName, hexTint } from '@/lib/category-icons';
+import { formatRupiah, formatDate } from '@/utils';
+import type { TransactionItem } from '@/types';
 
 interface WalletRecentActivityProps {
-  activities?: ActivityItem[];
+  activities?: TransactionItem[];
+  isLoading?: boolean;
 }
 
-const WalletRecentActivity = ({ activities = mockActivity }: WalletRecentActivityProps) => {
+const SkeletonRow = () => (
+  <div className="flex items-center gap-3 py-3">
+    <div className="size-9 animate-pulse rounded-lg bg-muted sm:size-10" />
+    <div className="flex-1 space-y-1.5">
+      <div className="h-3.5 w-32 animate-pulse rounded bg-muted" />
+      <div className="h-3 w-20 animate-pulse rounded bg-muted" />
+    </div>
+    <div className="h-4 w-20 animate-pulse rounded bg-muted" />
+  </div>
+);
+
+const WalletRecentActivity = ({ activities = [], isLoading = false }: WalletRecentActivityProps) => {
   return (
     <div className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5 md:p-6">
       <h3 className="text-lg font-semibold text-foreground font-manrope sm:text-xl">
         Recent Activity
       </h3>
 
-      <div className="mt-4 space-y-3 sm:mt-5">
-        {activities.map((activity) => {
-          const config = typeConfig[activity.type];
-          const Icon = config.icon;
-
-          return (
-            <div
-              key={activity.id}
-              className="flex items-center justify-between gap-3 rounded-xl bg-muted/50 dark:bg-muted/20 py-3 sm:py-4"
-            >
-              <div className="flex items-center gap-3">
-                <div className={`flex size-9 items-center justify-center rounded-lg ${config.iconBg} sm:size-10`}>
-                  <Icon className={`size-4 sm:size-5 ${config.iconColor}`} />
+      <div className="mt-4 space-y-1 sm:mt-5">
+        {isLoading ? (
+          Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} />)
+        ) : activities.length === 0 ? (
+          <p className="py-6 text-center text-sm text-muted-foreground">No recent activity</p>
+        ) : (
+          activities.map((tx) => {
+            const amount = parseFloat(tx.amount);
+            const isExpense = tx.type === 'expense';
+            const iconComponent = React.createElement(getIconByName(tx.category_icon), {
+              className: 'size-4 sm:size-5',
+              style: { color: tx.category_color ?? '#6B7280' },
+            });
+            return (
+              <div
+                key={tx.id}
+                className="flex items-center justify-between gap-3 rounded-xl py-2.5"
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="flex size-9 items-center justify-center rounded-lg sm:size-10"
+                    style={{ backgroundColor: hexTint(tx.category_color ?? '#6B7280') }}
+                  >
+                    {iconComponent}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{tx.merchant_name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {tx.category_name} • {formatDate(tx.date)}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-medium text-foreground">{activity.description}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {activity.wallet} • {activity.date}
-                  </p>
-                </div>
+                <p className={`text-sm font-semibold sm:text-base ${isExpense ? 'text-destructive' : 'text-green-600 dark:text-green-400'}`}>
+                  {isExpense ? '-' : '+'}{formatRupiah(amount)}
+                </p>
               </div>
-              <p className={`text-sm font-semibold ${config.amountColor} sm:text-base`}>
-                {config.prefix}{formatRupiah(activity.amount)}
-              </p>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </div>
   );

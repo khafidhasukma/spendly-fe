@@ -1,6 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
+import { resolveAvatarUrl } from '@/utils';
 import type { ProfileHeaderProps } from '@/types';
 
 const ProfileHeader = ({ onEditProfile }: ProfileHeaderProps) => {
@@ -10,6 +11,7 @@ const ProfileHeader = ({ onEditProfile }: ProfileHeaderProps) => {
   const initials = user
     ? `${user.first_name[0]}${user.last_name[0]}`.toUpperCase()
     : '?';
+  const avatarSrc = resolveAvatarUrl(user?.avatar_url);
 
   return (
     <div className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5 md:p-6">
@@ -18,8 +20,8 @@ const ProfileHeader = ({ onEditProfile }: ProfileHeaderProps) => {
         <div className="flex max-sm:flex-col items-center gap-4 sm:gap-6 md:gap-8">
           <div className="relative shrink-0">
             <Avatar className="size-20 sm:size-24 md:size-28 lg:h-32 lg:w-32 ring-4 ring-primary/20">
-              {user?.avatar_url && (
-                <AvatarImage src={user.avatar_url} alt={fullName} />
+              {avatarSrc && (
+                <AvatarImage src={avatarSrc} alt={fullName} />
               )}
               <AvatarFallback className="text-lg sm:text-xl font-semibold bg-primary/10 text-primary">
                 {initials}

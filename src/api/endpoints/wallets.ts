@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import api from '../client';
+import type { TransactionItem } from '@/types/history';
 
 export interface ApiWallet {
   id: string;
@@ -16,11 +17,12 @@ export interface ApiWallet {
   transaction_count: number;
   total_income: string;
   total_expense: string;
+  recent_activity?: TransactionItem[];
 }
 
-export interface WalletBalance {
-  total_balance: string;
-  wallet_count: number;
+export interface WalletsApiData {
+  wallets: ApiWallet[];
+  recent_activity: TransactionItem[];
 }
 
 export interface CreateWalletPayload {
@@ -42,10 +44,18 @@ export interface UpdateWalletPayload {
   is_default?: boolean;
 }
 
+export interface TransferWalletPayload {
+  from_wallet_id: string;
+  to_wallet_id: string;
+  amount: number;
+  date: string;
+  notes?: string;
+}
+
 interface WalletsResponse {
   success: boolean;
   message: string;
-  data: ApiWallet[];
+  data: WalletsApiData;
 }
 
 interface WalletResponse {
@@ -54,20 +64,18 @@ interface WalletResponse {
   data: ApiWallet;
 }
 
-interface BalanceResponse {
-  success: boolean;
-  message: string;
-  data: WalletBalance;
-}
-
 export const walletsApi = {
-  async getAll(): Promise<ApiWallet[]> {
+  async getAll(): Promise<WalletsApiData> {
     const { data } = await api.get<WalletsResponse>('/wallets');
-    return data.data;
+    const raw = data.data;
+    return {
+      wallets: Array.isArray(raw?.wallets) ? raw.wallets : [],
+      recent_activity: Array.isArray(raw?.recent_activity) ? raw.recent_activity : [],
+    };
   },
 
-  async getBalance(): Promise<WalletBalance> {
-    const { data } = await api.get<BalanceResponse>('/wallets/balance');
+  async getById(id: string): Promise<ApiWallet> {
+    const { data } = await api.get<WalletResponse>(`/wallets/${id}`);
     return data.data;
   },
 
@@ -83,5 +91,9 @@ export const walletsApi = {
 
   async delete(id: string): Promise<void> {
     await api.delete(`/wallets/${id}`);
+  },
+
+  async transfer(payload: TransferWalletPayload): Promise<void> {
+    await api.post('/wallets/transfer', payload);
   },
 };

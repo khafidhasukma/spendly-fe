@@ -10,14 +10,14 @@ export interface WealthGrowthProps {
   data?: BarData[];
 }
 
-// category icon is an emoji string from the API
+// category icon is a PascalCase Lucide icon name from the API (e.g. "Shirt", "UtensilsCrossed")
 export interface DisplayTransaction {
   id: string;
   merchant: string;
   datetime: string;
   amount: number;
   categoryName: string;
-  categoryEmoji: string;
+  categoryIcon: string;   // Lucide icon name
   categoryColor: string;
   type: string;
 }
@@ -100,11 +100,21 @@ export interface DashboardWealthPoint {
   net: string;
 }
 
+export interface DashboardCategory {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+  type: string;
+  is_system: boolean;
+}
+
 export interface DashboardApiData {
   balance: DashboardBalance;
   recent_transactions: DashboardTransaction[];
   budgets: DashboardBudget[];
   wealth_growth: DashboardWealthPoint[];
+  categories?: DashboardCategory[];
 }
 
 export interface DashboardApiResponse {

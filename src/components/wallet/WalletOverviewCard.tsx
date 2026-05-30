@@ -1,9 +1,8 @@
 import { ArrowDownLeft, ArrowUpRight, Wallet } from 'lucide-react';
 import { formatRupiah } from '@/utils';
-import type { ApiWallet, WalletBalance } from '@/api/endpoints/wallets';
+import type { ApiWallet } from '@/api/endpoints/wallets';
 
 interface WalletOverviewCardProps {
-  balance?: WalletBalance;
   wallets?: ApiWallet[];
   isLoading?: boolean;
 }
@@ -12,10 +11,11 @@ const Skeleton = ({ className }: { className?: string }) => (
   <div className={`animate-pulse rounded bg-white/20 ${className}`} />
 );
 
-const WalletOverviewCard = ({ balance, wallets = [], isLoading = false }: WalletOverviewCardProps) => {
-  const totalBalance = balance ? parseFloat(balance.total_balance) : 0;
-  const totalIncome = wallets.reduce((s, w) => s + parseFloat(w.total_income), 0);
-  const totalExpense = wallets.reduce((s, w) => s + parseFloat(w.total_expense), 0);
+const WalletOverviewCard = ({ wallets = [], isLoading = false }: WalletOverviewCardProps) => {
+  const safe = Array.isArray(wallets) ? wallets : [];
+  const totalBalance = safe.reduce((s, w) => s + parseFloat(w.balance), 0);
+  const totalIncome = safe.reduce((s, w) => s + parseFloat(w.total_income), 0);
+  const totalExpense = safe.reduce((s, w) => s + parseFloat(w.total_expense), 0);
 
   return (
     <div className="relative overflow-hidden rounded-2xl bg-primary p-5 text-white sm:p-6 md:p-8">
@@ -38,7 +38,7 @@ const WalletOverviewCard = ({ balance, wallets = [], isLoading = false }: Wallet
             {formatRupiah(totalBalance)}
           </h2>
           <p className="mt-1 text-sm text-white/70">
-            Combined balance from {balance?.wallet_count ?? wallets.length} wallet{(balance?.wallet_count ?? wallets.length) !== 1 ? 's' : ''}
+            Combined balance from {safe.length} wallet{safe.length !== 1 ? 's' : ''}
           </p>
         </>
       )}

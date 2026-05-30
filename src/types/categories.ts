@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 
+// legacy type kept for backward compat — prefer ApiCategory from api/endpoints/categories
 export interface Category {
   id: string;
   name: string;

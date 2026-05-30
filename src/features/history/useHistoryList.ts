@@ -2,29 +2,30 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { transactionsApi } from '@/api';
+import { moment } from '@/utils';
 import type { TransactionItem, TransactionPagination, HistoryFiltersValue } from '@/types';
 
 const PAGE_SIZE = 10;
 const DEBOUNCE_MS = 500;
 
-const dateRangeToParams = (range: string): { date_from?: string; date_to?: string } => {
+const dateRangeToParams = (range: string): { ['date_from']?: string; ['date_to']?: string } => {
   const now = new Date();
   const pad = (n: number) => String(n).padStart(2, '0');
   const fmt = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   const today = fmt(now);
 
   switch (range) {
-    case 'last-7': { const f = new Date(now); f.setDate(f.getDate() - 7); return { date_from: fmt(f), date_to: today }; }
-    case 'last-30': { const f = new Date(now); f.setDate(f.getDate() - 30); return { date_from: fmt(f), date_to: today }; }
-    case 'last-90': { const f = new Date(now); f.setDate(f.getDate() - 90); return { date_from: fmt(f), date_to: today }; }
-    case 'this-month': return { date_from: fmt(new Date(now.getFullYear(), now.getMonth(), 1)), date_to: today };
-    case 'last-month': {
-      const first = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-      const last = new Date(now.getFullYear(), now.getMonth(), 0);
-      return { date_from: fmt(first), date_to: fmt(last) };
-    }
-    case 'this-year': return { date_from: fmt(new Date(now.getFullYear(), 0, 1)), date_to: today };
-    default: return {};
+  case 'last-7': { const f = new Date(now); f.setDate(f.getDate() - 7); return { ['date_from']: fmt(f), ['date_to']: today }; }
+  case 'last-30': { const f = new Date(now); f.setDate(f.getDate() - 30); return { ['date_from']: fmt(f), ['date_to']: today }; }
+  case 'last-90': { const f = new Date(now); f.setDate(f.getDate() - 90); return { ['date_from']: fmt(f), ['date_to']: today }; }
+  case 'this-month': return { ['date_from']: fmt(new Date(now.getFullYear(), now.getMonth(), 1)), ['date_to']: today };
+  case 'last-month': {
+    const first = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const last = new Date(now.getFullYear(), now.getMonth(), 0);
+    return { ['date_from']: fmt(first), ['date_to']: fmt(last) };
+  }
+  case 'this-year': return { ['date_from']: fmt(new Date(now.getFullYear(), 0, 1)), ['date_to']: today };
+  default: return {};
   }
 };
 
@@ -54,6 +55,7 @@ const useHistoryList = () => {
   const [formOpen, setFormOpen] = useState(false);
   const [formMode, setFormMode] = useState<'add' | 'edit'>('add');
   const [editTarget, setEditTarget] = useState<TransactionItem | undefined>();
+  const [isExporting, setIsExporting] = useState(false);
 
   // Sync state → URL
   useEffect(() => {
@@ -78,9 +80,9 @@ const useHistoryList = () => {
         limit: PAGE_SIZE,
         sort: 'date',
         order: 'DESC',
-        category_id: f.category !== 'all' ? f.category : undefined,
-        amount_min: f.amountMin ? Number(f.amountMin) : undefined,
-        amount_max: f.amountMax ? Number(f.amountMax) : undefined,
+        ['category_id']: f.category !== 'all' ? f.category : undefined,
+        ['amount_min']: f.amountMin ? Number(f.amountMin) : undefined,
+        ['amount_max']: f.amountMax ? Number(f.amountMax) : undefined,
         ...dateParams,
       });
       setTransactions(result.data);
@@ -163,6 +165,33 @@ const useHistoryList = () => {
     if (!open) setDeleteTarget(undefined);
   }, []);
 
+  // export all matching transactions as CSV via backend endpoint
+  const exportCsv = useCallback(async () => {
+    setIsExporting(true);
+    try {
+      const dateParams = dateRangeToParams(filters.dateRange);
+      const blob = await transactionsApi.exportCsv({
+        ['category_id']: filters.category !== 'all' ? filters.category : undefined,
+        ['amount_min']: filters.amountMin ? Number(filters.amountMin) : undefined,
+        ['amount_max']: filters.amountMax ? Number(filters.amountMax) : undefined,
+        ...dateParams,
+      });
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `transactions-${moment().format('YYYY-MM-DD')}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      toast.success('Transactions exported');
+    } catch {
+      toast.error('Failed to export transactions');
+    } finally {
+      setIsExporting(false);
+    }
+  }, [filters]);
+
   return {
     transactions,
     isLoading,
@@ -189,6 +218,8 @@ const useHistoryList = () => {
     onDeleteDialogOpenChange,
     requestDelete,
     confirmDelete,
+    exportCsv,
+    isExporting,
   };
 };
 

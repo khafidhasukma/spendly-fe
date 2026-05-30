@@ -96,9 +96,9 @@ export function toDisplayTransactions(
       ? -Math.abs(parseFloat(tx.amount))
       : Math.abs(parseFloat(tx.amount)),
     categoryName: tx.category_name?.toUpperCase() ?? tx.type.toUpperCase(),
-    categoryEmoji: tx.category_icon ?? '💳',
+    categoryIcon: tx.category_icon ?? 'LayoutGrid',
     categoryColor: tx.category_color ?? '#6B7280',
-    type: tx.type
+    type: tx.type,
   }));
 }
 

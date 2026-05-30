@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { formatRupiah, formatDate } from '@/utils';
+import { getIconByName, hexTint } from '@/lib/category-icons';
 import type { TransactionItem } from '@/types';
 
 type Props = {
@@ -39,15 +40,16 @@ const HistoryTableDesktop = ({ transactions, onView, onEdit, onDelete }: Props) 
           {transactions.map((tx) => {
             const amount = parseFloat(tx.amount);
             const isExpense = tx.type === 'expense';
+            const Icon = getIconByName(tx.category_icon);
             return (
               <tr key={tx.id} className="transition-colors hover:bg-muted/30">
                 <td className="px-4 py-4 sm:px-6">
                   <div className="flex items-center gap-3">
                     <div
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-base"
-                      style={{ backgroundColor: `${tx.category_color}20` }}
+                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
+                      style={{ backgroundColor: hexTint(tx.category_color) }}
                     >
-                      {tx.category_icon}
+                      <Icon className="h-4 w-4" style={{ color: tx.category_color }} />
                     </div>
                     <div className="min-w-0">
                       <p className="font-medium text-sm text-foreground">{tx.merchant_name}</p>

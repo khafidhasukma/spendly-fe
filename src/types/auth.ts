@@ -28,6 +28,7 @@ export interface UserProfile {
   email_summaries: boolean;
   security_alerts: boolean;
   spending_alerts: boolean;
+  spending_alert_pct?: number;
   dark_mode: boolean;
   currency: string;
 }

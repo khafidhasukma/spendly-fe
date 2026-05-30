@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import { formatRupiah, formatDate } from '@/utils';
+import { getIconByName, hexTint } from '@/lib/category-icons';
 import type { TransactionItem } from '@/types';
 
 type Props = {
@@ -27,14 +28,15 @@ const HistoryTableMobile = ({ groups, onView, onEdit, onDelete }: Props) => {
             {txs.map((tx) => {
               const amount = parseFloat(tx.amount);
               const isExpense = tx.type === 'expense';
+              const Icon = getIconByName(tx.category_icon);
               return (
                 <Card key={tx.id} className="gap-0 py-0 rounded-lg">
                   <CardContent className="flex items-start gap-2.5 p-3.5 sm:gap-3 sm:p-4">
                     <div
-                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-base"
-                      style={{ backgroundColor: `${tx.category_color}20` }}
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md"
+                      style={{ backgroundColor: hexTint(tx.category_color) }}
                     >
-                      {tx.category_icon}
+                      <Icon className="h-4 w-4" style={{ color: tx.category_color }} />
                     </div>
                     <div className="min-w-0 flex-1 space-y-1.5">
                       <div className="flex items-start justify-between gap-2">
