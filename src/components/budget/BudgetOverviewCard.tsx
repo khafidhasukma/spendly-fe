@@ -43,9 +43,6 @@ const BudgetOverviewCard = ({ summary, isLoading = false }: BudgetOverviewCardPr
           <h2 className="mt-2 text-2xl font-bold font-manrope sm:text-3xl md:text-4xl">
             {formatRupiah(totalLimit)}
           </h2>
-          <p className="mt-1 text-xs text-white/70 sm:text-sm">
-            Total budget limit across {summary?.total_budgets ?? 0} categories
-          </p>
         </>
       )}
 

@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -14,7 +15,6 @@ const ResetPasswordForm = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  // Token and email are passed via navigation state from ForgotPasswordForm
   const token = (location.state as { token?: string; email?: string } | null)?.token ?? '';
   const email = (location.state as { token?: string; email?: string } | null)?.email ?? '';
 

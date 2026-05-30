@@ -12,7 +12,7 @@ const BudgetSettingsCard = () => {
   return (
     <div className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5 md:p-6">
       {/* header */}
-      <div className="mb-5 sm:mb-6 md:mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-5 sm:mb-6 md:mb-8 flex gap-3 items-center justify-between">
         <div className="flex items-center gap-3 sm:gap-4">
           <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-md bg-secondary/10">
             <Wallet className="h-4 w-4 sm:h-5 sm:w-5 text-secondary" />
@@ -23,7 +23,7 @@ const BudgetSettingsCard = () => {
           onClick={() => navigate('/budget')}
           className="flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-primary/80"
         >
-          View Detailed Budgeting
+          View
           <ArrowRight className="h-3.5 w-3.5" />
         </button>
       </div>

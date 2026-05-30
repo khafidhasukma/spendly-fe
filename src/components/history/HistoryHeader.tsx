@@ -14,18 +14,18 @@ const HistoryHeader = ({ onAdd, onExport, isExporting = false }: Props) => {
       title="Transaction History"
       description="Review and manage your detailed spending logs across all accounts."
       action={
-        <div className="flex w-full gap-2 sm:justify-end">
+        <div className="flex w-full gap-2 max-sm:grid max-sm:grid-cols-2 sm:justify-end">
           <Button
             variant="outline"
             size="sm"
-            className="h-10 gap-2 sm:h-9"
+            className="h-10 gap-2 sm:h-9 max-sm:w-full px-5!"
             onClick={onExport}
             disabled={isExporting}
           >
             <Download className="h-4 w-4 shrink-0" />
-            <span>{isExporting ? 'Exporting...' : 'CSV'}</span>
+            <span>{isExporting ? 'Exporting...' : 'Export CSV'}</span>
           </Button>
-          <Button size="sm" className="h-10 gap-2 sm:h-9" onClick={onAdd}>
+          <Button size="sm" className="h-10 gap-2 sm:h-9 max-sm:w-full" onClick={onAdd}>
             <Plus className="h-4 w-4 shrink-0" />
             <span>Add Transaction</span>
           </Button>
