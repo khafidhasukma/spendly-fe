@@ -40,16 +40,19 @@ const HistoryTableDesktop = ({ transactions, onView, onEdit, onDelete }: Props) 
           {transactions.map((tx) => {
             const amount = parseFloat(tx.amount);
             const isExpense = tx.type === 'expense';
-            const Icon = getIconByName(tx.category_icon);
+            const isTransfer = tx.type === 'transfer';
+            const Icon = getIconByName(isTransfer ? 'ArrowLeftRight' : tx.category_icon);
+            const displayColor = isTransfer ? '#3B82F6' : (tx.category_color ?? '#6B7280');
+            const displayCategory = isTransfer ? 'Transfer' : tx.category_name;
             return (
               <tr key={tx.id} className="transition-colors hover:bg-muted/30">
                 <td className="px-4 py-4 sm:px-6">
                   <div className="flex items-center gap-3">
                     <div
                       className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
-                      style={{ backgroundColor: hexTint(tx.category_color) }}
+                      style={{ backgroundColor: hexTint(displayColor) }}
                     >
-                      <Icon className="h-4 w-4" style={{ color: tx.category_color }} />
+                      <Icon className="h-4 w-4" style={{ color: displayColor }} />
                     </div>
                     <div className="min-w-0">
                       <p className="font-medium text-sm text-foreground">{tx.merchant_name}</p>
@@ -62,12 +65,12 @@ const HistoryTableDesktop = ({ transactions, onView, onEdit, onDelete }: Props) 
                   <Badge
                     className="font-medium"
                     style={{
-                      backgroundColor: `${tx.category_color}20`,
-                      color: tx.category_color,
-                      borderColor: `${tx.category_color}40`,
+                      backgroundColor: `${displayColor}20`,
+                      color: displayColor,
+                      borderColor: `${displayColor}40`,
                     }}
                   >
-                    {tx.category_name}
+                    {displayCategory}
                   </Badge>
                 </td>
 
@@ -78,10 +81,11 @@ const HistoryTableDesktop = ({ transactions, onView, onEdit, onDelete }: Props) 
                 <td
                   className={cn(
                     'px-4 py-4 text-right text-sm font-semibold tabular-nums sm:px-6',
-                    isExpense ? 'text-destructive' : 'text-green-600 dark:text-green-400',
+                    isTransfer ? 'text-blue-600 dark:text-blue-400'
+                      : isExpense ? 'text-destructive' : 'text-green-600 dark:text-green-400',
                   )}
                 >
-                  {isExpense ? '-' : '+'}{formatRupiah(amount)}
+                  {isExpense ? '-' : isTransfer ? '' : '+'}{formatRupiah(amount)}
                 </td>
 
                 <td className="px-4 py-4 sm:px-6">

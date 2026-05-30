@@ -60,7 +60,7 @@ const HistoryViewDialog = ({ open, onOpenChange, transaction }: Props) => {
                   isExpense ? 'text-destructive' : 'text-green-600 dark:text-green-400',
                 )}
               >
-                {isExpense ? '-' : '+'}Rp{formatRupiah(amount)}
+                {isExpense ? '-' : '+'}{formatRupiah(amount)}
               </p>
             </div>
           </div>
@@ -108,7 +108,7 @@ const HistoryViewDialog = ({ open, onOpenChange, transaction }: Props) => {
                     isExpense ? 'text-destructive' : 'text-green-600 dark:text-green-400',
                   )}
                 >
-                  {isExpense ? '-' : '+'}Rp{formatRupiah(amount)}
+                  {isExpense ? '-' : '+'}{formatRupiah(amount)}
                 </span>
               }
             />

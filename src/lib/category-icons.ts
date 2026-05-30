@@ -33,6 +33,7 @@ import {
   Banknote,
   Building2,
   Sparkles,
+  ArrowLeftRight,
   type LucideIcon,
 } from 'lucide-react';
 import type { CategoryIconOption, ColorOption } from '@/types';
@@ -73,6 +74,7 @@ export const ICON_OPTIONS: CategoryIconOption[] = [
   { id: 'CreditCard',      label: 'Card',          icon: CreditCard     },
   { id: 'Banknote',        label: 'Cash',          icon: Banknote       },
   { id: 'Building2',       label: 'Office',        icon: Building2      },
+  { id: 'ArrowLeftRight',  label: 'Transfer',      icon: ArrowLeftRight },
 ];
 
 // fast lookup by PascalCase name (as returned by the API)

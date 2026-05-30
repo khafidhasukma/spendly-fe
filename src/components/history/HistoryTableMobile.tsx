@@ -28,15 +28,18 @@ const HistoryTableMobile = ({ groups, onView, onEdit, onDelete }: Props) => {
             {txs.map((tx) => {
               const amount = parseFloat(tx.amount);
               const isExpense = tx.type === 'expense';
-              const Icon = getIconByName(tx.category_icon);
+              const isTransfer = tx.type === 'transfer';
+              const Icon = getIconByName(isTransfer ? 'ArrowLeftRight' : tx.category_icon);
+              const displayColor = isTransfer ? '#3B82F6' : (tx.category_color ?? '#6B7280');
+              const displayCategory = isTransfer ? 'Transfer' : tx.category_name;
               return (
                 <Card key={tx.id} className="gap-0 py-0 rounded-lg">
                   <CardContent className="flex items-start gap-2.5 p-3.5 sm:gap-3 sm:p-4">
                     <div
                       className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md"
-                      style={{ backgroundColor: hexTint(tx.category_color) }}
+                      style={{ backgroundColor: hexTint(displayColor) }}
                     >
-                      <Icon className="h-4 w-4" style={{ color: tx.category_color }} />
+                      <Icon className="h-4 w-4" style={{ color: displayColor }} />
                     </div>
                     <div className="min-w-0 flex-1 space-y-1.5">
                       <div className="flex items-start justify-between gap-2">
@@ -46,14 +49,15 @@ const HistoryTableMobile = ({ groups, onView, onEdit, onDelete }: Props) => {
                         <span
                           className={cn(
                             'shrink-0 text-sm tabular-nums',
-                            isExpense ? 'text-destructive' : 'text-green-600 dark:text-green-400',
+                            isTransfer ? 'text-blue-600 dark:text-blue-400'
+                              : isExpense ? 'text-destructive' : 'text-green-600 dark:text-green-400',
                           )}
                         >
-                          {isExpense ? '-' : '+'}Rp{formatRupiah(amount)}
+                          {isExpense ? '-' : isTransfer ? '' : '+'}{formatRupiah(amount)}
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        <span>{tx.category_name}</span>
+                        <span>{displayCategory}</span>
                         <span className="mx-1.5 opacity-60">•</span>
                         <span>{formatDate(tx.date)}</span>
                       </p>

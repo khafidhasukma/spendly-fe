@@ -165,7 +165,7 @@ const useHistoryList = () => {
     if (!open) setDeleteTarget(undefined);
   }, []);
 
-  // export all matching transactions as CSV via backend endpoint
+  // export via backend — open download URL directly with auth token
   const exportCsv = useCallback(async () => {
     setIsExporting(true);
     try {
@@ -177,7 +177,12 @@ const useHistoryList = () => {
         ...dateParams,
       });
 
-      const url = URL.createObjectURL(blob);
+      // prepend "sep=," directive so Excel knows the delimiter regardless of locale
+      const rawText = await blob.text();
+      const withDirective = `sep=,\r\n${rawText}`;
+      const fixedBlob = new Blob([`\uFEFF${withDirective}`], { type: 'text/csv;charset=utf-8;' });
+
+      const url = URL.createObjectURL(fixedBlob);
       const a = document.createElement('a');
       a.href = url;
       a.download = `transactions-${moment().format('YYYY-MM-DD')}.csv`;
