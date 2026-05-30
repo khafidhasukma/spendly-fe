@@ -23,6 +23,7 @@ import ForgotPasswordPage from './pages/forgot-password';
 import BudgetPage from './pages/budget';
 import WalletPage from './pages/wallet';
 import NotFoundPage from './pages/not-found';
+import ResetPasswordPage from './pages/reset-password';
 
 const App = () => {
   return (
@@ -57,6 +58,7 @@ const App = () => {
               <Route path="login" element={<LoginPage />} />
               <Route path="register" element={<RegisterPage />} />
               <Route path="forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="reset-password" element={<ResetPasswordPage />} />
             </Route>
 
             <Route path="*" element={<NotFoundPage />} />

@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { Mail } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { GroupInput } from '@/components/forms';
 import { useForm } from '@/hooks/useForm';
 import { forgotPasswordSchema, type ForgotPasswordFormData } from '@/lib/validations/auth';
+import { authApi } from '@/api/endpoints/auth';
 
 const ForgotPasswordForm = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
 
   const form = useForm<ForgotPasswordFormData>({
     schema: forgotPasswordSchema,
@@ -23,35 +24,23 @@ const ForgotPasswordForm = () => {
 
     setLoading(true);
     try {
-      // TODO: integrate when backend supports forgot-password endpoint
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setSent(true);
+      const res = await authApi.forgotPassword({ email: data.email });
       toast.success('Reset link sent', {
-        description: `We've sent a password reset link to ${data.email}.`,
+        description: res.message,
       });
+      // Redirect to reset-password page, passing the token via state
+      navigate('/reset-password', {
+        state: { token: res.data.reset_token, email: data.email },
+      });
+    } catch (err: unknown) {
+      const message =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+        'Something went wrong. Please try again.';
+      toast.error(message);
     } finally {
       setLoading(false);
     }
   };
-
-  if (sent) {
-    return (
-      <>
-        <h1 className="text-2xl font-bold text-foreground font-manrope">Check Your Email</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          We&apos;ve sent a password reset link to <strong>{form.values.email}</strong>. Please check your inbox.
-        </p>
-        <div className="mt-8">
-          <Link
-            to="/login"
-            className="inline-flex w-full justify-center rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
-          >
-            Back to Sign In
-          </Link>
-        </div>
-      </>
-    );
-  }
 
   return (
     <>

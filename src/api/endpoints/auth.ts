@@ -10,6 +10,10 @@ import type {
   UpdatePreferencesPayload,
   AuthResponse,
   ProfileResponse,
+  ForgotPasswordPayload,
+  ForgotPasswordResponse,
+  ResetPasswordPayload,
+  ResetPasswordResponse,
 } from '@/types/auth';
 
 export const authApi = {
@@ -59,5 +63,15 @@ export const authApi = {
 
   async updatePreferences(payload: UpdatePreferencesPayload): Promise<void> {
     await api.put('/auth/me/preferences', payload);
+  },
+
+  async forgotPassword(payload: ForgotPasswordPayload): Promise<ForgotPasswordResponse> {
+    const { data } = await api.post<ForgotPasswordResponse>('/auth/forgot-password', payload);
+    return data;
+  },
+
+  async resetPassword(payload: ResetPasswordPayload): Promise<ResetPasswordResponse> {
+    const { data } = await api.post<ResetPasswordResponse>('/auth/reset-password', payload);
+    return data;
   },
 };

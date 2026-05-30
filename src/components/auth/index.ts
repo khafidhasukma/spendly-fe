@@ -6,6 +6,7 @@ import AuthStepIndicator from './AuthStepIndicator';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import ForgotPasswordForm from './ForgotPasswordForm';
+import ResetPasswordForm from './ResetPasswordForm';
 export { ProtectedRoute } from './ProtectedRoute';
 export { GuestRoute } from './GuestRoute';
 
@@ -17,5 +18,6 @@ export {
   AuthStepIndicator,
   LoginForm,
   RegisterForm,
-  ForgotPasswordForm
+  ForgotPasswordForm,
+  ResetPasswordForm,
 };
