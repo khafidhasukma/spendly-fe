@@ -51,10 +51,10 @@ const WalletRecentActivity = ({ activities = [], isLoading = false }: WalletRece
                   >
                     {iconComponent}
                   </div>
-                  <div>
+                  <div className='space-y-1'>
                     <p className="text-sm font-medium text-foreground">{tx.merchant_name}</p>
                     <p className="text-xs text-muted-foreground">
-                      {tx.category_name} • {formatDate(tx.date)}
+                      {tx.type == 'transfer' ? 'Transfer' : tx.category_name} • {formatDate(tx.date)}
                     </p>
                   </div>
                 </div>

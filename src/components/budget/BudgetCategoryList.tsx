@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+import React from 'react';
 import {
   MoreHorizontal,
   Pencil,
@@ -13,6 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { formatRupiah } from '@/utils';
+import { getIconByName, hexTint } from '@/lib/category-icons';
 
 interface BudgetCategoryListProps {
   budgets?: BudgetItem[];
@@ -51,15 +53,20 @@ const BudgetCategoryItemCard = ({
       ? 'text-secondary'
       : 'text-muted-foreground';
 
+  const iconEl = React.createElement(getIconByName(category_icon), {
+    className: 'size-5',
+    style: { color: category_color ?? '#6B7280' },
+  });
+
   return (
     <div className="rounded-xl border border-border bg-card p-4 shadow-sm transition-shadow hover:shadow-md sm:p-5">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <div
-            className="flex size-10 items-center justify-center rounded-lg text-lg sm:size-11"
-            style={{ backgroundColor: `${category_color}20` }}
+            className="flex size-10 items-center justify-center rounded-lg sm:size-11"
+            style={{ backgroundColor: hexTint(category_color) }}
           >
-            {category_icon}
+            {iconEl}
           </div>
           <div>
             <p className="text-sm font-semibold text-foreground sm:text-base">{name}</p>

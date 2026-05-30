@@ -24,7 +24,7 @@ const WalletOverviewCard = ({ wallets = [], isLoading = false }: WalletOverviewC
       </div>
 
       <p className="text-xs font-semibold uppercase tracking-widest text-white/70">
-        Total Balance (All Wallets)
+        Total Balance
       </p>
 
       {isLoading ? (
@@ -37,9 +37,6 @@ const WalletOverviewCard = ({ wallets = [], isLoading = false }: WalletOverviewC
           <h2 className="mt-2 text-3xl font-bold font-manrope sm:text-4xl lg:text-5xl">
             {formatRupiah(totalBalance)}
           </h2>
-          <p className="mt-1 text-sm text-white/70">
-            Combined balance from {safe.length} wallet{safe.length !== 1 ? 's' : ''}
-          </p>
         </>
       )}
 
