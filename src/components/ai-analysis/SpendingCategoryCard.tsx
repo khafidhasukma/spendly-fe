@@ -1,71 +1,49 @@
 import { useState, useRef } from 'react';
-import {
-  Zap,
-  UtensilsCrossed,
-  ShoppingBag,
-  Car,
-  Home,
-  HeartPulse,
-} from 'lucide-react';
-import type { CategoryItem } from '@/types/ai-analysis';
 import { formatRupiah } from '@/utils';
+import { getIconByName } from '@/lib/category-icons';
+import React from 'react';
+import type { SpendingCluster } from '@/api/endpoints/analysis';
 
-const categoryBreakdown: CategoryItem[] = [
-  { name: 'Lifestyle & Dining', amount: 1_850_000, pct: 35, color: '#10B981', tag: 'Frequent', icon: UtensilsCrossed },
-  { name: 'Commute & Travel', amount: 750_000, pct: 18, color: '#76BC43', tag: 'Routine', icon: Car },
-  { name: 'Retail Therapy', amount: 1_200_000, pct: 12, color: '#F48221', tag: 'Outliers', icon: ShoppingBag },
-  { name: 'Household', amount: 650_000, pct: 15, color: '#3B82F6', tag: 'Essential', icon: Home },
-  { name: 'Health & Wellness', amount: 500_000, pct: 11, color: '#EF4444', tag: 'Priority', icon: HeartPulse },
-  { name: 'Others', amount: 350_000, pct: 9, color: '#6B7280', tag: 'Misc', icon: Zap },
-];
+interface SpendingCategoryCardProps {
+  clusters?: SpendingCluster[];
+  loading?: boolean;
+}
 
-const DonutChart = () => {
-  const [hoveredSegment, setHoveredSegment] = useState<string | null>(null);
+interface Segment {
+  name: string;
+  color: string;
+  pct: number;
+  amount: number;
+  startPercent: number;
+  segLength: number;
+  offset: number;
+}
+
+const DonutChart = ({ segments, total }: { segments: Segment[]; total: number }) => {
+  const [hoveredName, setHoveredName] = useState<string | null>(null);
   const [tooltipPos, setTooltipPos] = useState<{ x: number; y: number } | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 
-  const total = categoryBreakdown.reduce((s, c) => s + c.pct, 0);
   const radius = 40;
   const circumference = 2 * Math.PI * radius;
-
-  const segments = categoryBreakdown.reduce<
-    Array<CategoryItem & { startPercent: number; segLength: number; offset: number }>
-  >((acc, cat) => {
-    const prevPercent = acc.length > 0 ? acc[acc.length - 1].startPercent + acc[acc.length - 1].pct / total : 0;
-    const segLength = (cat.pct / total) * circumference;
-    const offset = circumference - (prevPercent * circumference);
-    acc.push({ ...cat, startPercent: prevPercent, segLength, offset });
-    return acc;
-  }, []);
+  const hoveredSeg = segments.find((s) => s.name === hoveredName);
 
   const handleMouseMove = (e: React.MouseEvent<SVGCircleElement>, name: string) => {
     if (svgRef.current) {
       const rect = svgRef.current.getBoundingClientRect();
-      setTooltipPos({
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top - 40,
-      });
+      setTooltipPos({ x: e.clientX - rect.left, y: e.clientY - rect.top - 40 });
     }
-    setHoveredSegment(name);
+    setHoveredName(name);
   };
-
-  const hoveredCat = categoryBreakdown.find((c) => c.name === hoveredSegment);
 
   return (
     <div className="relative w-full flex justify-center">
       <div className="relative w-48 h-48 sm:w-56 sm:h-56">
-        <svg
-          ref={svgRef}
-          viewBox="0 0 100 100"
-          className="w-full h-full"
-          style={{ overflow: 'visible' }}
-        >
+        <svg ref={svgRef} viewBox="0 0 100 100" className="w-full h-full" style={{ overflow: 'visible' }}>
           {segments.map((seg) => (
             <circle
               key={seg.name}
-              cx="50"
-              cy="50"
-              r={radius}
+              cx="50" cy="50" r={radius}
               fill="none"
               stroke={seg.color}
               strokeWidth="14"
@@ -73,38 +51,33 @@ const DonutChart = () => {
               strokeDashoffset={seg.offset}
               transform="rotate(-90 50 50)"
               className="cursor-pointer transition-opacity duration-200"
-              style={{
-                opacity: hoveredSegment && hoveredSegment !== seg.name ? 0.3 : 1,
-              }}
+              style={{ opacity: hoveredName && hoveredName !== seg.name ? 0.3 : 1 }}
               onMouseMove={(e) => handleMouseMove(e, seg.name)}
-              onMouseLeave={() => {
-                setHoveredSegment(null);
-                setTooltipPos(null);
-              }}
+              onMouseLeave={() => { setHoveredName(null); setTooltipPos(null); }}
             />
           ))}
         </svg>
 
         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-          {hoveredSegment && hoveredCat ? (
+          {hoveredSeg ? (
             <>
-              <p className="text-[11px] text-muted-foreground leading-tight text-center px-4">{hoveredCat.name}</p>
-              <p className="text-lg font-bold text-foreground font-manrope">{hoveredCat.pct}%</p>
+              <p className="text-[11px] text-muted-foreground leading-tight text-center px-4">{hoveredSeg.name}</p>
+              <p className="text-lg font-bold text-foreground font-manrope">{hoveredSeg.pct.toFixed(1)}%</p>
             </>
           ) : (
             <>
               <p className="text-[11px] text-muted-foreground">Total Expense</p>
-              <p className="text-lg font-bold text-foreground font-manrope sm:text-xl">Rp5.3M</p>
+              <p className="text-lg font-bold text-foreground font-manrope sm:text-xl">{formatRupiah(total)}</p>
             </>
           )}
         </div>
 
-        {hoveredSegment && tooltipPos && hoveredCat && (
+        {hoveredName && tooltipPos && hoveredSeg && (
           <div
             className="absolute z-30 pointer-events-none whitespace-nowrap rounded-lg bg-foreground px-3 py-1.5 text-xs font-medium text-background shadow-lg"
             style={{ left: tooltipPos.x, top: tooltipPos.y, transform: 'translateX(-50%)' }}
           >
-            {hoveredCat.name}: {formatRupiah(hoveredCat.amount)}
+            {hoveredSeg.name}: {formatRupiah(hoveredSeg.amount)}
           </div>
         )}
       </div>
@@ -112,7 +85,27 @@ const DonutChart = () => {
   );
 };
 
-const SpendingCategoryCard = () => {
+const SpendingCategoryCard = ({ clusters = [], loading = false }: SpendingCategoryCardProps) => {
+  const total = clusters.reduce((s, c) => s + parseFloat(c.total), 0);
+  const circumference = 2 * Math.PI * 40;
+
+  const segments: Segment[] = clusters.reduce<Segment[]>((acc, c) => {
+    const pct = parseFloat(c.pct_of_total);
+    const prevPct = acc.length > 0 ? acc[acc.length - 1].startPercent + acc[acc.length - 1].pct : 0;
+    const segLength = (pct / 100) * circumference;
+    const offset = circumference - (prevPct / 100) * circumference;
+    acc.push({
+      name: c.name,
+      color: c.color,
+      pct,
+      amount: parseFloat(c.total),
+      startPercent: prevPct,
+      segLength,
+      offset,
+    });
+    return acc;
+  }, []);
+
   return (
     <div className="w-full rounded-2xl border border-border bg-card p-5 sm:p-6">
       <h2 className="text-base font-semibold text-foreground font-manrope sm:text-lg">
@@ -120,25 +113,39 @@ const SpendingCategoryCard = () => {
       </h2>
 
       <div className="mt-5">
-        <DonutChart />
+        {loading ? (
+          <div className="flex items-center justify-center h-48">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary/30 border-t-primary" />
+          </div>
+        ) : clusters.length === 0 ? (
+          <div className="flex items-center justify-center h-48 text-sm text-muted-foreground">
+            No spending data
+          </div>
+        ) : (
+          <DonutChart segments={segments} total={total} />
+        )}
       </div>
 
-      <div className="mt-5 space-y-3">
-        {categoryBreakdown.map((cat) => (
-          <div key={cat.name} className="flex items-center gap-3">
-            <span
-              className="h-2.5 w-2.5 shrink-0 rounded-full"
-              style={{ backgroundColor: cat.color }}
-            />
-            <span className="flex-1 truncate text-sm font-medium text-foreground">{cat.name}</span>
-            <span className="text-sm font-semibold tabular-nums text-foreground">{cat.pct}%</span>
-            <span className="h-1 w-1 shrink-0 rounded-full bg-muted-foreground/40" />
-            <span className="text-sm font-semibold tabular-nums text-foreground w-24 text-right">
-              {formatRupiah(cat.amount)}
-            </span>
-          </div>
-        ))}
-      </div>
+      {!loading && clusters.length > 0 && (
+        <div className="mt-5 space-y-3">
+          {clusters.map((c) => {
+            const icon = getIconByName(c.icon);
+            return (
+              <div key={c.name} className="flex items-center gap-3">
+                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md" style={{ background: `${c.color}22` }}>
+                  {React.createElement(icon, { className: 'h-3.5 w-3.5', style: { color: c.color } })}
+                </span>
+                <span className="flex-1 truncate text-sm font-medium text-foreground">{c.name}</span>
+                <span className="text-sm font-semibold tabular-nums text-foreground">{parseFloat(c.pct_of_total).toFixed(1)}%</span>
+                <span className="h-1 w-1 shrink-0 rounded-full bg-muted-foreground/40" />
+                <span className="text-sm font-semibold tabular-nums text-foreground w-24 text-right">
+                  {formatRupiah(parseFloat(c.total))}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

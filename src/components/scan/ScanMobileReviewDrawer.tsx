@@ -1,17 +1,18 @@
-import { useState } from 'react';
-import { Store, Banknote, CalendarDays, Tag, CreditCard, FileText } from 'lucide-react';
+import { useMemo } from 'react';
+import {
+  Store,
+  Banknote,
+  CalendarDays,
+  FileText,
+  Sparkles,
+  Tag,
+  Loader2,
+} from 'lucide-react';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -21,69 +22,68 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from '@/components/ui/drawer';
-import { formatRupiah } from '@/utils';
-
-interface ReviewData {
-  merchant: string;
-  amount: number;
-  date: string;
-  category: string;
-  paymentMethod: string;
-  confidence: number;
-}
+import IconSelect, { type IconSelectOption } from './IconSelect';
+import { renderCategoryIcon, renderWalletIcon } from './scan-icons';
+import { useScanReview } from './useScanReview';
+import type { ScanResult } from '@/api/endpoints/scans';
 
 interface ScanMobileReviewDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  data: ReviewData;
+  scanId: string;
+  scanResult: ScanResult | null;
   onSave: () => void;
   onRetake: () => void;
 }
 
-const CATEGORIES = [
-  'F&B', 'Shopping', 'Transport', 'Household',
-  'Health', 'Beauty', 'Electricity', 'Groceries', 'Others',
-];
-
-const PAYMENT_METHODS = [
-  'Cash', 'Debit - BCA', 'Debit - Mandiri', 'Credit Card',
-  'GoPay', 'OVO', 'DANA', 'ShopeePay', 'Bank Transfer',
-];
-
-// Strip everything except digits
-const stripNonDigits = (s: string) => s.replace(/\D/g, '');
-
-const INPUT_CLASS = 'h-12 text-sm md:text-base bg-muted/30 border-border';
 const LABEL_CLASS = 'text-sm font-medium text-muted-foreground';
+const INPUT_CLASS = 'h-12 text-sm bg-muted/30 border-border';
 
-const ScanMobileReviewDrawer = ({ open, onOpenChange, data, onSave, onRetake }: ScanMobileReviewDrawerProps) => {
-  const [merchant, setMerchant] = useState(data.merchant);
-  const [amount, setAmount] = useState(data.amount);
-  const [amountDisplay, setAmountDisplay] = useState(
-    data.amount > 0 ? `Rp${formatRupiah(data.amount)}` : '',
+const ScanMobileReviewDrawer = ({
+  open,
+  onOpenChange,
+  scanId,
+  scanResult,
+  onSave,
+  onRetake,
+}: ScanMobileReviewDrawerProps) => {
+  const {
+    form,
+    setField,
+    categories,
+    wallets,
+    loadingMeta,
+    submitting,
+    confidence,
+    handleConfirm,
+  } = useScanReview({ scanId, scanResult, onSaved: onSave });
+
+  const categoryOptions: IconSelectOption[] = useMemo(
+    () => categories.map((cat) => ({
+      id: cat.id,
+      label: cat.name,
+      iconEl: renderCategoryIcon(cat),
+    })),
+    [categories],
   );
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [category, setCategory] = useState(data.category.toLowerCase());
-  const [paymentMethod, setPaymentMethod] = useState(
-    data.paymentMethod.toLowerCase().replace(/\s/g, '-'),
+
+  const walletOptions: IconSelectOption[] = useMemo(
+    () => wallets.map((w) => ({
+      id: w.id,
+      label: w.name,
+      iconEl: renderWalletIcon(w),
+      meta: w.is_default ? '(default)' : undefined,
+    })),
+    [wallets],
   );
-  const [notes, setNotes] = useState('');
+
+  const isFailed = scanResult?.status === 'failed';
+  const suggestedName = scanResult?.suggested_category_name;
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const digits = stripNonDigits(e.target.value);
-    const num = digits === '' ? 0 : parseInt(digits, 10);
-    setAmount(num);
-    setAmountDisplay(num > 0 ? `Rp${formatRupiah(num)}` : '');
-  };
-
-  // On focus: show raw number so user can type freely
-  const handleAmountFocus = () => {
-    setAmountDisplay(amount > 0 ? String(amount) : '');
-  };
-
-  // On blur: reformat back to Rp display
-  const handleAmountBlur = () => {
-    setAmountDisplay(amount > 0 ? `Rp${formatRupiah(amount)}` : '');
+    const raw = e.target.value.replace(/[^\d]/g, '');
+    const num = parseInt(raw, 10);
+    setField('amount', isNaN(num) ? 0 : num);
   };
 
   return (
@@ -92,20 +92,48 @@ const ScanMobileReviewDrawer = ({ open, onOpenChange, data, onSave, onRetake }: 
         {/* Scrollable form area */}
         <div className="flex-1 overflow-y-auto px-5">
           <DrawerHeader className="px-0 pt-2 pb-4">
-            <DrawerTitle className="text-xl font-bold text-primary font-manrope">
-              Review Receipt
-            </DrawerTitle>
+            <div className="flex items-center justify-between">
+              <DrawerTitle className="text-xl font-bold text-primary font-manrope">
+                Review Receipt
+              </DrawerTitle>
+              {!isFailed && (
+                <span className="flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[10px] font-semibold text-primary">
+                  <Sparkles className="h-3 w-3" />
+                  AI {confidence > 0 && `· ${confidence}%`}
+                </span>
+              )}
+            </div>
           </DrawerHeader>
 
           <div className="space-y-4 pb-4">
+            {/* Suggested category banner */}
+            {suggestedName && !isFailed && (
+              <div className="flex items-center gap-3 rounded-lg bg-primary/5 border border-primary/15 p-3">
+                <Tag className="h-4 w-4 text-primary" />
+                <div>
+                  <p className="text-[11px] text-muted-foreground">Smart Suggestion</p>
+                  <p className="text-sm font-semibold text-foreground">{suggestedName}</p>
+                </div>
+              </div>
+            )}
+
+            {isFailed && (
+              <div className="rounded-lg bg-amber-500/10 border border-amber-500/30 p-3">
+                <p className="text-xs text-amber-700 dark:text-amber-400">
+                  AI could not extract data automatically. Please fill in the details manually.
+                </p>
+              </div>
+            )}
+
             {/* Merchant */}
             <div className="space-y-1.5">
               <Label className={LABEL_CLASS}>Merchant Name</Label>
               <div className="relative">
                 <Store className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  value={merchant}
-                  onChange={(e) => setMerchant(e.target.value)}
+                  value={form.merchantName}
+                  onChange={(e) => setField('merchantName', e.target.value)}
+                  placeholder="e.g. Indomaret"
                   className={`pl-9 ${INPUT_CLASS}`}
                 />
               </div>
@@ -113,16 +141,14 @@ const ScanMobileReviewDrawer = ({ open, onOpenChange, data, onSave, onRetake }: 
 
             {/* Amount */}
             <div className="space-y-1.5">
-              <Label className={LABEL_CLASS}>Total Amount</Label>
+              <Label className={LABEL_CLASS}>Total Amount (Rp)</Label>
               <div className="relative">
                 <Banknote className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  value={amountDisplay}
+                  value={form.amount > 0 ? form.amount.toLocaleString('id-ID') : ''}
                   onChange={handleAmountChange}
-                  onFocus={handleAmountFocus}
-                  onBlur={handleAmountBlur}
                   inputMode="numeric"
-                  placeholder="Rp0"
+                  placeholder="0"
                   className={`pl-9 font-semibold text-primary ${INPUT_CLASS}`}
                 />
               </div>
@@ -139,59 +165,45 @@ const ScanMobileReviewDrawer = ({ open, onOpenChange, data, onSave, onRetake }: 
                       className={`w-full justify-start gap-2 font-normal bg-muted/30 border-border px-3 ${INPUT_CLASS}`}
                     >
                       <CalendarDays className="h-4 w-4 shrink-0 text-muted-foreground" />
-                      <span className="text-sm md:text-base truncate">
-                        {date ? format(date, 'MMM d, yyyy') : 'Pick date'}
-                      </span>
+                      <span className="text-sm truncate">{format(form.date, 'MMM d, yyyy')}</span>
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar mode="single" selected={date} onSelect={setDate} />
+                    <Calendar
+                      mode="single"
+                      selected={form.date}
+                      onSelect={(d) => d && setField('date', d)}
+                    />
                   </PopoverContent>
                 </Popover>
               </div>
 
               <div className="space-y-1.5">
                 <Label className={LABEL_CLASS}>Category</Label>
-                <Select value={category} onValueChange={setCategory}>
-                  <SelectTrigger className={`w-full bg-muted/30 px-3 ${INPUT_CLASS}`}>
-                    <div className="flex items-center gap-2 min-w-0">
-                      <Tag className="h-4 w-4 shrink-0 text-muted-foreground" />
-                      <SelectValue className="text-sm md:text-base" />
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    {CATEGORIES.map((cat) => (
-                      <SelectItem key={cat} value={cat.toLowerCase()} className="text-sm md:text-base">
-                        {cat}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <IconSelect
+                  options={categoryOptions}
+                  value={form.categoryId}
+                  onChange={(v) => setField('categoryId', v)}
+                  placeholder="Select"
+                  disabled={loadingMeta}
+                  loading={loadingMeta}
+                  className="bg-muted/30"
+                />
               </div>
             </div>
 
-            {/* Payment Method */}
+            {/* Wallet */}
             <div className="space-y-1.5">
-              <Label className={LABEL_CLASS}>Payment Method</Label>
-              <Select value={paymentMethod} onValueChange={setPaymentMethod}>
-                <SelectTrigger className={`w-full bg-muted/30 px-3 ${INPUT_CLASS}`}>
-                  <div className="flex items-center gap-2">
-                    <CreditCard className="h-4 w-4 shrink-0 text-muted-foreground" />
-                    <SelectValue className="text-sm md:text-base" />
-                  </div>
-                </SelectTrigger>
-                <SelectContent>
-                  {PAYMENT_METHODS.map((method) => (
-                    <SelectItem
-                      key={method}
-                      value={method.toLowerCase().replace(/\s/g, '-')}
-                      className="text-sm md:text-base"
-                    >
-                      {method}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label className={LABEL_CLASS}>Wallet</Label>
+              <IconSelect
+                options={walletOptions}
+                value={form.walletId}
+                onChange={(v) => setField('walletId', v)}
+                placeholder="Select wallet"
+                disabled={loadingMeta}
+                loading={loadingMeta}
+                className="bg-muted/30"
+              />
             </div>
 
             {/* Notes */}
@@ -203,11 +215,11 @@ const ScanMobileReviewDrawer = ({ open, onOpenChange, data, onSave, onRetake }: 
                 </span>
               </Label>
               <Textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
+                value={form.notes}
+                onChange={(e) => setField('notes', e.target.value)}
                 placeholder="Add notes for this transaction..."
                 rows={3}
-                className="resize-none text-sm md:text-base bg-muted/30 border-border"
+                className="resize-none text-sm bg-muted/30 border-border"
               />
             </div>
           </div>
@@ -219,15 +231,18 @@ const ScanMobileReviewDrawer = ({ open, onOpenChange, data, onSave, onRetake }: 
             <Button
               variant="outline"
               onClick={onRetake}
-              className="w-full h-12 gap-2 border-primary text-primary hover:bg-primary/5 text-sm md:text-base font-semibold rounded-full"
+              disabled={submitting}
+              className="w-full h-12 gap-2 border-primary text-primary hover:bg-primary/5 text-sm font-semibold rounded-full"
             >
               Cancel
             </Button>
             <Button
-              onClick={onSave}
-              className="w-full h-12 gap-2 bg-primary hover:bg-primary/90 text-sm md:text-base font-semibold rounded-full"
+              onClick={handleConfirm}
+              disabled={submitting || loadingMeta}
+              className="w-full h-12 gap-2 bg-primary hover:bg-primary/90 text-sm font-semibold rounded-full"
             >
-              Save
+              {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
+              {submitting ? 'Saving...' : 'Save'}
             </Button>
           </div>
         </DrawerFooter>

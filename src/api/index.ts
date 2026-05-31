@@ -6,3 +6,5 @@ export { budgetApi } from './endpoints/budget';
 export { categoriesApi } from './endpoints/categories';
 export { transactionsApi } from './endpoints/transactions';
 export { walletsApi } from './endpoints/wallets';
+export { scansApi } from './endpoints/scans';
+export { analysisApi } from './endpoints/analysis';

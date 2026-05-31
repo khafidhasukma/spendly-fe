@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import PageHeader from '@/components/ui/page-header';
 import {
@@ -13,17 +13,12 @@ import {
 } from '@/components/scan';
 import { usePageTitle } from '@/hooks';
 import type { ScanMode } from '@/components/scan/ScanTabSwitcher';
+import { scansApi, type ScanResult } from '@/api/endpoints/scans';
 
 type PageState = 'idle' | 'processing' | 'result';
 
-const MOCK_RESULT = {
-  merchant: 'Superindo',
-  amount: 188_000,
-  date: 'May 1st, 2026',
-  category: 'Groceries',
-  paymentMethod: 'Debit - BCA',
-  confidence: 94,
-};
+const POLL_INTERVAL_MS = 1500;
+const POLL_TIMEOUT_MS = 60_000; // 60s safety timeout
 
 const useIsDesktop = () => {
   const [isDesktop, setIsDesktop] = useState(() =>
@@ -48,45 +43,133 @@ const ScanStrukPage = () => {
   const [preview, setPreview] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [reviewDrawerOpen, setReviewDrawerOpen] = useState(false);
+  const [scanId, setScanId] = useState<string | null>(null);
+  const [scanResult, setScanResult] = useState<ScanResult | null>(null);
 
-  const handleFileSelect = useCallback((file: File) => {
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-    setState('processing');
-    setProgress(0);
+  // Track in-flight polling so we can cancel cleanly on reset/unmount
+  const pollAbortRef = useRef<{ cancelled: boolean } | null>(null);
+
+  // Reusable cleanup
+  const cancelPolling = useCallback(() => {
+    if (pollAbortRef.current) {
+      pollAbortRef.current.cancelled = true;
+      pollAbortRef.current = null;
+    }
   }, []);
 
-  useEffect(() => {
-    if (state !== 'processing') return;
-
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        const next = prev + Math.round(Math.random() * 12 + 5);
-        if (next >= 100) {
-          clearInterval(interval);
-          setState('result');
-          if (!isDesktop) setReviewDrawerOpen(true);
-          return 100;
-        }
-        return next;
-      });
-    }, 300);
-
-    return () => clearInterval(interval);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state]);
-
-  const handleReset = () => {
+  const handleReset = useCallback(() => {
+    cancelPolling();
+    // Best-effort: delete the scan if it exists and we never confirmed
+    if (scanId) {
+      scansApi.delete(scanId).catch(() => { /* ignore */ });
+    }
     setState('idle');
     setPreview(null);
     setProgress(0);
     setReviewDrawerOpen(false);
-  };
+    setScanId(null);
+    setScanResult(null);
+  }, [cancelPolling, scanId]);
 
-  const handleSaveTransaction = () => {
-    toast.success('Transaction saved successfully');
-    handleReset();
-  };
+  // Smooth progress animation while polling
+  useEffect(() => {
+    if (state !== 'processing') return;
+    const id = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 95) return prev; // hold at 95% until result arrives
+        return prev + Math.round(Math.random() * 6 + 2);
+      });
+    }, 350);
+    return () => clearInterval(id);
+  }, [state]);
+
+  // Upload + poll flow
+  const handleFileSelect = useCallback(async (file: File) => {
+    const url = URL.createObjectURL(file);
+    setPreview(url);
+    setState('processing');
+    setProgress(5);
+
+    let uploaded;
+    try {
+      uploaded = await scansApi.upload(file);
+      setScanId(uploaded.scan_id);
+    } catch (err: unknown) {
+      const message =
+        (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
+        'Failed to upload receipt';
+      toast.error(message);
+      setState('idle');
+      setPreview(null);
+      return;
+    }
+
+    // Begin polling for AI processing result
+    cancelPolling();
+    const token = { cancelled: false };
+    pollAbortRef.current = token;
+
+    const startedAt = Date.now();
+
+    const poll = async () => {
+      while (!token.cancelled) {
+        if (Date.now() - startedAt > POLL_TIMEOUT_MS) {
+          toast.error('Scan is taking too long. Please try again.');
+          if (!token.cancelled) {
+            setState('idle');
+            setPreview(null);
+            setScanId(null);
+          }
+          return;
+        }
+
+        try {
+          const result = await scansApi.getById(uploaded.scan_id);
+          if (token.cancelled) return;
+
+          if (result.status === 'completed') {
+            setScanResult(result);
+            setProgress(100);
+            setState('result');
+            if (!isDesktop) setReviewDrawerOpen(true);
+            return;
+          }
+
+          if (result.status === 'failed') {
+            toast.error('AI could not extract data from this receipt. Please fill in manually.');
+            setScanResult(result); // still show form so user can fill it
+            setProgress(100);
+            setState('result');
+            if (!isDesktop) setReviewDrawerOpen(true);
+            return;
+          }
+        } catch {
+          // transient error — keep polling silently
+        }
+
+        await new Promise((r) => setTimeout(r, POLL_INTERVAL_MS));
+      }
+    };
+
+    poll();
+  }, [cancelPolling, isDesktop]);
+
+  // Cleanup polling on unmount
+  useEffect(() => {
+    return () => { cancelPolling(); };
+  }, [cancelPolling]);
+
+  const handleSaveTransaction = useCallback(() => {
+    // After confirm() succeeds, the child component calls this.
+    // We don't delete here — the scan is already linked to a transaction.
+    cancelPolling();
+    setState('idle');
+    setPreview(null);
+    setProgress(0);
+    setReviewDrawerOpen(false);
+    setScanId(null);
+    setScanResult(null);
+  }, [cancelPolling]);
 
   const handleModeChange = (newMode: ScanMode) => {
     setMode(newMode);
@@ -138,11 +221,12 @@ const ScanStrukPage = () => {
         </div>
 
         {/* Review drawer */}
-        {!isDesktop && (
+        {!isDesktop && scanId && (
           <ScanMobileReviewDrawer
             open={reviewDrawerOpen}
             onOpenChange={setReviewDrawerOpen}
-            data={MOCK_RESULT}
+            scanId={scanId}
+            scanResult={scanResult}
             onSave={handleSaveTransaction}
             onRetake={handleReset}
           />
@@ -198,9 +282,10 @@ const ScanStrukPage = () => {
 
               {/* Right col */}
               <div className="flex h-full flex-col xl:col-span-2">
-                {state === 'result' ? (
+                {state === 'result' && scanId ? (
                   <ScanExtractionResult
-                    data={MOCK_RESULT}
+                    scanId={scanId}
+                    scanResult={scanResult}
                     onSave={handleSaveTransaction}
                     onDiscard={handleReset}
                   />

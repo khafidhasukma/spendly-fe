@@ -1,31 +1,129 @@
-import { Bot } from 'lucide-react';
+import { Bot, AlertTriangle, Info, Lightbulb, TrendingUp, Sparkles } from 'lucide-react';
+import type { GroupedInsight } from './insight-utils';
 
-const AIInsightCard = () => {
+const TYPE_CONFIG = {
+  warning: { Icon: AlertTriangle, iconColor: 'text-amber-400', dotColor: 'bg-amber-400', label: 'Warning' },
+  danger:  { Icon: AlertTriangle, iconColor: 'text-red-400',   dotColor: 'bg-red-400',   label: 'Alert'   },
+  info:    { Icon: Info,          iconColor: 'text-blue-400',  dotColor: 'bg-blue-400',  label: 'Info'    },
+  tip:     { Icon: Lightbulb,     iconColor: 'text-emerald-400', dotColor: 'bg-emerald-400', label: 'Tip' },
+} as const;
+
+// TipCard — shown beside Income/Expense summary
+interface TipCardProps {
+  tip: GroupedInsight | null;
+  loading?: boolean;
+}
+
+export const TipCard = ({ tip, loading = false }: TipCardProps) => {
+  if (loading) {
+    return (
+      <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-[#005C39] to-[#003d26] p-5 sm:p-6 animate-pulse">
+        <div className="h-4 w-24 rounded bg-white/10" />
+        <div className="mt-4 h-6 w-3/4 rounded bg-white/10" />
+        <div className="mt-2 h-4 w-full rounded bg-white/10" />
+        <div className="mt-2 h-4 w-5/6 rounded bg-white/10" />
+      </div>
+    );
+  }
+
+  if (!tip) {
+    return (
+      <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-[#005C39] to-[#003d26] p-5 sm:p-6 flex flex-col items-center justify-center gap-3 text-center min-h-[180px]">
+        <Sparkles className="h-8 w-8 text-white/20" />
+        <p className="text-sm font-medium text-white/40">No tips available yet</p>
+        <p className="text-xs text-white/25">Keep tracking your spending to get AI tips</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-[#005C39] to-[#003d26] p-5 sm:p-6 flex flex-col justify-between h-full">
-      <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/5" />
+    <div className="relative overflow-hidden rounded-2xl bg-linear-to-br from-[#005C39] to-[#003d26] p-5 sm:p-6">
+      <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full bg-white/5" />
+      <div className="pointer-events-none absolute -left-4 bottom-0 h-20 w-20 rounded-full bg-white/3" />
       <div className="relative">
-        <div className="flex items-center gap-2.5">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10">
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white/10">
             <Bot className="h-4 w-4 text-[#86D2A6]" />
           </div>
-          <p className="text-[10px] font-semibold tracking-wide text-[#86D2A6] uppercase">
-            AI Intelligence
-          </p>
+          <p className="text-[10px] font-bold tracking-widest text-[#86D2A6] uppercase">AI Intelligence</p>
         </div>
-        <h3 className="text-base font-bold text-white font-manrope mt-3 sm:text-lg">
-          Savings Optimization
-        </h3>
-        <p className="mt-2 text-sm leading-relaxed text-white/70">
-          Based on your recent lifestyle shifts, you can optimize your monthly balance. Reduce dining out by 2x/week to save more.
-        </p>
-      </div>
-      <div className="mt-4 rounded-lg bg-white/10 px-4 py-3">
-        <p className="text-[10px] text-[#86D2A6] font-medium">Potential Monthly Savings</p>
-        <p className="text-xl font-bold text-white font-manrope sm:text-2xl mt-0.5">Rp1.250.000</p>
+        <h3 className="mt-4 text-lg font-bold text-white font-manrope leading-snug sm:text-xl">{tip.title}</h3>
+        <div className="mt-2 space-y-1">
+          {tip.messages.map((msg, i) => (
+            <p key={i} className="text-sm leading-relaxed text-white/70">{msg}</p>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-export default AIInsightCard;
+// InsightCards — warning / danger / info grid
+interface InsightCardsProps {
+  items: GroupedInsight[];
+  loading?: boolean;
+}
+
+const SkeletonCard = () => (
+  <div className="rounded-2xl border border-border bg-card p-4 animate-pulse space-y-3">
+    <div className="h-3 w-16 rounded bg-muted" />
+    <div className="h-4 w-3/4 rounded bg-muted" />
+    <div className="space-y-1.5">
+      <div className="h-3 w-full rounded bg-muted" />
+      <div className="h-3 w-5/6 rounded bg-muted" />
+    </div>
+  </div>
+);
+
+export const InsightCards = ({ items, loading = false }: InsightCardsProps) => {
+  if (loading) {
+    return (
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)}
+      </div>
+    );
+  }
+
+  if (items.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border bg-muted/20 py-8 text-center">
+        <TrendingUp className="h-7 w-7 text-muted-foreground/30" />
+        <p className="text-sm font-medium text-muted-foreground">All clear — no alerts</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      {items.map((item, i) => {
+        const cfg = TYPE_CONFIG[item.type] ?? TYPE_CONFIG.info;
+        const { Icon } = cfg;
+        return (
+          <div key={i} className="rounded-2xl border border-border bg-card p-4 space-y-2">
+            <div className="flex items-center gap-1.5">
+              <Icon className={`h-3.5 w-3.5 shrink-0 ${cfg.iconColor}`} />
+              <span className={`text-[11px] font-semibold uppercase tracking-wide ${cfg.iconColor}`}>
+                {cfg.label}
+              </span>
+            </div>
+            <p className="text-sm font-semibold text-foreground leading-snug">{item.title}</p>
+            {item.messages.length === 1 ? (
+              <p className="text-xs leading-relaxed text-muted-foreground">{item.messages[0]}</p>
+            ) : (
+              <ul className="space-y-1">
+                {item.messages.map((msg, j) => (
+                  <li key={j} className="flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">
+                    <span className={`mt-1.5 h-1 w-1 shrink-0 rounded-full ${cfg.dotColor}`} />
+                    {msg}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+export default InsightCards;
