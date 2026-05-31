@@ -165,3 +165,36 @@ export interface TransactionFilters {
   amount_min?: number;
   amount_max?: number;
 }
+
+export interface CreateTransactionPayload {
+  type: 'expense' | 'income';
+  amount: number;
+  merchant_name: string;
+  category_id: string;
+  wallet_id: string;
+  date: string;
+  notes?: string;
+}
+
+export interface UpdateTransactionPayload {
+  type?: 'expense' | 'income';
+  amount?: number;
+  merchant_name?: string;
+  category_id?: string;
+  wallet_id?: string;
+  date?: string;
+  notes?: string;
+}
+
+export interface TransactionsResponse {
+  success: boolean;
+  message: string;
+  data: TransactionItem[];
+  pagination: TransactionPagination;
+}
+
+export interface TransactionMutationResponse {
+  success: boolean;
+  message: string;
+  data: TransactionItem;
+}

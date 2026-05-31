@@ -11,7 +11,7 @@ import { format } from 'date-fns';
 import IconSelect, { type IconSelectOption } from './IconSelect';
 import { renderCategoryIcon, renderWalletIcon } from './scan-icons';
 import { useScanReview } from './useScanReview';
-import type { ScanResult } from '@/api/endpoints/scans';
+import type { ScanResult } from '@/types';
 
 interface ScanExtractionResultProps {
   scanId: string;

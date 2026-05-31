@@ -4,11 +4,11 @@ import { resolveAvatarUrl } from '@/utils';
 import type { NavbarProps } from '@/types';
 
 const Navbar = ({ title = 'Dashboard' }: NavbarProps) => {
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
 
   const fullName = user ? `${user.first_name} ${user.last_name}` : '';
   const initials = user
-    ? `${user.first_name[0]}${user.last_name[0]}`.toUpperCase()
+    ? `${user.first_name[0] ?? ''}${user.last_name[0] ?? ''}`.toUpperCase()
     : '?';
   const avatarSrc = resolveAvatarUrl(user?.avatar_url);
 
@@ -27,15 +27,22 @@ const Navbar = ({ title = 'Dashboard' }: NavbarProps) => {
         </div>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <Avatar className="size-9 sm:size-10">
-            {avatarSrc && (
-              <AvatarImage src={avatarSrc} alt={fullName} />
-            )}
-            <AvatarFallback>{initials}</AvatarFallback>
-          </Avatar>
-          <span className="hidden max-w-30 truncate text-sm font-medium text-foreground sm:inline-block sm:max-w-none sm:text-base">
-            {fullName}
-          </span>
+          {isLoading ? (
+            <>
+              <div className="size-9 animate-pulse rounded-full bg-muted sm:size-10" />
+              <div className="hidden h-4 w-24 animate-pulse rounded bg-muted sm:block" />
+            </>
+          ) : (
+            <>
+              <Avatar className="size-9 sm:size-10">
+                {avatarSrc && <AvatarImage src={avatarSrc} alt={fullName} />}
+                <AvatarFallback>{initials}</AvatarFallback>
+              </Avatar>
+              <span className="hidden max-w-30 truncate text-sm font-medium text-foreground sm:inline-block sm:max-w-none sm:text-base">
+                {fullName}
+              </span>
+            </>
+          )}
         </div>
       </div>
     </header>

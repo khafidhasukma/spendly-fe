@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { formatRupiah } from '@/utils';
-import type { CashFlowItem } from '@/api/endpoints/analysis';
+import type { CashFlowItem } from '@/types';
 
 interface MonthlyTrendChartProps {
   data?: CashFlowItem[];

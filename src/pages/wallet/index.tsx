@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useState } from 'react';
 import { Plus, ArrowLeftRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -15,33 +15,13 @@ import {
 } from '@/components/wallet';
 import { usePageTitle } from '@/hooks';
 import { walletsApi } from '@/api';
-import type { ApiWallet, WalletsApiData, CreateWalletPayload, UpdateWalletPayload } from '@/api/endpoints/wallets';
-import type { TransactionItem } from '@/types';
-
-type FetchState =
-  | { status: 'loading'; data: null }
-  | { status: 'success'; data: WalletsApiData }
-  | { status: 'error'; data: null };
-
-type FetchAction =
-  | { type: 'LOADING' }
-  | { type: 'SUCCESS'; payload: WalletsApiData }
-  | { type: 'ERROR' };
-
-function reducer(state: FetchState, action: FetchAction): FetchState {
-  switch (action.type) {
-  case 'LOADING': return { status: 'loading', data: null };
-  case 'SUCCESS': return { status: 'success', data: action.payload };
-  case 'ERROR':   return { status: 'error', data: null };
-  default: return state;
-  }
-}
+import { useWalletList } from '@/features/wallet';
+import type { ApiWallet, CreateWalletPayload, UpdateWalletPayload } from '@/types';
 
 const WalletPage = () => {
   usePageTitle('Wallet');
 
-  const [tick, setTick] = useState(0);
-  const [state, dispatch] = useReducer(reducer, { status: 'loading', data: null });
+  const { wallets, recentActivity, isLoading, refetch } = useWalletList();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [addOpen, setAddOpen] = useState(false);
@@ -50,21 +30,6 @@ const WalletPage = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<ApiWallet | null>(null);
   const [transferOpen, setTransferOpen] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    dispatch({ type: 'LOADING' });
-    walletsApi.getAll()
-      .then((result) => { if (!cancelled) dispatch({ type: 'SUCCESS', payload: result }); })
-      .catch(() => { if (!cancelled) dispatch({ type: 'ERROR' }); });
-    return () => { cancelled = true; };
-  }, [tick]);
-
-  const refetch = useCallback(() => setTick((t) => t + 1), []);
-
-  const wallets: ApiWallet[] = state.data?.wallets ?? [];
-  const recentActivity: TransactionItem[] = (state.data?.recent_activity ?? []).slice(0, 5);
-  const isLoading = state.status === 'loading';
 
   const handleAdd = async (payload: CreateWalletPayload) => {
     setIsSubmitting(true);
@@ -168,7 +133,7 @@ const WalletPage = () => {
           />
         </div>
         <div className="lg:col-span-2">
-          <WalletRecentActivity activities={recentActivity} isLoading={isLoading} />
+          <WalletRecentActivity activities={recentActivity.slice(0, 5)} isLoading={isLoading} />
         </div>
       </div>
 

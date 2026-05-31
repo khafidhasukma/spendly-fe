@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { formatRupiah } from '@/utils';
 import { getIconByName } from '@/lib/category-icons';
 import React from 'react';
-import type { SpendingCluster } from '@/api/endpoints/analysis';
+import type { SpendingCluster } from '@/types';
 
 interface SpendingCategoryCardProps {
   clusters?: SpendingCluster[];

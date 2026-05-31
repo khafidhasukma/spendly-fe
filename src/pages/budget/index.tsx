@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -12,17 +11,14 @@ import {
   EditBudgetDialog,
 } from '@/components/budget';
 import { usePageTitle } from '@/hooks';
-import { budgetApi, categoriesApi } from '@/api';
-import type { BudgetItem, BudgetPayload, BudgetSummary, BudgetUpdatePayload } from '@/types/budget';
-import type { ApiCategory } from '@/api/endpoints/categories';
+import { budgetApi } from '@/api';
+import { useBudgetList } from '@/features/budget';
+import type { BudgetItem, BudgetPayload, BudgetUpdatePayload } from '@/types/budget';
 
 const BudgetPage = () => {
   usePageTitle('Budget');
 
-  const [budgets, setBudgets] = useState<BudgetItem[]>([]);
-  const [summary, setSummary] = useState<BudgetSummary | undefined>();
-  const [categories, setCategories] = useState<ApiCategory[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { budgets, summary, categories, isLoading, refetch } = useBudgetList();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [addDialogOpen, setAddDialogOpen] = useState(false);
@@ -31,40 +27,11 @@ const BudgetPage = () => {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<BudgetItem | null>(null);
 
-  const fetchBudgets = useCallback(async () => {
-    try {
-      const [budgetData, summaryData] = await Promise.all([
-        budgetApi.getAll(),
-        budgetApi.getSummary(),
-      ]);
-      setBudgets(budgetData);
-      setSummary(summaryData);
-    } catch {
-      toast.error('Failed to load budgets');
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  const fetchCategories = useCallback(async () => {
-    try {
-      const data = await categoriesApi.getAll('expense');
-      setCategories(data);
-    } catch {
-      // noop
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchBudgets();
-    fetchCategories();
-  }, [fetchBudgets, fetchCategories]);
-
   const handleAdd = async (payload: BudgetPayload) => {
     setIsSubmitting(true);
     try {
       await budgetApi.create(payload);
-      await fetchBudgets();
+      await refetch();
     } finally {
       setIsSubmitting(false);
     }
@@ -82,7 +49,7 @@ const BudgetPage = () => {
     setIsSubmitting(true);
     try {
       await budgetApi.update(id, payload);
-      await fetchBudgets();
+      await refetch();
     } finally {
       setIsSubmitting(false);
     }
@@ -101,7 +68,7 @@ const BudgetPage = () => {
     try {
       await budgetApi.delete(deleteTarget.id);
       toast.success('Budget deleted successfully');
-      await fetchBudgets();
+      await refetch();
     } catch {
       toast.error('Failed to delete budget');
     } finally {

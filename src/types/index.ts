@@ -1,5 +1,3 @@
-export type { Transaction, OCRResult, Prediction, ApiResponse } from './api';
-
 export type {
   LoginPayload,
   RegisterPayload,
@@ -10,6 +8,10 @@ export type {
   UpdatePreferencesPayload,
   AuthResponse,
   ProfileResponse,
+  ForgotPasswordPayload,
+  ForgotPasswordResponse,
+  ResetPasswordPayload,
+  ResetPasswordResponse,
 } from './auth';
 
 export type {
@@ -33,6 +35,10 @@ export type {
   TransactionItem,
   TransactionPagination,
   TransactionFilters,
+  CreateTransactionPayload,
+  UpdateTransactionPayload,
+  TransactionsResponse,
+  TransactionMutationResponse,
 } from './history';
 
 export type {
@@ -42,7 +48,7 @@ export type {
   RecentTransactionsProps,
   QuickCategory,
   DashboardGreetingProps,
-  BudgetItem,
+  BudgetTrackingItem,
   BudgetTrackingProps,
   BalanceCardProps,
   AIInsightCardProps,
@@ -68,7 +74,12 @@ export type {
 } from './profile';
 
 export type {
-  Category,
+  ApiCategory,
+  CreateCategoryPayload,
+  UpdateCategoryPayload,
+  CategoriesResponse,
+  CategoryResponse,
+  CategoryType,
   CategoryIconOption,
   ColorOption,
 } from './categories';
@@ -106,9 +117,7 @@ export type {
 
 export type {
   BudgetCategory,
-  BudgetOverview,
   BudgetHistoryItem,
-  AddBudgetFormData,
 } from './budget';
 
 export type {
@@ -116,4 +125,34 @@ export type {
   WalletTransaction,
   AddWalletFormData,
   TransferFormData,
+  ApiWallet,
+  WalletsApiData,
+  CreateWalletPayload,
+  UpdateWalletPayload,
+  TransferWalletPayload,
+  WalletsResponse,
+  WalletResponse,
 } from './wallet';
+
+export type {
+  ScanStatus,
+  ConfidenceLevel,
+  ScanUploadData,
+  ScanResult,
+  ConfirmScanPayload,
+  ScanUploadResponse,
+  ScanResponse,
+  ScanConfirmResponse,
+} from './scan';
+
+export type {
+  CashFlowItem,
+  HeatmapItem,
+  SpendingCluster,
+  InsightItem,
+  UnusualSpending,
+  ForecastData,
+  AiHealth,
+  AnalysisSummaryData,
+  AnalysisSummaryResponse,
+} from './analysis';

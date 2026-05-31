@@ -19,7 +19,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import type { CreateWalletPayload } from '@/api/endpoints/wallets';
+import type { CreateWalletPayload } from '@/types';
 
 const walletTypes = [
   { value: 'cash',     label: 'Cash',        icon: Banknote    },

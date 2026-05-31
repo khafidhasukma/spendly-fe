@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/select';
 import { categoriesApi } from '@/api';
 import { ICON_OPTIONS, hexTint } from '@/lib/category-icons';
-import type { ApiCategory } from '@/api/endpoints/categories';
+import type { ApiCategory } from '@/types';
 
 interface Props {
   open: boolean;

@@ -5,7 +5,6 @@ import TransferDialog from './TransferDialog';
 import WalletCard from './WalletCard';
 import WalletList from './WalletList';
 import WalletOverviewCard from './WalletOverviewCard';
-import WalletQuickActions from './WalletQuickActions';
 import WalletRecentActivity from './WalletRecentActivity';
 
 export {
@@ -16,6 +15,5 @@ export {
   WalletCard,
   WalletList,
   WalletOverviewCard,
-  WalletQuickActions,
   WalletRecentActivity,
 };

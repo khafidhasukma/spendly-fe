@@ -1,4 +1,4 @@
-import type { ApiWallet } from '@/api/endpoints/wallets';
+import type { ApiWallet } from '@/types';
 import WalletCard from './WalletCard';
 
 const SkeletonCard = () => (

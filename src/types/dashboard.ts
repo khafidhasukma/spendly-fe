@@ -39,14 +39,14 @@ export interface DashboardGreetingProps {
   name?: string;
 }
 
-export interface BudgetItem {
+export interface BudgetTrackingItem {
   label: string;
   limit: number;
   spent: number;
 }
 
 export interface BudgetTrackingProps {
-  budgets?: BudgetItem[];
+  budgets?: BudgetTrackingItem[];
   isLoading?: boolean;
 }
 

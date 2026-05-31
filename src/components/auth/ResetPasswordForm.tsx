@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { PasswordInput } from '@/components/forms';
 import { useForm } from '@/hooks/useForm';
 import { resetPasswordSchema, type ResetPasswordFormData } from '@/lib/validations/auth';
-import { authApi } from '@/api/endpoints/auth';
+import { authApi } from '@/api';
 
 const ResetPasswordForm = () => {
   const navigate = useNavigate();

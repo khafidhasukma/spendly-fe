@@ -1,5 +1,6 @@
 export { api, client } from './client';
 export { tokenStorage } from './token';
+export { invalidate, clearCache, dedupe } from './cache';
 export { authApi } from './endpoints/auth';
 export { dashboardApi } from './endpoints/dashboard';
 export { budgetApi } from './endpoints/budget';

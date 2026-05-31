@@ -1,15 +1,43 @@
 import type { LucideIcon } from 'lucide-react';
 
-// legacy type kept for backward compat — prefer ApiCategory from api/endpoints/categories
-export interface Category {
+export type CategoryType = 'expense' | 'income' | 'both';
+
+export interface ApiCategory {
   id: string;
   name: string;
-  iconId: string;
-  icon: LucideIcon;
+  icon: string;
   color: string;
-  bgColor: string;
-  transactions: number;
-  total: number;
+  type: CategoryType;
+  is_system: boolean;
+  ai_label: string | null;
+  created_at: string;
+  transaction_count: number;
+  total_amount: string;
+}
+
+export interface CreateCategoryPayload {
+  name: string;
+  icon: string;
+  color: string;
+  type: CategoryType;
+}
+
+export interface UpdateCategoryPayload {
+  name?: string;
+  icon?: string;
+  color?: string;
+}
+
+export interface CategoriesResponse {
+  success: boolean;
+  message: string;
+  data: ApiCategory[];
+}
+
+export interface CategoryResponse {
+  success: boolean;
+  message: string;
+  data: ApiCategory;
 }
 
 export interface CategoryIconOption {

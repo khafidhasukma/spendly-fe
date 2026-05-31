@@ -1,6 +1,7 @@
 import HistoryHeader from './HistoryHeader';
 import HistoryFilters from './HistoryFilters';
 import HistoryTable from './HistoryTable';
+import HistoryTableSkeleton from './HistoryTableSkeleton';
 import HistoryPagination from './HistoryPagination';
 import HistoryTableDesktop from './HistoryTableDesktop';
 import HistoryTableMobile from './HistoryTableMobile';
@@ -11,6 +12,7 @@ export {
   HistoryHeader,
   HistoryFilters,
   HistoryTable,
+  HistoryTableSkeleton,
   HistoryPagination,
   HistoryTableDesktop,
   HistoryTableMobile,

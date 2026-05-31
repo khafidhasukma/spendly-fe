@@ -1,6 +1,6 @@
 import { ArrowDownLeft, ArrowUpRight, Wallet } from 'lucide-react';
 import { formatRupiah } from '@/utils';
-import type { ApiWallet } from '@/api/endpoints/wallets';
+import type { ApiWallet } from '@/types';
 
 interface WalletOverviewCardProps {
   wallets?: ApiWallet[];

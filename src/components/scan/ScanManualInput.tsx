@@ -16,9 +16,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
-import { categoriesApi, type ApiCategory } from '@/api/endpoints/categories';
-import { walletsApi, type ApiWallet } from '@/api/endpoints/wallets';
-import { transactionsApi } from '@/api/endpoints/transactions';
+import { categoriesApi, walletsApi, transactionsApi } from '@/api';
+import type { ApiCategory, ApiWallet } from '@/types';
 import IconSelect, { type IconSelectOption } from './IconSelect';
 import { renderCategoryIcon, renderWalletIcon } from './scan-icons';
 

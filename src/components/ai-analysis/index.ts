@@ -1,5 +1,6 @@
 import SummaryCard from './SummaryCard';
-import AIInsightCard from './AIInsightCard';
+import TipCard from './TipCard';
+import InsightCards from './InsightCards';
 import FilterDropdown from './FilterDropdown';
 import MonthlyTrendChart from './MonthlyTrendChart';
 import PredictionCard from './PredictionCard';
@@ -7,10 +8,11 @@ import SpendingCategoryCard from './SpendingCategoryCard';
 
 export {
   SummaryCard,
-  AIInsightCard,
+  TipCard,
+  InsightCards,
   FilterDropdown,
   MonthlyTrendChart,
   PredictionCard,
-  SpendingCategoryCard
+  SpendingCategoryCard,
 };
 export type { FilterOption } from './FilterDropdown';

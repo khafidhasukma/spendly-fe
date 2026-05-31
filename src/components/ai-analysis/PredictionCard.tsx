@@ -1,6 +1,6 @@
 import { Sparkles, TrendingDown, WifiOff } from 'lucide-react';
 import { formatRupiah } from '@/utils';
-import type { ForecastData } from '@/api/endpoints/analysis';
+import type { ForecastData } from '@/types';
 
 interface PredictionCardProps {
   forecast?: ForecastData | null;

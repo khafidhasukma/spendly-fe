@@ -1,9 +1,9 @@
 import { BarChart3 } from 'lucide-react';
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/components/ui/empty';
-import type { BudgetItem, BudgetTrackingProps } from '@/types';
+import type { BudgetTrackingItem, BudgetTrackingProps } from '@/types';
 import { formatRupiah } from '@/utils';
 
-const BudgetBar = ({ item }: { item: BudgetItem }) => {
+const BudgetBar = ({ item }: { item: BudgetTrackingItem }) => {
   const pct = Math.min((item.spent / item.limit) * 100, 100);
   const isDanger  = pct >= 100;
   const isWarning = pct >= 85 && !isDanger;

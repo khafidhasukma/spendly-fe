@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
-import { transactionsApi } from '@/api';
+import { transactionsApi, categoriesApi } from '@/api';
 import { moment } from '@/utils';
-import type { TransactionItem, TransactionPagination, HistoryFiltersValue } from '@/types';
+import type { TransactionItem, TransactionPagination, HistoryFiltersValue, ApiCategory } from '@/types';
 
 const PAGE_SIZE = 10;
 const DEBOUNCE_MS = 500;
@@ -47,6 +47,7 @@ const useHistoryList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState<HistoryFiltersValue>(initialFilters);
   const [currentPage, setCurrentPage] = useState(initialPage);
+  const [categoryOptions, setCategoryOptions] = useState<ApiCategory[]>([]);
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<TransactionItem | undefined>();
@@ -57,7 +58,7 @@ const useHistoryList = () => {
   const [editTarget, setEditTarget] = useState<TransactionItem | undefined>();
   const [isExporting, setIsExporting] = useState(false);
 
-  // Sync state → URL
+  // Sync state -> URL
   useEffect(() => {
     const params: Record<string, string> = {};
     if (currentPage > 1) params.page = String(currentPage);
@@ -68,8 +69,16 @@ const useHistoryList = () => {
     setSearchParams(params, { replace: true });
   }, [filters, currentPage, setSearchParams]);
 
-  // Debounced fetch
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  // Load categories once
+  useEffect(() => {
+    let cancelled = false;
+    categoriesApi.getAll()
+      .then((cats) => { if (!cancelled) setCategoryOptions(cats); })
+      .catch(() => { /* noop */ });
+    return () => { cancelled = true; };
+  }, []);
+
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const fetchTransactions = useCallback(async (page: number, f: HistoryFiltersValue) => {
     setIsLoading(true);
@@ -111,7 +120,6 @@ const useHistoryList = () => {
     fetchTransactions(currentPage, filters);
   }, [fetchTransactions, currentPage, filters]);
 
-  // View
   const requestView = useCallback((id: string) => {
     setViewTarget(transactions.find((t) => t.id === id));
     setViewOpen(true);
@@ -122,14 +130,12 @@ const useHistoryList = () => {
     if (!open) setViewTarget(undefined);
   }, []);
 
-  // Add
   const requestAdd = useCallback(() => {
     setFormMode('add');
     setEditTarget(undefined);
     setFormOpen(true);
   }, []);
 
-  // Edit
   const requestEdit = useCallback((id: string) => {
     setFormMode('edit');
     setEditTarget(transactions.find((t) => t.id === id));
@@ -141,7 +147,6 @@ const useHistoryList = () => {
     if (!open) setEditTarget(undefined);
   }, []);
 
-  // Delete
   const requestDelete = useCallback((id: string) => {
     setDeleteTarget(transactions.find((t) => t.id === id));
     setDeleteOpen(true);
@@ -165,7 +170,6 @@ const useHistoryList = () => {
     if (!open) setDeleteTarget(undefined);
   }, []);
 
-  // export via backend — open download URL directly with auth token
   const exportCsv = useCallback(async () => {
     setIsExporting(true);
     try {
@@ -177,7 +181,7 @@ const useHistoryList = () => {
         ...dateParams,
       });
 
-      // prepend "sep=," directive so Excel knows the delimiter regardless of locale
+      // Prepend "sep=," directive so Excel detects delimiter regardless of locale.
       const rawText = await blob.text();
       const withDirective = `sep=,\r\n${rawText}`;
       const fixedBlob = new Blob([`\uFEFF${withDirective}`], { type: 'text/csv;charset=utf-8;' });
@@ -207,6 +211,7 @@ const useHistoryList = () => {
     setCurrentPage,
     totalPages: pagination.totalPages,
     totalItems: pagination.total,
+    categoryOptions: categoryOptions.map((c) => ({ id: c.id, name: c.name })),
     viewOpen,
     viewTarget,
     onViewDialogOpenChange,

@@ -6,6 +6,7 @@ import ScanFeatureCards from './ScanFeatureCards';
 import ScanManualInput from './ScanManualInput';
 import ScanTabSwitcher from './ScanTabSwitcher';
 import ScanMobileReviewDrawer from './ScanMobileReviewDrawer';
+import ScanResultPlaceholder from './ScanResultPlaceholder';
 
 export {
   ScanUploadZone,
@@ -16,4 +17,5 @@ export {
   ScanManualInput,
   ScanTabSwitcher,
   ScanMobileReviewDrawer,
+  ScanResultPlaceholder,
 };

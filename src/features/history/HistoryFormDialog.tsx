@@ -29,9 +29,7 @@ import { cn } from '@/lib/utils';
 import { formatRupiah } from '@/utils';
 import { getIconByName } from '@/lib/category-icons';
 import { transactionsApi, categoriesApi, walletsApi } from '@/api';
-import type { ApiCategory } from '@/api/endpoints/categories';
-import type { ApiWallet } from '@/api/endpoints/wallets';
-import type { TransactionItem } from '@/types';
+import type { ApiCategory, ApiWallet, TransactionItem } from '@/types';
 
 type FormMode = 'add' | 'edit';
 type TxType = 'expense' | 'income';

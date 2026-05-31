@@ -1,4 +1,4 @@
-import type { InsightItem } from '@/api/endpoints/analysis';
+import type { InsightItem } from '@/types';
 
 export interface GroupedInsight {
   type: InsightItem['type'];

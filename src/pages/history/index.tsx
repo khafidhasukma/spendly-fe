@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { HistoryHeader } from '@/components/history';
 import {
   HistoryDeleteDialog,
@@ -9,23 +8,9 @@ import {
   useHistoryList,
 } from '@/features/history';
 import { usePageTitle } from '@/hooks';
-import { categoriesApi } from '@/api';
-import type { ApiCategory } from '@/api/endpoints/categories';
 
 const HistoryPage = () => {
   usePageTitle('Transaction History');
-
-  const [categoryOptions, setCategoryOptions] = useState<{ id: string; name: string }[]>([]);
-
-  useEffect(() => {
-    let cancelled = false;
-    categoriesApi.getAll()
-      .then((cats: ApiCategory[]) => {
-        if (!cancelled) setCategoryOptions(cats.map((c) => ({ id: c.id, name: c.name })));
-      })
-      .catch(() => { /* noop */ });
-    return () => { cancelled = true; };
-  }, []);
 
   const {
     transactions,
@@ -37,6 +22,7 @@ const HistoryPage = () => {
     setCurrentPage,
     totalPages,
     totalItems,
+    categoryOptions,
     viewOpen,
     viewTarget,
     onViewDialogOpenChange,

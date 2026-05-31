@@ -1,2 +1,1 @@
-// Scan feature – OCR logic and state management
-export {};
+export { useScanUpload, type ScanPageState } from './useScanUpload';

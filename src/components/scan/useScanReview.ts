@@ -2,9 +2,8 @@
 import { useState, useEffect, useMemo } from 'react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
-import { categoriesApi, type ApiCategory } from '@/api/endpoints/categories';
-import { walletsApi, type ApiWallet } from '@/api/endpoints/wallets';
-import { scansApi, type ScanResult } from '@/api/endpoints/scans';
+import { categoriesApi, walletsApi, scansApi } from '@/api';
+import type { ApiCategory, ApiWallet, ScanResult } from '@/types';
 
 export interface ScanReviewForm {
   merchantName: string;
@@ -21,12 +20,6 @@ interface UseScanReviewArgs {
   onSaved: () => void;
 }
 
-/**
- * Centralizes the review state shared by desktop & mobile review UIs.
- * - Pre-fills form from scan result (merchant, amount, date, suggested category)
- * - Loads categories (expense) + wallets in parallel
- * - Handles confirm submission
- */
 export function useScanReview({ scanId, scanResult, onSaved }: UseScanReviewArgs) {
   const [form, setForm] = useState<ScanReviewForm>(() => buildInitialForm(scanResult));
 
@@ -35,12 +28,10 @@ export function useScanReview({ scanId, scanResult, onSaved }: UseScanReviewArgs
   const [loadingMeta, setLoadingMeta] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Re-init form when scan result arrives
   useEffect(() => {
     setForm(buildInitialForm(scanResult));
   }, [scanResult]);
 
-  // Fetch categories + wallets
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -53,16 +44,11 @@ export function useScanReview({ scanId, scanResult, onSaved }: UseScanReviewArgs
         setCategories(cats);
         setWallets(walletData.wallets);
 
-        // Pre-fill defaults
         setForm((prev) => {
           const next = { ...prev };
-
-          // Pick suggested category if not already set
           if (!next.categoryId && scanResult?.suggested_category_id) {
             next.categoryId = scanResult.suggested_category_id;
           }
-
-          // Pick default wallet if not already set
           if (!next.walletId) {
             const def = walletData.wallets.find((w) => w.is_default) ?? walletData.wallets[0];
             if (def) next.walletId = def.id;

@@ -5,7 +5,6 @@ import DashboardGreeting from './DashboardGreeting';
 import QuickCategories from './QuickCategories';
 import RecentTransactions from './RecentTransactions';
 import WalletCTA from './WalletCTA';
-import WealthGrowth from './WealthGrowth';
 
 export {
   AIInsightCard,
@@ -15,5 +14,4 @@ export {
   QuickCategories,
   RecentTransactions,
   WalletCTA,
-  WealthGrowth
 };

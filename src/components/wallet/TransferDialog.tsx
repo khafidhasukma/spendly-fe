@@ -24,7 +24,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { walletsApi } from '@/api';
-import type { ApiWallet } from '@/api/endpoints/wallets';
+import type { ApiWallet } from '@/types';
 
 interface TransferDialogProps {
   open: boolean;

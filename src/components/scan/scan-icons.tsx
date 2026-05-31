@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+
 import React from 'react';
 import {
   Banknote,
@@ -8,8 +8,7 @@ import {
   Wallet,
 } from 'lucide-react';
 import { getIconByName, hexTint } from '@/lib/category-icons';
-import type { ApiCategory } from '@/api/endpoints/categories';
-import type { ApiWallet } from '@/api/endpoints/wallets';
+import type { ApiCategory, ApiWallet } from '@/types';
 
 // Wallet type → icon
 const WALLET_ICON_MAP: Record<string, React.ElementType> = {

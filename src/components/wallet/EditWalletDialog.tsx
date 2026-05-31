@@ -11,7 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import type { ApiWallet, UpdateWalletPayload } from '@/api/endpoints/wallets';
+import type { ApiWallet, UpdateWalletPayload } from '@/types';
 
 interface EditWalletDialogProps {
   open: boolean;

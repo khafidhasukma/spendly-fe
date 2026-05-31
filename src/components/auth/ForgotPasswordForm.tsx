@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { GroupInput } from '@/components/forms';
 import { useForm } from '@/hooks/useForm';
 import { forgotPasswordSchema, type ForgotPasswordFormData } from '@/lib/validations/auth';
-import { authApi } from '@/api/endpoints/auth';
+import { authApi } from '@/api';
 
 const ForgotPasswordForm = () => {
   const navigate = useNavigate();

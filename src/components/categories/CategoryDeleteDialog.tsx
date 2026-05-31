@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import type { ApiCategory } from '@/api/endpoints/categories';
+import type { ApiCategory } from '@/types';
 
 interface Props {
   open: boolean;

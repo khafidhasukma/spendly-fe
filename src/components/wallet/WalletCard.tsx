@@ -9,7 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { formatRupiah } from '@/utils';
-import type { ApiWallet } from '@/api/endpoints/wallets';
+import type { ApiWallet } from '@/types';
 
 const WALLET_ICON: Record<string, React.ElementType> = {
   bank: Landmark,

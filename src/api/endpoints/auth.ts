@@ -1,5 +1,6 @@
 import api from '../client';
 import { tokenStorage } from '../token';
+import { clearCache } from '../cache';
 import type {
   LoginPayload,
   RegisterPayload,
@@ -20,12 +21,14 @@ export const authApi = {
   async login(payload: LoginPayload): Promise<AuthTokens> {
     const { data } = await api.post<AuthResponse>('/auth/login', payload);
     tokenStorage.setTokens(data.data.accessToken, data.data.refreshToken);
+    clearCache();
     return data.data;
   },
 
   async register(payload: RegisterPayload): Promise<AuthTokens> {
     const { data } = await api.post<AuthResponse>('/auth/register', payload);
     tokenStorage.setTokens(data.data.accessToken, data.data.refreshToken);
+    clearCache();
     return data.data;
   },
 
@@ -35,6 +38,7 @@ export const authApi = {
       await api.post('/auth/logout', { ['refresh_token']: refreshToken });
     } finally {
       tokenStorage.clear();
+      clearCache();
     }
   },
 

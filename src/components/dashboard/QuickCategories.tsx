@@ -2,7 +2,7 @@ import { useEffect, useReducer, useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { categoriesApi } from '@/api';
 import { getIconByName, hexTint } from '@/lib/category-icons';
-import type { ApiCategory } from '@/api/endpoints/categories';
+import type { ApiCategory } from '@/types';
 
 type State =
   | { status: 'loading' }
