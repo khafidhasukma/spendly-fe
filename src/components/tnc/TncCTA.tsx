@@ -1,4 +1,4 @@
-import { Mail, Download } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -16,10 +16,6 @@ const TncCTA = () => {
             <Mail className="mr-2 h-4 w-4" />
             Contact Us
           </Link>
-        </Button>
-        <Button variant="outline" className='bg-transparent font-semibold px-6! sm:px-8! py-2.5 sm:py-3 h-auto text-sm sm:text-base rounded-[0.75rem] w-full sm:w-auto'>
-          <Download className="mr-2 h-4 w-4" />
-          Download PDF
         </Button>
       </div>
     </div>

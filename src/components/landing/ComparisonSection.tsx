@@ -33,6 +33,7 @@ const ComparisonSection = () => {
           {rows.map((row, i) => (
             <div
               key={row.feature}
+              data-stagger
               className={`grid grid-cols-[1fr_80px_80px] sm:grid-cols-[1fr_100px_100px] items-center px-5 py-3.5 ${
                 i < rows.length - 1 ? 'border-b border-border/50' : ''
               } ${i % 2 === 0 ? 'bg-card' : 'bg-muted/20'}`}

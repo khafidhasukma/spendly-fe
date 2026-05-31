@@ -33,6 +33,7 @@ const PainPointSection = () => {
             return (
               <div
                 key={p.title}
+                data-stagger
                 className="group flex flex-col items-center text-center rounded-2xl border border-border bg-card p-4 sm:p-5 lg:p-6 transition-all duration-300 hover:bg-primary hover:border-primary hover:shadow-md hover:-translate-y-1 cursor-default"
               >
                 <Icon className="h-5 w-5 sm:h-6 sm:w-6 mb-2 sm:mb-3 text-primary transition-colors group-hover:text-on-primary" />

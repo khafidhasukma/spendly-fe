@@ -64,8 +64,8 @@ const TncTableOfContents = () => {
       {/* Help box */}
       <div className="rounded-[0.75rem] border border-border bg-primary/5 p-4 text-sm text-muted-foreground leading-relaxed">
         Need help understanding this document? Contact our legal team at{' '}
-        <a href="mailto:legal@spendly.id" className="font-semibold text-primary hover:underline">
-          legal@spendly.id
+        <a href="mailto:spendly.company@gmail.com" className="font-semibold text-primary hover:underline">
+          spendly.company@gmail.com
         </a>
       </div>
     </div>

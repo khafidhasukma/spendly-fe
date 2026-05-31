@@ -19,7 +19,7 @@ const FeaturesSection = () => {
 
         {/* Row 1: OCR (2/3) + Forecasting (1/3) */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:gap-5 mb-4 lg:mb-5" data-animate>
-          <div className="sm:col-span-2 relative rounded-2xl bg-primary overflow-hidden min-h-52 sm:min-h-64">
+          <div className="sm:col-span-2 relative rounded-2xl bg-primary overflow-hidden min-h-52 sm:min-h-64" data-stagger>
             <div className="relative z-10 p-5 sm:p-8 sm:max-w-[60%]">
               <span className="inline-block text-[10px] font-semibold uppercase tracking-widest bg-on-primary/15 text-on-primary rounded-full px-3 py-1 mb-4">
                 OCR Engine
@@ -37,7 +37,7 @@ const FeaturesSection = () => {
             </div>
           </div>
 
-          <div className="sm:col-span-1 rounded-2xl border border-border bg-card p-5 sm:p-6 flex flex-col">
+          <div className="sm:col-span-1 rounded-2xl border border-border bg-card p-5 sm:p-6 flex flex-col" data-stagger>
             <TrendingUp className="h-7 w-7 text-primary mb-4" />
             <h3 className="text-sm font-bold text-foreground font-manrope sm:text-base">Forecasting</h3>
             <p className="mt-2 text-xs text-muted-foreground leading-relaxed flex-1 sm:text-sm">
@@ -48,7 +48,7 @@ const FeaturesSection = () => {
 
         {/* Row 2: Smart Categorization (1/3) + Financial Goals (2/3) */}
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 lg:gap-5" data-animate>
-          <div className="sm:col-span-1 rounded-2xl border border-border bg-card p-5 sm:p-6 flex flex-col">
+          <div className="sm:col-span-1 rounded-2xl border border-border bg-card p-5 sm:p-6 flex flex-col" data-stagger>
             <PieChart className="h-7 w-7 text-primary mb-4" />
             <h3 className="text-sm font-bold text-foreground font-manrope sm:text-base">Smart Categorization</h3>
             <p className="mt-2 text-xs text-muted-foreground leading-relaxed flex-1 sm:text-sm">
@@ -61,7 +61,7 @@ const FeaturesSection = () => {
             </div>
           </div>
 
-          <div className="sm:col-span-2 relative rounded-2xl bg-secondary overflow-hidden min-h-52 sm:min-h-64">
+          <div className="sm:col-span-2 relative rounded-2xl bg-secondary overflow-hidden min-h-52 sm:min-h-64" data-stagger>
             <div className="relative z-10 p-5 sm:p-8 sm:max-w-[60%]">
               <h3 className="text-lg font-bold text-on-secondary font-manrope sm:text-xl">
                 Achieve Your Financial Goals

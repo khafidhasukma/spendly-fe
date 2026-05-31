@@ -43,25 +43,25 @@ const InsightCards = ({ items, loading = false }: InsightCardsProps) => {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((item, i) => {
         const cfg = TYPE_CONFIG[item.type] ?? TYPE_CONFIG.info;
         const { Icon } = cfg;
         return (
-          <div key={i} className="rounded-2xl border border-border bg-card p-4 space-y-2">
+          <div key={i} className="rounded-lg border border-border bg-card p-4 space-y-2">
             <div className="flex items-center gap-1.5">
               <Icon className={`h-3.5 w-3.5 shrink-0 ${cfg.iconColor}`} />
-              <span className={`text-[11px] font-semibold uppercase tracking-wide ${cfg.iconColor}`}>
+              <span className={`text-xs font-semibold uppercase tracking-wide ${cfg.iconColor}`}>
                 {cfg.label}
               </span>
             </div>
-            <p className="text-sm font-semibold text-foreground leading-snug">{item.title}</p>
+            <p className="text-base font-semibold text-foreground leading-snug">{item.title}</p>
             {item.messages.length === 1 ? (
-              <p className="text-xs leading-relaxed text-muted-foreground">{item.messages[0]}</p>
+              <p className="text-sm leading-relaxed text-muted-foreground">{item.messages[0]}</p>
             ) : (
               <ul className="space-y-1">
                 {item.messages.map((msg, j) => (
-                  <li key={j} className="flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">
+                  <li key={j} className="flex items-start gap-2 text-sm leading-relaxed text-muted-foreground">
                     <span className={`mt-1.5 h-1 w-1 shrink-0 rounded-full ${cfg.dotColor}`} />
                     {msg}
                   </li>

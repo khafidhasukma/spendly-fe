@@ -26,11 +26,11 @@ const HowItWorksSection = () => {
         <div className="max-w-3xl mx-auto">
           <div className="relative">
             <div className="absolute left-5 top-0 bottom-0 w-px bg-primary/20 sm:left-6" />
-            <div className="space-y-10 sm:space-y-12">
+            <div className="space-y-10 sm:space-y-12" data-animate>
               {steps.map((step) => {
                 const Icon = step.icon;
                 return (
-                  <div key={step.num} className="relative flex gap-5 sm:gap-7 pl-1" data-animate>
+                  <div key={step.num} className="relative flex gap-5 sm:gap-7 pl-1" data-stagger>
                     <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-on-primary shadow-sm sm:h-12 sm:w-12">
                       <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                     </div>

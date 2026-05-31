@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight, Play } from 'lucide-react';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 const avatars = [
   'bg-primary/40',
@@ -8,12 +9,14 @@ const avatars = [
 ];
 
 const HeroSection = () => {
+  const sectionRef = useScrollReveal();
+
   return (
     <section className="relative overflow-hidden bg-background py-10 sm:py-20 lg:py-24">
-      <div className="relative mx-auto max-w-6xl px-5 sm:px-8">
+      <div ref={sectionRef} className="relative mx-auto max-w-6xl px-5 sm:px-8">
         <div className="grid grid-cols-1 items-stretch gap-10 lg:grid-cols-2 lg:gap-14">
           {/* Left content */}
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center" data-animate="left">
             <h1 className="text-3xl font-bold leading-[1.15] text-foreground font-manrope sm:text-4xl lg:text-[2.75rem]">
               Smarter Finances,<br />
               <span className="text-primary">Calmer Life.</span>
@@ -23,11 +26,10 @@ const HeroSection = () => {
               Automatically track expenses, set budgets, and get AI-powered savings insights. All for free.
             </p>
 
-            {/* CTA buttons */}
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 to="/register"
-                className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-on-primary shadow-md transition-all hover:opacity-90 hover:shadow-lg"
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-on-primary shadow-md transition-all hover:opacity-90 hover:shadow-lg hover:-translate-y-0.5"
               >
                 Get Started Free <ArrowRight className="h-4 w-4" />
               </Link>
@@ -39,7 +41,6 @@ const HeroSection = () => {
               </Link>
             </div>
 
-            {/* Social proof */}
             <div className="mt-8 flex items-center gap-3">
               <div className="flex -space-x-2.5">
                 {avatars.map((bg, i) => (
@@ -59,30 +60,27 @@ const HeroSection = () => {
           </div>
 
           {/* Desktop image */}
-          <div className="relative hidden lg:flex">
-            {/* Decorative circles — behind image */}
+          <div className="relative hidden lg:flex" data-animate="right">
             <div className="absolute -top-6 -left-6 size-32 rounded-full bg-primary/20 blur-xl pointer-events-none" />
             <div className="absolute -bottom-6 -right-6 size-28 rounded-full bg-secondary/20 blur-xl pointer-events-none" />
-
-            {/* Image on top of circles */}
-            <div className="relative z-10 w-full rounded-2xl overflow-hidden shadow-ambient">
+            <div className="relative z-10 w-full rounded-xl overflow-hidden shadow-ambient">
               <img
-                src="/assets/images/auth-bg.png"
+                src="/assets/images/hero.png"
                 alt="Spendly App"
-                className="absolute inset-0 w-full h-full object-cover aspect-video"
+                className="absolute inset-0 w-full h-full object-cover aspect-video object-right"
               />
             </div>
           </div>
 
           {/* Mobile image */}
-          <div className="relative lg:hidden">
+          <div className="relative lg:hidden" data-animate>
             <div className="absolute -top-4 -left-4 h-20 w-20 rounded-full bg-primary/20 blur-md pointer-events-none" />
             <div className="absolute -bottom-4 -right-4 h-16 w-16 rounded-full bg-secondary/20 blur-md pointer-events-none" />
-            <div className="relative z-10 rounded-2xl overflow-hidden shadow-ambient">
+            <div className="relative z-10 rounded-xl overflow-hidden shadow-ambient">
               <img
-                src="/assets/images/auth-bg.png"
+                src="/assets/images/hero.png"
                 alt="Spendly App"
-                className="w-full h-auto object-cover aspect-video"
+                className="w-full h-auto object-cover aspect-video object-right"
               />
             </div>
           </div>

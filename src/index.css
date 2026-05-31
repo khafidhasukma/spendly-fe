@@ -141,6 +141,11 @@
     -moz-osx-font-smoothing: grayscale;
     background-color: var(--color-background);
     color: var(--color-on-surface);
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
   }
 }
 
@@ -371,4 +376,85 @@
 .animate-marquee-right:hover,
 .animate-marquee-left:hover {
   animation-play-state: paused;
+}
+
+/* Scroll reveal — initial hidden state for elements with `data-animate` */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+[data-animate].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Direction variants */
+[data-animate="left"]  { transform: translateX(-32px); }
+[data-animate="right"] { transform: translateX(32px); }
+[data-animate="zoom"]  { transform: scale(0.96); }
+
+[data-animate="left"].is-visible,
+[data-animate="right"].is-visible {
+  transform: translateX(0);
+}
+
+[data-animate="zoom"].is-visible {
+  transform: scale(1);
+}
+
+/* Optional staggered children — siblings inside an animated container */
+[data-animate] [data-stagger] {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+[data-animate].is-visible [data-stagger] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+[data-animate].is-visible [data-stagger]:nth-child(1)  { transition-delay: 0.05s; }
+[data-animate].is-visible [data-stagger]:nth-child(2)  { transition-delay: 0.10s; }
+[data-animate].is-visible [data-stagger]:nth-child(3)  { transition-delay: 0.15s; }
+[data-animate].is-visible [data-stagger]:nth-child(4)  { transition-delay: 0.20s; }
+[data-animate].is-visible [data-stagger]:nth-child(5)  { transition-delay: 0.25s; }
+[data-animate].is-visible [data-stagger]:nth-child(6)  { transition-delay: 0.30s; }
+[data-animate].is-visible [data-stagger]:nth-child(7)  { transition-delay: 0.35s; }
+[data-animate].is-visible [data-stagger]:nth-child(8)  { transition-delay: 0.40s; }
+[data-animate].is-visible [data-stagger]:nth-child(9)  { transition-delay: 0.45s; }
+[data-animate].is-visible [data-stagger]:nth-child(10) { transition-delay: 0.50s; }
+
+/* Page transition keyframe used by PublicLayout's main */
+@keyframes fade-up {
+  0%   { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Honor user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  [data-animate],
+  [data-animate].is-visible,
+  [data-animate] [data-stagger],
+  .animate-fade-up,
+  .animate-marquee-right,
+  .animate-marquee-left,
+  .animate-scan-line {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }

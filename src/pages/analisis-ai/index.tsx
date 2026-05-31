@@ -1,15 +1,14 @@
-import { useState } from 'react';
-import { Bot } from 'lucide-react';
+// import { useState } from 'react';
 import PageHeader from '@/components/ui/page-header';
 import {
   SummaryCard,
-  FilterDropdown,
+  // FilterDropdown,
   MonthlyTrendChart,
   PredictionCard,
   SpendingCategoryCard,
   TipCard,
   InsightCards,
-  type FilterOption,
+  // type FilterOption,
 } from '@/components/ai-analysis';
 import { groupInsights } from '@/components/ai-analysis/insight-utils';
 import { usePageTitle } from '@/hooks';
@@ -18,7 +17,7 @@ import { formatRupiah } from '@/utils';
 
 const AnalisisAIPage = () => {
   usePageTitle('AI Analysis');
-  const [filter, setFilter] = useState<FilterOption>('This Month');
+  // const [filter, setFilter] = useState<FilterOption>('This Month');
   const { data, isLoading } = useAnalysis();
 
   const cashFlow = data?.insights.cash_flow ?? [];
@@ -44,9 +43,9 @@ const AnalisisAIPage = () => {
           title="AI Financial Analysis"
           description="Smart insights powered by AI to help you understand spending patterns."
         />
-        <div className="shrink-0 self-end sm:self-start">
+        {/* <div className="shrink-0 self-end sm:self-start">
           <FilterDropdown value={filter} onChange={setFilter} />
-        </div>
+        </div> */}
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
@@ -70,12 +69,7 @@ const AnalisisAIPage = () => {
       </div>
 
       <div className="space-y-3">
-        <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
-            <Bot className="h-3.5 w-3.5 text-primary" />
-          </div>
-          <p className="text-sm font-semibold text-foreground font-manrope">Alerts & Notifications</p>
-        </div>
+        <p className="text-base md:text-lg lg:text-xl font-semibold text-foreground font-manrope">Alerts & Notifications</p>
         <InsightCards items={alertItems} loading={isLoading} />
       </div>
 
