@@ -15,7 +15,7 @@ const ScanProcessing = ({ preview, progress }: ScanProcessingProps) => {
           <img
             src={preview}
             alt="Receipt"
-            className="h-full w-auto rounded-xl object-contain shadow-lg"
+            className="h-full lg:max-h-96 mx-auto w-auto rounded-xl object-contain shadow-lg"
           />
           {/* Scan line overlay */}
           <div className="absolute inset-0 overflow-hidden rounded-xl">

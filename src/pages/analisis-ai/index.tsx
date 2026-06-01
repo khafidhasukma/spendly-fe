@@ -49,7 +49,7 @@ const AnalisisAIPage = () => {
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-6">
-        <div className="flex flex-col gap-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-1 gap-4">
           <SummaryCard
             label="Total Income"
             value={formatRupiah(totalIncome)}
@@ -73,7 +73,7 @@ const AnalisisAIPage = () => {
         <InsightCards items={alertItems} loading={isLoading} />
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5 lg:gap-6 lg:items-stretch">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-5 lg:gap-6 lg:items-stretch">
         <div className="lg:col-span-3 flex flex-col gap-4 lg:gap-6">
           <MonthlyTrendChart data={data?.insights.cash_flow} loading={isLoading} />
           <PredictionCard forecast={data?.forecast} loading={isLoading} />

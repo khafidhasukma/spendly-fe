@@ -2,7 +2,7 @@ import { ShieldCheck, Zap } from 'lucide-react';
 
 const ScanFeatureCards = () => {
   return (
-    <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
+    <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
       <div className="rounded-xl border border-border bg-card p-4">
         <ShieldCheck className="h-5 w-5 text-primary" />
         <h4 className="mt-2 text-sm font-semibold text-foreground">Secure Upload</h4>

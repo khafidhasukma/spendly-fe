@@ -4,7 +4,6 @@ import {
   Store,
   Banknote,
   CalendarDays,
-  FileText,
   Loader2,
 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -137,20 +136,8 @@ const ScanManualInput = () => {
 
   return (
     <div className="rounded-2xl border border-border bg-card p-5 sm:p-6">
-      <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-          <FileText className="h-5 w-5 text-primary" />
-        </div>
-        <div>
-          <h3 className="text-base font-semibold text-foreground font-manrope">Manual Input</h3>
-          <p className="text-xs text-muted-foreground">Add transaction details manually</p>
-        </div>
-
-        <span className="ml-auto flex items-center gap-1.5 rounded-full border border-red-500/30 bg-red-500/10 px-3 py-1 text-xs font-medium text-red-600 dark:text-red-400">
-          <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
-          Expense
-        </span>
-      </div>
+      <h3 className="text-base font-semibold text-foreground font-manrope">Manual Input</h3>
+      <p className="text-xs text-muted-foreground">Add transaction details manually</p>
 
       <Separator className="my-5" />
 
@@ -248,14 +235,16 @@ const ScanManualInput = () => {
           />
         </div>
 
-        <Button
-          type="submit"
-          disabled={submitting || loadingMeta}
-          className="w-full gap-2 bg-primary hover:bg-primary/90 sm:w-auto"
-        >
-          {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-          {submitting ? 'Saving...' : 'Save Transaction'}
-        </Button>
+        <div className="text-end mt-8">
+          <Button
+            type="submit"
+            disabled={submitting || loadingMeta}
+            className="w-full gap-2 bg-primary hover:bg-primary/90 sm:w-auto py-2.5 px-5 h-auto"
+          >
+            {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
+            {submitting ? 'Saving...' : 'Save Transaction'}
+          </Button>
+        </div>
       </form>
     </div>
   );
