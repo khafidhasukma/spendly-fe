@@ -21,6 +21,7 @@ const DashboardPage = () => {
   const balance = data?.balance;
   const transactions = data ? toDisplayTransactions(data.recent_transactions) : [];
   const budgets = data ? toBudgetItems(data.budgets) : [];
+  const aiInsight = data?.ai_insight ?? undefined;
 
   return (
     <div className="space-y-6 lg:space-y-8">
@@ -39,7 +40,7 @@ const DashboardPage = () => {
           />
         </div>
         <div className="lg:col-span-2">
-          <AIInsightCard />
+          <AIInsightCard AIInsight={aiInsight} />
         </div>
       </div>
 

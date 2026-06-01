@@ -62,6 +62,7 @@ export interface BalanceCardProps {
 export interface AIInsightCardProps {
   title?: string;
   viewDetailsTo?: string;
+  AIInsight?: string;
 }
 
 // --- API response types (matches actual backend shape) ---
@@ -115,6 +116,7 @@ export interface DashboardApiData {
   budgets: DashboardBudget[];
   wealth_growth: DashboardWealthPoint[];
   categories?: DashboardCategory[];
+  ai_insight?: string | null;
 }
 
 export interface DashboardApiResponse {

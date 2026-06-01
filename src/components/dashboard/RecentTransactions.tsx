@@ -72,7 +72,7 @@ const RecentTransactions = ({ transactions = [], isLoading = false }: RecentTran
                 </div>
 
                 <div className="shrink-0 text-right">
-                  <p className={`text-sm font-bold tabular-nums ${tx.type !== 'expense' ? 'text-green-600 dark:text-green-400' : 'text-foreground'}`}>
+                  <p className={`text-sm font-bold tabular-nums ${tx.type == 'expense' ? 'text-red-600 dark:text-red-400' : 'text-green-600 dark:text-green-400'}`}>
                     {tx.amount > 0 ? '+' : ''}{formatRupiah(tx.amount)}
                   </p>
                   <p className="text-[0.625rem] font-semibold uppercase tracking-wide text-muted-foreground">

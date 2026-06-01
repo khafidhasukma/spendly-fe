@@ -5,6 +5,7 @@ import type { AIInsightCardProps } from '@/types';
 const AIInsightCard = ({
   title = 'Smart Savings',
   viewDetailsTo = '/ai-analysis',
+  AIInsight
 }: AIInsightCardProps) => {
   return (
     <div className="relative flex h-full min-h-40 flex-col overflow-hidden rounded-2xl bg-primary-container p-5 sm:min-h-44 sm:p-6">
@@ -20,10 +21,11 @@ const AIInsightCard = ({
       <h3 className="mt-3 text-xl font-semibold text-on-primary-container font-manrope sm:mt-4 sm:text-2xl">
         {title}
       </h3>
-      <p className="mt-2 flex-1 text-sm leading-relaxed text-on-primary-container/80">
-        Based on your recent utility trends, you're on track to save{' '}
-        <span className="font-semibold">Rp200.000</span> more than last month. Keep it up!
-      </p>
+      {AIInsight && (
+        <p className="mt-2 flex-1 text-sm leading-relaxed text-on-primary-container/80">
+          {AIInsight}
+        </p>
+      )}
 
       <Link
         to={viewDetailsTo}
