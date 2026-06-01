@@ -38,7 +38,7 @@ const RecentTransactions = ({ transactions = [], isLoading = false }: RecentTran
           {Array.from({ length: 4 }).map((_, i) => <SkeletonRow key={i} />)}
         </ul>
       ) : transactions.length === 0 ? (
-        <Empty className="mt-6 border border-dashed">
+        <Empty className="mt-6">
           <EmptyHeader>
             <EmptyMedia variant="icon"><ScanLine /></EmptyMedia>
             <EmptyTitle>No Transactions Yet</EmptyTitle>

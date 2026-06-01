@@ -35,9 +35,9 @@ const InsightCards = ({ items, loading = false }: InsightCardsProps) => {
 
   if (items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-dashed border-border bg-muted/20 py-8 text-center">
+      <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border-border bg-muted/20 py-8 text-center">
         <TrendingUp className="h-7 w-7 text-muted-foreground/30" />
-        <p className="text-sm font-medium text-muted-foreground">All clear — no alerts</p>
+        <p className="text-sm font-medium text-muted-foreground">All clear</p>
       </div>
     );
   }

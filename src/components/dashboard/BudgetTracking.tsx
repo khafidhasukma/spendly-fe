@@ -58,7 +58,7 @@ const BudgetTracking = ({ budgets = [], isLoading = false }: BudgetTrackingProps
           <SkeletonBar />
         </div>
       ) : budgets.length === 0 ? (
-        <Empty className="mt-6 border border-dashed">
+        <Empty className="mt-6">
           <EmptyHeader>
             <EmptyMedia variant="icon"><BarChart3 /></EmptyMedia>
             <EmptyTitle>Budget</EmptyTitle>

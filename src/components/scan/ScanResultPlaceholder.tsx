@@ -1,7 +1,7 @@
 import { FileText } from 'lucide-react';
 
 const ScanResultPlaceholder = () => (
-  <div className="hidden xl:flex h-full flex-1 items-center justify-center rounded-2xl border border-dashed border-border bg-muted/20 p-8">
+  <div className="hidden xl:flex h-full flex-1 items-center justify-center rounded-2xl border-border bg-muted/20 p-8">
     <div className="flex flex-col items-center text-center">
       <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
         <FileText className="h-5 w-5 text-muted-foreground" />
