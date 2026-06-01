@@ -28,7 +28,6 @@ const ScanExtractionResult = ({ scanId, scanResult, onSave, onDiscard }: ScanExt
     wallets,
     loadingMeta,
     submitting,
-    confidence,
     handleConfirm,
   } = useScanReview({ scanId, scanResult, onSaved: onSave });
 
@@ -75,7 +74,7 @@ const ScanExtractionResult = ({ scanId, scanResult, onSave, onDiscard }: ScanExt
         {!isFailed && (
           <span className="flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
             <Sparkles className="h-3 w-3" />
-            AI {confidence > 0 && `· ${confidence}%`}
+            AI
           </span>
         )}
       </div>
