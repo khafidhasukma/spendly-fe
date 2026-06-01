@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,19 +11,18 @@ import { authApi } from '@/api';
 
 const ResetPasswordForm = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const token = (location.state as { token?: string; email?: string } | null)?.token ?? '';
-  const email = (location.state as { token?: string; email?: string } | null)?.email ?? '';
+  const token = searchParams.get('token') ?? '';
 
   const form = useForm<ResetPasswordFormData>({
     schema: resetPasswordSchema,
     initialValues: { new_password: '', confirmPassword: '' },
   });
 
-  // If no token in state, the user navigated here directly — redirect them
+  // If no token in URL, the user navigated here directly — redirect them
   if (!token) {
     return (
       <>
@@ -89,9 +88,7 @@ const ResetPasswordForm = () => {
     <>
       <h1 className="text-2xl font-bold text-foreground font-manrope">Reset Password</h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        Create a new password for{' '}
-        {email ? <strong>{email}</strong> : 'your account'}.
-        Make sure it&apos;s at least 8 characters.
+        Create a new password for your account. Make sure it&apos;s at least 8 characters.
       </p>
 
       <form className="mt-8 space-y-6" onSubmit={handleSubmit}>

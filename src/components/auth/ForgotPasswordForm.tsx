@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Mail } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Mail, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { GroupInput } from '@/components/forms';
@@ -9,8 +9,9 @@ import { forgotPasswordSchema, type ForgotPasswordFormData } from '@/lib/validat
 import { authApi } from '@/api';
 
 const ForgotPasswordForm = () => {
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [sentEmail, setSentEmail] = useState('');
 
   const form = useForm<ForgotPasswordFormData>({
     schema: forgotPasswordSchema,
@@ -28,10 +29,8 @@ const ForgotPasswordForm = () => {
       toast.success('Reset link sent', {
         description: res.message,
       });
-      // Redirect to reset-password page, passing the token via state
-      navigate('/reset-password', {
-        state: { token: res.data.reset_token, email: data.email },
-      });
+      setSentEmail(data.email);
+      setSuccess(true);
     } catch (err: unknown) {
       const message =
         (err as { response?: { data?: { message?: string } } })?.response?.data?.message ||
@@ -41,6 +40,38 @@ const ForgotPasswordForm = () => {
       setLoading(false);
     }
   };
+
+  if (success) {
+    return (
+      <>
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-green-500/10">
+          <CheckCircle className="h-7 w-7 text-green-500" />
+        </div>
+        <h1 className="mt-4 text-2xl font-bold text-foreground font-manrope">Check Your Email</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          We&apos;ve sent a password reset link to <strong>{sentEmail}</strong>. 
+          Please check your inbox and click the link to reset your password.
+        </p>
+        <div className="mt-8">
+          <Link
+            to="/login"
+            className="inline-flex w-full justify-center rounded-lg bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
+          >
+            Back to Sign In
+          </Link>
+        </div>
+        <p className="mt-6 text-center text-xs text-muted-foreground">
+          Didn&apos;t receive the email?{' '}
+          <button
+            onClick={() => setSuccess(false)}
+            className="font-medium text-primary hover:underline"
+          >
+            Try again
+          </button>
+        </p>
+      </>
+    );
+  }
 
   return (
     <>

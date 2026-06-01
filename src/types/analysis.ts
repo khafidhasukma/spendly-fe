@@ -40,7 +40,7 @@ export interface UnusualSpending {
 }
 
 export interface ForecastData {
-  next_week: number | null;
+  next_week: { [category: string]: number } | null;
   total_predicted: number | null;
   categories: string[];
   source: string;
