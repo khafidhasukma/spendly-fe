@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   BudgetSettingsCard,
   ChangePasswordModal,
@@ -9,12 +9,19 @@ import {
   SupportCard,
 } from '@/components/profile';
 import { usePageTitle } from '@/hooks';
+import { useAuth } from '@/contexts/AuthContext';
 
 const ProfilePage = () => {
   usePageTitle('Profile');
+  const { refreshUser } = useAuth();
   const [editOpen, setEditOpen] = useState(false);
   const [changePasswordOpen, setChangePasswordOpen] = useState(false);
   const [logoutOpen, setLogoutOpen] = useState(false);
+
+  useEffect(() => {
+    refreshUser();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="space-y-4 sm:space-y-5 md:space-y-6">
