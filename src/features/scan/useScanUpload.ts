@@ -5,8 +5,8 @@ import type { ScanResult } from '@/types';
 
 export type ScanPageState = 'idle' | 'processing' | 'result';
 
-const POLL_INTERVAL_MS = 1500;
-const POLL_TIMEOUT_MS = 60_000;
+const POLL_INTERVAL_MS = 3000;
+const POLL_TIMEOUT_MS = 90_000;
 
 interface UseScanUploadOptions {
   onCompleted?: () => void;
