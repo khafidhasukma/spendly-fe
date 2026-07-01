@@ -14,7 +14,7 @@ export const scansApi = {
     const formData = new FormData();
     formData.append('receipt', file);
     const { data } = await api.upload<ScanUploadResponse>('/scans/upload', formData, {
-      timeout: 60_000,
+      timeout: 120_000,
     });
     return data.data;
   },

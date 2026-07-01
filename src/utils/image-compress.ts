@@ -8,9 +8,9 @@ export async function compressImage(
   } = {},
 ): Promise<File> {
   const {
-    maxWidth = 1600,
-    maxHeight = 1600,
-    quality = 0.8,
+    maxWidth = 2048,
+    maxHeight = 2048,
+    quality = 0.92,
     mimeType = 'image/jpeg',
   } = options;
 
