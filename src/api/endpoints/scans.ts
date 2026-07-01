@@ -13,8 +13,8 @@ export const scansApi = {
   async upload(file: File): Promise<ScanUploadData> {
     const formData = new FormData();
     formData.append('receipt', file);
-    const { data } = await api.post<ScanUploadResponse>('/scans/upload', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
+    const { data } = await api.upload<ScanUploadResponse>('/scans/upload', formData, {
+      timeout: 60_000,
     });
     return data.data;
   },

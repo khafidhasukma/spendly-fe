@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { scansApi } from '@/api';
+import { compressImage } from '@/utils/image-compress';
 import type { ScanResult } from '@/types';
 
 export type ScanPageState = 'idle' | 'processing' | 'result';
@@ -66,7 +67,8 @@ export function useScanUpload({ onCompleted }: UseScanUploadOptions = {}) {
 
     let uploaded;
     try {
-      uploaded = await scansApi.upload(file);
+      const compressed = await compressImage(file);
+      uploaded = await scansApi.upload(compressed);
       setScanId(uploaded.scan_id);
     } catch (err: unknown) {
       const message =
