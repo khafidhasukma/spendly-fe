@@ -18,7 +18,8 @@ const HeroSection = () => {
           {/* Left content */}
           <div className="flex flex-col justify-center" data-animate="left">
             <h1 className="text-3xl font-bold leading-[1.15] text-foreground font-manrope sm:text-4xl lg:text-[2.75rem]">
-              Smarter Finances,<br />
+              Smarter Finances,
+              <br />
               <span className="text-primary">Calmer Life.</span>
             </h1>
 
@@ -29,16 +30,16 @@ const HeroSection = () => {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 to="/register"
-                className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-on-primary shadow-md transition-all hover:opacity-90 hover:shadow-lg hover:-translate-y-0.5"
-              >
+                className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-on-primary shadow-md transition-all hover:opacity-90 hover:shadow-lg hover:-translate-y-0.5">
                 Get Started Free <ArrowRight className="h-4 w-4" />
               </Link>
-              <Link
-                to="/dashboard"
-                className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-muted"
-              >
+              <a
+                href="https://youtu.be/EVCnUZz1xls?si=2mSq5x3GZDiqSJwE"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-muted">
                 <Play className="h-3.5 w-3.5" /> View Demo
-              </Link>
+              </a>
             </div>
 
             <div className="mt-8 flex items-center gap-3">
